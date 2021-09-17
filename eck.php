@@ -147,6 +147,12 @@ function eck_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  */
 function eck_civicrm_entityTypes(&$entityTypes) {
   _eck_civix_civicrm_entityTypes($entityTypes);
+
+  $entityTypes['CRM_Eck_DAO_Foobar'] = [
+    'name' => 'EckFoobar',
+    'class' => 'CRM_Eck_DAO_Entity',
+    'table' => 'civicrm_eck_foobar',
+  ];
 }
 
 /**

@@ -37,3 +37,11 @@ repo for this extension and install it with the command-line tool
 git clone https://github.com/FIXME/de.systopia.eck.git
 cv en eck
 ```
+
+## Development
+
+This extension employs principles lined out in the following references:
+
+* https://docs.civicrm.org/dev/en/latest/step-by-step/create-entity/#3-add-a-new-entity
+* https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes/
+* https://docs.civicrm.org/dev/en/latest/extensions/civix/#generate-entity
