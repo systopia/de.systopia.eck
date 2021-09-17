@@ -1,8 +1,8 @@
-# civiCRM Entity Construction Kit
+# CiviCRM Entity Construction Kit
 
 This extension provides a user interface and an API for creating and managing
 CiviCRM entities. In conjunction with custom fields being attached to those
-entities, things in your business logic can be modelled more clearly, when
+entities, things in your business logic can be modeled more clearly, when
 standard CiviCRM entities are not sufficient.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
@@ -34,7 +34,7 @@ repo for this extension and install it with the command-line tool
 [cv](https://github.com/civicrm/cv).
 
 ```bash
-git clone https://github.com/FIXME/de.systopia.eck.git
+git clone https://github.com/systopia/de.systopia.eck.git
 cv en eck
 ```
 
