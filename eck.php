@@ -25,6 +25,13 @@ use CRM_Eck_ExtensionUtil as E;
  */
 function eck_civicrm_config(&$config) {
   _eck_civix_civicrm_config($config);
+
+  $dispatcher = new \Civi\RemoteDispatcher();
+
+  $dispatcher->addUniqueListener(
+    'civi.api.resolve',
+    ['CRM_Eck_Api', 'resolve']
+  );
 }
 
 /**
@@ -148,11 +155,13 @@ function eck_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 function eck_civicrm_entityTypes(&$entityTypes) {
   _eck_civix_civicrm_entityTypes($entityTypes);
 
-  $entityTypes['CRM_Eck_DAO_Foobar'] = [
-    'name' => 'EckFoobar',
-    'class' => 'CRM_Eck_DAO_Entity',
-    'table' => 'civicrm_eck_foobar',
-  ];
+  foreach (Civi::settings()->get('eck_entity_types') as $entity_type) {
+    $entityTypes[$entity_type['class_name']] = [
+      'name' => $entity_type['name'],
+      'class' => $entity_type['class_name'],
+      'table' => $entity_type['table_name'],
+    ];
+  }
 }
 
 /**

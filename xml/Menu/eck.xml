@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/admin/eck/entity-types</path>
+    <page_callback>CRM_Eck_Page_EntityTypes</page_callback>
+    <title>EntityTypes</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/admin/eck/entity-type</path>
+    <page_callback>CRM_Eck_Page_EntityType</page_callback>
+    <title>EntityType</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/eck/entity/list</path>
+    <page_callback>CRM_Eck_Page_EntityList</page_callback>
+    <title>EntityList</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+</menu>
