@@ -13,9 +13,12 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/**
- *
- */
-class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity {
+use CRM_Eck_ExtensionUtil as E;
+
+class CRM_Eck_Api {
+
+  public function resolve(\Civi\API\Event\ResolveEvent $event, $event_name, \Civi\Core\CiviEventDispatcher $dispatcher) {
+    $stop = 'here';
+  }
 
 }
