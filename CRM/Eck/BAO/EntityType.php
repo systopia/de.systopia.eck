@@ -13,22 +13,9 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use \Civi\API\Event\PrepareEvent;
-
 /**
  *
  */
-class CRM_Eck_BAO_EntityType extends CRM_Eck_DAO_EntityType implements EventSubscriberInterface {
-
-  public static function getSubscribedEvents() {
-    return [
-      'civi.api.prepare' => 'civiApiPrepare',
-    ];
-  }
-
-  public function civiApiPrepare(PrepareEvent $event) {
-
-  }
+class CRM_Eck_BAO_EntityType extends CRM_Eck_DAO_EntityType {
 
 }

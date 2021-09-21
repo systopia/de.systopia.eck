@@ -17,6 +17,7 @@ require_once 'eck.civix.php';
 // phpcs:disable
 use CRM_Eck_ExtensionUtil as E;
 // phpcs:enable
+use \Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Implements hook_civicrm_config().
@@ -25,13 +26,6 @@ use CRM_Eck_ExtensionUtil as E;
  */
 function eck_civicrm_config(&$config) {
   _eck_civix_civicrm_config($config);
-
-  $dispatcher = new \Civi\RemoteDispatcher();
-
-  $dispatcher->addUniqueListener(
-    'civi.api.resolve',
-    ['CRM_Eck_Api', 'resolve']
-  );
 }
 
 /**
@@ -156,9 +150,12 @@ function eck_civicrm_entityTypes(&$entityTypes) {
   _eck_civix_civicrm_entityTypes($entityTypes);
 
   foreach (Civi::settings()->get('eck_entity_types') as $entity_type) {
+    // $entity_type['class_name'] is a virtual class name, the corresponding
+    // class does not exist. "CRM_Eck_DAO_EntityType" is therefore defined as
+    // the controller class.
     $entityTypes[$entity_type['class_name']] = [
       'name' => $entity_type['name'],
-      'class' => $entity_type['class_name'],
+      'class' => 'CRM_Eck_DAO_EntityType',
       'table' => $entity_type['table_name'],
     ];
   }
@@ -169,6 +166,17 @@ function eck_civicrm_entityTypes(&$entityTypes) {
  */
 function eck_civicrm_themes(&$themes) {
   _eck_civix_civicrm_themes($themes);
+}
+
+function eck_civicrm_container(\Symfony\Component\DependencyInjection\ContainerBuilder $container) {
+  // Register our API Providers.
+  // The API provider is used to process incoming api calls and process them
+  // with the form processor logic.
+  $apiKernelDefinition = $container->getDefinition('civi_api_kernel');
+  $apiProviderDefinition = new Definition('Civi\Eck\API\EntityType');
+  $apiKernelDefinition->addMethodCall('registerApiProvider', array($apiProviderDefinition));
+//  $apiProviderDefaultsDefinition = new Definition('Civi\Eck\API\EntityTypeDefaults');
+//  $apiKernelDefinition->addMethodCall('registerApiProvider', array($apiProviderDefaultsDefinition));
 }
 
 // --- Functions below this ship commented out. Uncomment as required. ---

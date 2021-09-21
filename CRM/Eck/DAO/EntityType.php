@@ -82,7 +82,7 @@ class CRM_Eck_DAO_EntityType extends CRM_Core_DAO {
           'add' => '4.3',
         ],
       ];
-      // TODO: Dynamically define fields.
+      // TODO: Dynamically define configurable "base property" fields.
 
       CRM_Core_DAO_AllCoreTables::invoke(static::$_className, 'fields_callback', Civi::$statics[static::$_className]['fields']);
     }
