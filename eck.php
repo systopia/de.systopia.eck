@@ -149,13 +149,17 @@ function eck_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 function eck_civicrm_entityTypes(&$entityTypes) {
   _eck_civix_civicrm_entityTypes($entityTypes);
 
-  foreach (Civi::settings()->get('eck_entity_types') as $entity_type) {
+  $eck_entity_types = CRM_Core_DAO::executeQuery(
+    'SELECT * FROM `civicrm_eck_entity_type`;'
+  )->fetchAll('id');
+
+  foreach ($eck_entity_types as $entity_type) {
     // $entity_type['class_name'] is a virtual class name, the corresponding
     // class does not exist. "CRM_Eck_DAO_EntityType" is therefore defined as
     // the controller class.
     $entityTypes[$entity_type['class_name']] = [
       'name' => $entity_type['name'],
-      'class' => 'CRM_Eck_DAO_EntityType',
+      'class' => 'CRM_Eck_DAO_Entity',
       'table' => $entity_type['table_name'],
     ];
   }

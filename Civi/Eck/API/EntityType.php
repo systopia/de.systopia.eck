@@ -55,7 +55,7 @@ class EntityType implements API_ProviderInterface, EventSubscriberInterface {
 
   public static function getEntityTypes() {
     if (!isset(static::$_entityTypes)) {
-      static::$_entityTypes = array_column(\Civi::settings()->get('eck_entity_types'), 'name');
+      static::$_entityTypes = array_column(civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'], 'name');
     }
     return static::$_entityTypes;
   }
@@ -63,6 +63,7 @@ class EntityType implements API_ProviderInterface, EventSubscriberInterface {
   public function onApiResolve(ResolveEvent $event) {
     if (in_array($event->getApiRequest()['entity'], static::getEntityTypes())) {
       $event->setApiProvider($this);
+      $apiRequest = $event->getApiRequest();
 
       // TODO: Copied this from Civi\FormProcessor\API\FormProcessor - is this needed?
       if (strtolower($apiRequest['action']) == 'getfields' || strtolower($apiRequest['action']) == 'getoptions') {

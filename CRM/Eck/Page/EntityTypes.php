@@ -21,45 +21,7 @@ class CRM_Eck_Page_EntityTypes extends CRM_Core_Page {
     // Example: Set the page-title dynamically; alternatively, declare a static title in xml/Menu/*.xml
     CRM_Utils_System::setTitle(E::ts('Entity Types'));
 
-    Civi::settings()->set('eck_entity_types', [
-      'foobar' => [
-        'name' => 'EckFoobar',
-        'label' => 'Foo Bar Entity Type',
-        'class_name' => 'CRM_Eck_DAO_Foobar',
-        'table_name' => 'civicrm_eck_foobar',
-        'log' => TRUE,
-      ],
-      'foo' => [
-        'name' => 'EckFoo',
-        'label' => 'Foo Entity Type',
-        'class_name' => 'CRM_Eck_DAO_Foo',
-        'table_name' => 'civicrm_eck_foo',
-        'log' => TRUE,
-      ],
-    ]);
-
-    $entity_types = Civi::settings()->get('eck_entity_types');
-
-    foreach ($entity_types as $entity_type) {
-      try {
-        civicrm_api3('OptionValue', 'getsingle', array(
-          'option_group_id' => 'cg_extend_objects',
-          'value' => $entity_type['name'],
-          'name' => $entity_type['table_name'],
-        ));
-      }
-      catch (CiviCRM_API3_Exception $exception) {
-        civicrm_api3('OptionValue', 'create', array(
-          'option_group_id' => 'cg_extend_objects',
-          'label' => $entity_type['label'],
-          'value' => $entity_type['name'],
-          'name' => $entity_type['table_name'],
-          'is_reserved' => 1,
-        ));
-      }
-    }
-
-    $retrieved_table_name = CRM_Core_DAO_AllCoreTables::getTableForEntityName('EckFoobar');
+    $entity_types = civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'];
 
     $this->assign('entity_types', $entity_types);
 

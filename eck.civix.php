@@ -449,5 +449,11 @@ function _eck_civix_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
  */
 function _eck_civix_civicrm_entityTypes(&$entityTypes) {
-  $entityTypes = array_merge($entityTypes, []);
+  $entityTypes = array_merge($entityTypes, [
+    'CRM_Eck_DAO_EckEntityType' => [
+      'name' => 'EckEntityType',
+      'class' => 'CRM_Eck_DAO_EckEntityType',
+      'table' => 'civicrm_eck_entity_type',
+    ],
+  ]);
 }

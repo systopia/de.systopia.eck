@@ -18,7 +18,7 @@ use CRM_Eck_ExtensionUtil as E;
 /**
  *
  */
-class CRM_Eck_DAO_EntityType extends CRM_Core_DAO {
+class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
 
   private static $_entityType;
 
@@ -26,7 +26,7 @@ class CRM_Eck_DAO_EntityType extends CRM_Core_DAO {
 
   private static $_tableName;
 
-  public static $_log;
+  public static $_log = TRUE;
 
   public function __construct($entityType) {
     static::$_entityType = $entityType;
@@ -37,10 +37,9 @@ class CRM_Eck_DAO_EntityType extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public function initialize() {
-    $entity_type = Civi::settings()->get('eck_entity_types')[static::$_entityType];
+    $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => static::$_entityType]);
     static::$_className = $entity_type['class_name'];
     static::$_tableName = $entity_type['table_name'];
-    static::$_log = $entity_type['log'];
 
     parent::initialize();
   }
@@ -70,6 +69,7 @@ class CRM_Eck_DAO_EntityType extends CRM_Core_DAO {
       Civi::$statics[static::$_className]['fields'] = [
         'id' => [
           'name' => 'id',
+          'title' => E::ts('ID'),
           'type' => CRM_Utils_Type::T_INT,
           'description' => E::ts('ID'),
           'required' => TRUE,
@@ -80,9 +80,12 @@ class CRM_Eck_DAO_EntityType extends CRM_Core_DAO {
           'bao' => 'CRM_Eck_DAO_EntityType',
           'localizable' => 0,
           'add' => '4.3',
+          'html' => [
+            'type' => 'Number',
+          ],
         ],
       ];
-      // TODO: Dynamically define configurable "base property" fields.
+      // TODO: Dynamically define configurable "base property" fields per entity type.
 
       CRM_Core_DAO_AllCoreTables::invoke(static::$_className, 'fields_callback', Civi::$statics[static::$_className]['fields']);
     }
@@ -105,7 +108,7 @@ class CRM_Eck_DAO_EntityType extends CRM_Core_DAO {
    *   an object of type referenced by daoName
    */
   public static function commonRetrieve($entityType, &$params, &$defaults, $returnProperities = NULL) {
-    $object = new CRM_Eck_DAO_EntityType($entityType);
+    $object = new self($entityType);
     $object->copyValues($params);
 
     // return only specific fields if returnproperties are sent
@@ -136,7 +139,7 @@ class CRM_Eck_DAO_EntityType extends CRM_Core_DAO {
    *   an object of type referenced by daoName
    */
   public static function commonRetrieveAll($entityType, $fieldIdName = 'id', $fieldId, &$details, $returnProperities = NULL) {
-    $object = new CRM_Eck_DAO_EntityType($entityType);
+    $object = new self($entityType);
     $object->$fieldIdName = $fieldId;
 
     // return only specific fields if returnproperties are sent
