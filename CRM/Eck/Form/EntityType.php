@@ -13,6 +13,8 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
 
   protected $_entityType;
 
+  protected $_customGroups = [];
+
   public function preProcess() {
     $this->setAction(CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? 'add');
 
@@ -29,12 +31,21 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       }
       catch (Exception $exception) {
         throw new Exception(E::ts('Invalid entity type.'));
-      }switch ($this->_action) {
+      }
+      switch ($this->_action) {
         case CRM_Core_Action::UPDATE:
-          $this->setTitle(E::ts('Edit Entity Type %1', [1 => $this->_entityType['label']]));
+          $this->setTitle(E::ts('Edit Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
+
+          // Retrieve custom groups for this entity type.
+          $this->_customGroups = civicrm_api3(
+            'CustomGroup',
+            'get',
+            ['extends' => $this->_entityTypeName],
+            ['limit' => 0]
+          )['values'];
           break;
         case CRM_Core_Action::DELETE:
-          $this->setTitle(E::ts('Delete Entity Type %1', [1 => $this->_entityType['label']]));
+          $this->setTitle(E::ts('Delete Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
           break;
       }
     }
@@ -66,6 +77,19 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
             ]);
           }
         }
+
+        // Add links to custom groups.
+        $this->assign('customGroupAdminUrl', CRM_Utils_System::url('civicrm/admin/custom/group'));
+        foreach ($this->_customGroups as &$custom_group) {
+          $custom_group['browse_url'] = CRM_Utils_System::url(
+            'civicrm/admin/custom/group/field',
+            [
+              'action' => CRM_Core_Action::BROWSE,
+              'gid' => $custom_group['id'],
+            ]
+          );
+        }
+        $this->assign('customGroups', $this->_customGroups);
         break;
       case CRM_Core_Action::DELETE:
         // TODO: Build "delete" form.
@@ -75,13 +99,19 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
         throw new Exception(E::ts('Invalid operation.'));
     }
 
-    $this->addButtons(array(
-      array(
-        'type' => 'submit',
-        'name' => $submit_button_caption,
-        'isDefault' => TRUE,
-      ),
-    ));
+    $this->addButtons(
+      [
+        [
+          'type' => 'submit',
+          'name' => $submit_button_caption,
+          'isDefault' => TRUE,
+        ],
+        [
+          'type' => 'cancel',
+          'name' => E::ts('Cancel'),
+        ],
+      ]
+    );
 
     // export form elements
     $this->assign('elementNames', $this->getRenderableElementNames());
