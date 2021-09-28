@@ -38,8 +38,8 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    */
   public function initialize() {
     $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => static::$_entityType]);
-    static::$_className = $entity_type['class_name'];
-    static::$_tableName = $entity_type['table_name'];
+    static::$_className = 'CRM_Eck_DAO_' . $entity_type['name'];
+    static::$_tableName = 'civicrm_eck_' . strtolower($entity_type['name']);
 
     parent::initialize();
   }
@@ -85,7 +85,8 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           ],
         ],
       ];
-      // TODO: Dynamically define configurable "base property" fields per entity type.
+      // TODO: Dynamically define configurable "base property" fields (as
+      //   opposed to custom fields) per entity type.
 
       CRM_Core_DAO_AllCoreTables::invoke(static::$_className, 'fields_callback', Civi::$statics[static::$_className]['fields']);
     }

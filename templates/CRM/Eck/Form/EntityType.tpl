@@ -7,7 +7,10 @@
     {foreach from=$elementNames item=elementName}
       <div class="crm-section">
         <div class="label">{$form.$elementName.label}</div>
-        <div class="content">{$form.$elementName.html}</div>
+        <div class="content">
+            {if $elementName == 'name'}<span>Eck</span>{/if}
+            {$form.$elementName.html}
+        </div>
         <div class="clear"></div>
       </div>
     {/foreach}

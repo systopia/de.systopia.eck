@@ -50,8 +50,6 @@ CREATE TABLE `civicrm_eck_entity_type` (
 
      `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT 'Unique EckEntityType ID',
      `name` varchar(255) NOT NULL   COMMENT 'The entity type\'s name',
-     `class_name` varchar(255) NOT NULL   COMMENT 'The entity type\'s virtual class name',
-     `table_name` varchar(255) NOT NULL   COMMENT 'The entity type\'s table name',
      `label` text NOT NULL   COMMENT 'The entity type\'s human-readable name' 
 ,
         PRIMARY KEY (`id`)

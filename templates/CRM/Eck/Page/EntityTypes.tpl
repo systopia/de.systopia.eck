@@ -5,7 +5,6 @@
       <tr>
         <th>{ts}Entity type{/ts}</th>
         <th>{ts}Internal Name{/ts}</th>
-        <th>{ts}Table name{/ts}</th>
         <th>{ts}Operations{/ts}</th>
       </tr>
       </thead>
@@ -15,7 +14,6 @@
         <tr>
           <td>{$entity_type.label}</td>
           <td>{$entity_type.name}</td>
-          <td>{$entity_type.table_name}</td>
           <td>
             <ul>
               <li>
@@ -30,5 +28,9 @@
       {/foreach}
       </tbody>
     </table>
+
+    <div class="action-link">
+        {crmButton p='civicrm/admin/eck/entity-type' q="action=add&reset=1" id="newEckEntityType"  icon="plus-circle"}{ts}Add Entity Type{/ts}{/crmButton}
+    </div>
   </div>
 {/crmScope}

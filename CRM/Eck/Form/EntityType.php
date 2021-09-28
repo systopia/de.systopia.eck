@@ -18,14 +18,13 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
   public function preProcess() {
     $this->setAction(CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? 'add');
 
-    if (!($this->_entityTypeName = CRM_Utils_Request::retrieve('type', 'String', $this))) {
-      throw new Exception(E::ts('No entity type given.'));
-    }
-
     if ($this->_action == CRM_Core_Action::ADD) {
       $this->setTitle(E::ts('Add Entity Type'));
     }
     elseif ($this->_action == CRM_Core_Action::UPDATE || $this->_action == CRM_Core_Action::DELETE) {
+      if (!($this->_entityTypeName = CRM_Utils_Request::retrieve('type', 'String', $this))) {
+        throw new Exception(E::ts('No entity type given.'));
+      }
       try {
         $this->_entityType = civicrm_api3('EckEntityType', 'getsingle', ['name' => $this->_entityTypeName]);
       }
@@ -67,14 +66,22 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       case CRM_Core_Action::UPDATE:
       case CRM_Core_Action::ADD:
         $submit_button_caption = E::ts('Save');
+
         foreach (CRM_Eck_DAO_EckEntityType::fields() as $field) {
           if ($field['name'] != 'id') {
-            $this->addField($field['name'], [
-              'entity' => 'EckEntityType',
-              'name' => $field['name'],
-              'action' => 'create',
-              'context' => array_search($this->_action, CRM_Core_Action::$_names),
-            ]);
+            $this->addField(
+              $field['name'],
+              [
+                'entity' => 'EckEntityType',
+                'name' => $field['name'],
+                'action' => 'create',
+                'context' => array_search(
+                  $this->_action,
+                  CRM_Core_Action::$_names
+                ),
+              ],
+              $field['required']
+            );
           }
         }
 
@@ -122,7 +129,47 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
    * {@inheritDoc}
    */
   public function setDefaultValues() {
-    // TODO: Set current field values as element default values.
+    // Set current field values as element default values.
+    $values = $this->exportValues();
+    foreach ($this->getRenderableElementNames() as $elementName) {
+      if (isset($values[$elementName])) {
+        $this->getElement($elementName)->setValue($values[$elementName]);
+      }
+      elseif (isset($this->_entityType[$elementName])) {
+        $this->getElement($elementName)->setValue($this->_entityType[$elementName]);
+      }
+    }
+  }
+
+  public function validate() {
+    parent::validate();
+
+    $values = $this->exportValues();
+
+    // Note: Since each field can only have one error, the most significant
+    // error is to be set the latest, overwriting previous error messages for
+    // the same element.
+
+    // Enforce PascalCase formatting.
+    if (ucfirst($this->_submitValues['name']) !== $this->_submitValues['name']) {
+      $this->_errors['name'] = E::ts('The entity type name must be in PascalCase (at least first letter uppercase).');
+    }
+
+    // Do not allow duplicate entity type names.
+    if ($this->getAction() == CRM_Core_Action::UPDATE || $this->getAction() == CRM_Core_Action::ADD) {
+      $count = civicrm_api3('EckEntityType', 'getcount', [
+        'name' => $values['name']
+      ]);
+      if (
+        // case-insensitive checking according to API/database behavior.
+        strtolower($values['name']) != strtolower($this->_entityType['name'] ?? NULL)
+        && $count > 0
+      ) {
+        $this->_errors['name'] = E::ts('An entity type with this name already exists.');
+      }
+    }
+
+    return (0 == count($this->_errors));
   }
 
   /**
@@ -133,13 +180,13 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       case CRM_Core_Action::ADD:
       case CRM_Core_Action::UPDATE:
         $values = $this->exportValues();
-        // TODO: Create or update entity type.
-        $entity_type = civicrm_api3('EckEntityType', 'create', [
+        // Create or update entity type.
+        $result = civicrm_api3('EckEntityType', 'create', [
+          'id' => $this->_entityType['id'] ?? NULL,
           'name' => $values['name'],
           'label' => $values['label'],
-          'class_name' => $values['class_name'],
-          'table_name' => $values['table_name']
         ]);
+        $entity_type = reset($result['values']);
 
         // TODO: Create table if not exists.
 
@@ -147,14 +194,14 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           civicrm_api3('OptionValue', 'getsingle', [
             'option_group_id' => 'cg_extend_objects',
             'value' => $entity_type['name'],
-            'name' => $entity_type['table_name'],
+            'name' => 'civicrm_eck_' . strtolower($entity_type['name']),
           ]);
         } catch (CiviCRM_API3_Exception $exception) {
           civicrm_api3('OptionValue', 'create', [
             'option_group_id' => 'cg_extend_objects',
             'label' => $entity_type['label'],
             'value' => $entity_type['name'],
-            'name' => $entity_type['table_name'],
+            'name' => 'civicrm_eck_' . strtolower($entity_type['name']),
             'is_reserved' => 1,
           ]);
         }

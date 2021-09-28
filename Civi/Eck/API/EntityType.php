@@ -55,7 +55,15 @@ class EntityType implements API_ProviderInterface, EventSubscriberInterface {
 
   public static function getEntityTypes() {
     if (!isset(static::$_entityTypes)) {
-      static::$_entityTypes = array_column(civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'], 'name');
+      static::$_entityTypes = array_map(
+        function($name) {
+          return 'Eck' . $name;
+        },
+        array_column(
+          civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'],
+          'name'
+        )
+      );
     }
     return static::$_entityTypes;
   }
