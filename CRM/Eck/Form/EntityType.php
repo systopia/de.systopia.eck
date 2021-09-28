@@ -1,4 +1,17 @@
 <?php
+/*-------------------------------------------------------+
+| CiviCRM Entity Construction Kit                        |
+| Copyright (C) 2021 SYSTOPIA                            |
+| Author: J. Schuppe (schuppe@systopia.de)               |
++--------------------------------------------------------+
+| This program is released as free software under the    |
+| Affero GPL license. You can redistribute it and/or     |
+| modify it under the terms of this license which you    |
+| can read by viewing the included agpl.txt or online    |
+| at www.gnu.org/licenses/agpl.html. Removal of this     |
+| copyright header is strictly prohibited without        |
+| written permission from the original author(s).        |
++--------------------------------------------------------*/
 
 use CRM_Eck_ExtensionUtil as E;
 
@@ -15,6 +28,9 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
 
   protected $_customGroups = [];
 
+  /**
+   * {@inheritDoc}
+   */
   public function preProcess() {
     $this->setAction(CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? 'add');
 
@@ -141,6 +157,9 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function validate() {
     parent::validate();
 
@@ -215,9 +234,9 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
   }
 
   /**
-   * Get the fields/elements defined in this form.
+   * Retrieves fields/elements defined in this form.
    *
-   * @return array (string)
+   * @return string[]
    */
   public function getRenderableElementNames() {
     // The _elements list includes some items which should not be
