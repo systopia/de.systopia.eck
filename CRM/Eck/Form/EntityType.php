@@ -47,6 +47,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       catch (Exception $exception) {
         throw new Exception(E::ts('Invalid entity type.'));
       }
+      $this->assign('entityTypeLabel', $this->_entityType['label']);
       switch ($this->_action) {
         case CRM_Core_Action::UPDATE:
           $this->setTitle(E::ts('Edit Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
@@ -206,27 +207,68 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           'label' => $values['label'],
         ]);
         $entity_type = reset($result['values']);
+        $old_table_name = 'civicrm_eck_' . strtolower($this->_entityTypeName);
+        $table_name = 'civicrm_eck_' . strtolower($values['name']);
 
-        // TODO: Create table if not exists.
+        if ($this->getAction() == CRM_Core_Action::UPDATE) {
+          // Rename existing table.
+          CRM_Core_DAO::executeQuery(
+            "
+            RENAME TABLE `{$old_table_name}` TO `{$table_name}`;
+            "
+          );
 
-        try {
-          civicrm_api3('OptionValue', 'getsingle', [
+          // Retrieve existing option value for custom-field-extendable object.
+          $option_value = civicrm_api3('OptionValue', 'getsingle', [
             'option_group_id' => 'cg_extend_objects',
-            'value' => $entity_type['name'],
-            'name' => 'civicrm_eck_' . strtolower($entity_type['name']),
+            'value' => 'Eck' . $this->_entityType['name'],
+            'name' => 'civicrm_eck_' . strtolower($this->_entityType['name']),
           ]);
-        } catch (CiviCRM_API3_Exception $exception) {
-          civicrm_api3('OptionValue', 'create', [
-            'option_group_id' => 'cg_extend_objects',
-            'label' => $entity_type['label'],
-            'value' => $entity_type['name'],
-            'name' => 'civicrm_eck_' . strtolower($entity_type['name']),
-            'is_reserved' => 1,
-          ]);
+        }
+        elseif ($this->getAction() == CRM_Core_Action::ADD) {
+          // Create table if not exists.
+          CRM_Core_DAO::executeQuery(
+            "
+          CREATE TABLE IF NOT EXISTS `civicrm_eck_{$table_name}` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Eck{$values['name']} ID',
+              PRIMARY KEY (`id`)
+          )
+          ENGINE=InnoDB
+          DEFAULT CHARSET=utf8
+          COLLATE=utf8_unicode_ci;
+          "
+          );
+        }
+
+        // Synchronize cg_object_exstends option values.
+        civicrm_api3('OptionValue', 'create', [
+          'id' => $option_value['id'] ?? NULL,
+          'option_group_id' => 'cg_extend_objects',
+          'label' => $entity_type['label'],
+          'value' => 'Eck' . $entity_type['name'],
+          'name' => 'civicrm_eck_' . strtolower($entity_type['name']),
+          'is_reserved' => 1,
+        ]);
+
+        // Synchronise custom groups.
+        foreach ($this->_customGroups as $custom_group) {
+          civicrm_api3(
+            'CustomGroup',
+            'create',
+            [
+              'id' => $custom_group['id'],
+              'extends' => 'Eck' . $values['name'],
+            ]
+          );
         }
       break;
       case CRM_Core_Action::DELETE:
-        $this->_entityType->delete();
+        // TODO: Delete entity type, alogn with
+        //   - entity instances of this entity type
+        //   - custom groups
+        //   - cg_extend_objects option value
+        //   - EckEntityType entity
+        //   - database table
         break;
     }
 

@@ -18,32 +18,48 @@
       {include file="CRM/common/formButtons.tpl" location="top"}
   </div>
 
-    {foreach from=$elementNames item=elementName}
-      <div class="crm-section">
-        <div class="label">{$form.$elementName.label}</div>
-        <div class="content">
-            {if $elementName == 'name'}<span>Eck</span>{/if}
-            {$form.$elementName.html}
-        </div>
-        <div class="clear"></div>
-      </div>
-    {/foreach}
+    {if $action == 1 or $action == 2}
 
-    {* Custom groups links *}
-    <div class="crm-accordion-wrapper">
-      <div class="crm-accordion-header">{ts}Custom Groups{/ts}</div>
-      <div class="crm-accordion-body">
-        <p class="description">{ts 1=$customGroupAdminUrl}You may add custom fields to this entity type using <a href="%1">CiviCRM's custom groups</a>.{/ts}</p>
-          {if !empty($customGroups)}
-            <p class="description">{ts}The following custom groups extend this entity type:{/ts}</p>
-            <ul>
-                {foreach from=$customGroups item=customGroup}
-                  <li><a href="{$customGroup.browse_url}">{$customGroup.title}</a></li>
-                {/foreach}
-            </ul>
-          {/if}
+        {foreach from=$elementNames item=elementName}
+          <div class="crm-section">
+            <div class="label">{$form.$elementName.label}</div>
+            <div class="content">
+                {if $elementName == 'name'}<span>Eck</span>{/if}
+                {$form.$elementName.html}
+            </div>
+            <div class="clear"></div>
+          </div>
+        {/foreach}
+
+        {* Custom groups links *}
+      <div class="crm-accordion-wrapper">
+        <div class="crm-accordion-header">{ts}Custom Groups{/ts}</div>
+        <div class="crm-accordion-body">
+          <p class="description">{ts 1=$customGroupAdminUrl}You may add custom fields to this entity type using <a href="%1">CiviCRM's custom groups</a>.{/ts}</p>
+            {if !empty($customGroups)}
+              <p class="description">{ts}The following custom groups extend this entity type:{/ts}</p>
+              <ul>
+                  {foreach from=$customGroups item=customGroup}
+                    <li>
+                      <a href="{$customGroup.browse_url}">{$customGroup.title}</a>
+                    </li>
+                  {/foreach}
+              </ul>
+            {/if}
+        </div>
       </div>
-    </div>
+
+    {elseif $action == 8}
+
+      <div class="crm-section no-label">
+        <div class="status">
+          <p>{ts 1=$entityTypeLabel}Do you want to delete the entity type <em>%1</em>?{/ts}</p>
+          <p>{ts}This involves deleting all custom fields attached to this entity type and all currently existing entities of this type.{/ts}</p>
+          <p class="crm-error">{ts}This action cannot be undone.{/ts}</p>
+        </div>
+      </div>
+
+    {/if}
 
   <div class="crm-submit-buttons">
       {include file="CRM/common/formButtons.tpl" location="bottom"}
