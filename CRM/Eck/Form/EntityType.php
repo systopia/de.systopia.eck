@@ -55,7 +55,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           $this->_customGroups = civicrm_api3(
             'CustomGroup',
             'get',
-            ['extends' => $this->_entityTypeName],
+            ['extends' => 'Eck' . $this->_entityTypeName],
             ['limit' => 0]
           )['values'];
           break;
