@@ -17,14 +17,28 @@
     <table class="row-highlight">
       <thead>
       <tr>
-        <th>{ts}Entity ID{/ts}</th>
+        {foreach from=$fields item=field}
+          <th>{$field.title}</th>
+        {/foreach}
+        <th>{ts}Operations{/ts}</th>
       </tr>
       </thead>
       <tbody>
       {if not empty($entities)}
-          {foreach from=$entities item=entity key=id}
+          {foreach from=$entities item=entity key=entity_id}
             <tr>
-              <td>{$id}</td>
+              {foreach from=$fields item=field key=field_name}
+                <td>
+                    {if $field_name == 'title'}
+                      <a href="{crmURL p="civicrm/eck/entity" q="reset=1&action=view&id=$entity_id"}">
+                          {$entity.$field_name}
+                      </a>
+                    {else}
+                        {$entity.$field_name}
+                    {/if}
+                </td>
+              {/foreach}
+              <td></td>
             </tr>
           {/foreach}
       {else}
@@ -34,5 +48,10 @@
       {/if}
       </tbody>
     </table>
+  </div>
+
+  <div class="action-link">
+      {capture assign=entity_type_name}{$entity_type.name}{/capture}
+      {crmButton p='civicrm/eck/entity' q="reset=1&action=add&type=$entity_type_name" id="newEckEntity"  icon="plus-circle"}{ts 1=$entity_type.label}Add %1{/ts}{/crmButton}
   </div>
 {/crmScope}

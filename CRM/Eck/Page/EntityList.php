@@ -24,23 +24,21 @@ class CRM_Eck_Page_EntityList extends CRM_Core_Page {
 
     try {
       $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => $entity_type_name]);
+      $this->assign('entity_type', $entity_type);
     }
     catch (Exception $exception) {
       throw new Exception(E::ts('Invalid entity type.'));
     }
 
-    // TODO: Use the API ($entity_type_name.get) when implemented.
-    $params = [
-      'type' => $entity_type_name,
-    ];
-    $details = [];
-    $entities = CRM_Eck_DAO_Entity::commonRetrieveAll($entity_type_name, 'name', $entity_type_name, $details);
-
     CRM_Utils_System::setTitle($entity_type['label']);
 
-    $entities = [];
-    $entities = CRM_Eck_DAO_Entity::commonRetrieveAll($entity_type_name, 'id', NULL, $entities);
+    $entities = civicrm_api3('Eck' . $entity_type_name, 'get', [], ['limit' => 0])['values'];
     $this->assign('entities', $entities);
+    $fields = civicrm_api3('Eck' . $entity_type_name, 'getfields')['values'];
+    $fields = array_filter($fields, function($key) {
+      return strpos($key, 'custom_') !== 0;
+    }, ARRAY_FILTER_USE_KEY);
+    $this->assign('fields', $fields);
 
     parent::run();
   }

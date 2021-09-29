@@ -20,7 +20,7 @@ use \Civi\API\Event\ResolveEvent;
 use Civi\API\Provider\ProviderInterface as API_ProviderInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class EntityType implements API_ProviderInterface, EventSubscriberInterface {
+class Entity implements API_ProviderInterface, EventSubscriberInterface {
 
   protected static $_entityTypes;
 
@@ -97,7 +97,31 @@ class EntityType implements API_ProviderInterface, EventSubscriberInterface {
   }
 
   public function invokeGet($apiRequest) {
-    // TODO: Implement.
+    $defaults = [];
+    if (0 === strpos($apiRequest['entity'], 'Eck')) {
+      $entity_type = civicrm_api3(
+        'EckEntityType',
+        'getsingle',
+        ['name' => substr($apiRequest['entity'], strlen('Eck'))]
+      );
+      $table_name = 'civicrm_eck_' . strtolower($entity_type['name']);
+      $query = "
+      SELECT *
+      FROM {$table_name}
+    ;";
+      // TODO: Implement params filtering and sorting.
+
+      $dao = \CRM_Core_DAO::executeQuery($query);
+      $entities = [];
+      while ($dao->fetch()) {
+        $entity = $dao->toArray();
+        $entities[$entity['id']] = $entity;
+      }
+      return civicrm_api3_create_success($entities, $apiRequest['params'], $apiRequest['entity'], 'get');
+    }
+    else {
+      throw new Exception(E::ts('Invalid Eck entity type.'));
+    }
   }
 
 }

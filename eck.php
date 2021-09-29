@@ -177,7 +177,7 @@ function eck_civicrm_container(\Symfony\Component\DependencyInjection\ContainerB
   // The API provider is used to process incoming api calls and process them
   // with the form processor logic.
   $apiKernelDefinition = $container->getDefinition('civi_api_kernel');
-  $apiProviderDefinition = new Definition('Civi\Eck\API\EntityType');
+  $apiProviderDefinition = new Definition('Civi\Eck\API\Entity');
   $apiKernelDefinition->addMethodCall('registerApiProvider', array($apiProviderDefinition));
 //  $apiProviderDefaultsDefinition = new Definition('Civi\Eck\API\EntityTypeDefaults');
 //  $apiKernelDefinition->addMethodCall('registerApiProvider', array($apiProviderDefaultsDefinition));
