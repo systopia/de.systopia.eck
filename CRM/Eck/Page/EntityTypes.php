@@ -23,6 +23,9 @@ class CRM_Eck_Page_EntityTypes extends CRM_Core_Page {
 
     $entity_types = civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'];
 
+    foreach ($entity_types as &$entity_type) {
+      $entity_type['custom_groups'] = CRM_Eck_DAO_EckEntityType::getCustomGroups($entity_type['name']);
+    }
     $this->assign('entity_types', $entity_types);
     CRM_Core_Session::singleton()->pushUserContext(CRM_Utils_System::url('civicrm/admin/eck/entity-types', 'reset=1'));
 
