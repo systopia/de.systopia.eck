@@ -246,6 +246,14 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           'option_group_id' => 'cg_extend_objects',
           'label' => $entity_type['label'],
           'value' => 'Eck' . $entity_type['name'],
+          /**
+           * Call a "virtual" static method on EckEntityType, which is being
+           * resolved using a __callStatic() implementation for retrieving a
+           * list of sub types.
+           * @see \CRM_Eck_BAO_EckEntityType::__callStatic()
+           * @see \CRM_Core_BAO_CustomGroup::getExtendedObjectTypes()
+           */
+          'description' => "CRM_Eck_BAO_EckEntityType::{$entity_type['name']}.getSubTypes;",
           'name' => 'civicrm_eck_' . strtolower($entity_type['name']),
           'is_reserved' => 1,
         ]);
