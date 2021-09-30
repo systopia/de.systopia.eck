@@ -19,6 +19,7 @@
       <tr>
         <th>{ts}Entity type{/ts}</th>
         <th>{ts}Internal Name{/ts}</th>
+        <th>{ts}Sub types{/ts}</th>
         <th>{ts}Operations{/ts}</th>
       </tr>
       </thead>
@@ -29,6 +30,15 @@
           <td>{$entity_type.label}</td>
           <td>{$entity_type.name}</td>
           <td>
+              {if !empty($entity_type.sub_types)}
+                  <ul>
+                      {foreach from=$entity_type.sub_types item=sub_type}
+                          <li>{$sub_type}</li>
+                      {/foreach}
+                  </ul>
+              {/if}
+          </td>
+          <td>
             <ul>
               <li>
                 <a href="{crmURL p='civicrm/admin/eck/entity-type' q="reset=1&action=update&type=$entity_type_name"}">{ts}Edit{/ts}</a>
@@ -37,6 +47,7 @@
                 <a href="{crmURL p='civicrm/admin/eck/entity-type' q="reset=1&action=delete&type=$entity_type_name"}">{ts}Delete{/ts}</a>
               </li>
               {if !empty($entity_type.custom_groups)}
+                <!--
                 <li>
                     {ts}Manage custom fields{/ts}
                   <ul>
@@ -47,6 +58,7 @@
                       {/foreach}
                   </ul>
                 </li>
+                -->
               {/if}
             </ul>
           </td>

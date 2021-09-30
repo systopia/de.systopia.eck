@@ -55,11 +55,14 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           $this->setTitle(E::ts('Edit Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
 
           // Retrieve custom groups for this entity type.
-          $this->_customGroups['::global::'] = CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName);
-
           $this->_subTypes = CRM_Eck_DAO_EckEntityType::getSubTypes($this->_entityTypeName);
-          foreach ($this->_subTypes as $sub_type_name => $sub_type_label) {
-            $this->_customGroups[$sub_type_name] = CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName, $sub_type_name, TRUE);
+          if (!empty($this->_subTypes)) {
+            foreach ($this->_subTypes as $sub_type_name => $sub_type_label) {
+              $this->_customGroups += CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName, $sub_type_name);
+            }
+          }
+          else {
+            $this->_customGroups = CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName);
           }
           break;
         case CRM_Core_Action::DELETE:

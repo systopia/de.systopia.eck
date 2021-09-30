@@ -31,6 +31,21 @@
           </div>
         {/foreach}
 
+        {* Sub types *}
+      <div class="crm-accordion-wrapper">
+        <div class="crm-accordion-header">{ts}Sub types{/ts}</div>
+        <div class="crm-accordion-body">
+          <p class="description">{ts 1=$optionGroupAdminUrl}You may manage sub types of this entity type using the <code>eck_sub_types</code> option group.{/ts}</p>
+            {if !empty($subTypes)}
+                <ul>
+                  {foreach from=$subTypes item=subType}
+                      <li>{$subType}</li>
+                  {/foreach}
+                </ul>
+            {/if}
+        </div>
+      </div>
+
         {* Custom groups links *}
       <div class="crm-accordion-wrapper">
         <div class="crm-accordion-header">{ts}Custom Groups{/ts}</div>

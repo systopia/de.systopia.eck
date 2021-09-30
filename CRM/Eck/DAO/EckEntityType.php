@@ -219,25 +219,29 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
   /**
    * Retrieves custom groups extending this entity type.
    *
-   * @return array
+   * @param $entity_type_name
+   *   The name of the entity type to retrieve custom groups for.
+   * @param string | null $sub_type_name
+   *   The name of the sub type to retrieve custom groups for.
+   *
+   * @return array|mixed
+   * @throws \CiviCRM_API3_Exception
    */
-  public static function getCustomGroups($entity_type_name, $sub_type_name = NULL, $exclude_global = FALSE) {
+  public static function getCustomGroups($entity_type_name, $sub_type_name = NULL) {
     $custom_groups = [];
 
-    if (!$exclude_global) {
-      $custom_groups = civicrm_api3(
-        'CustomGroup',
-        'get',
-        [
-          'extends' => 'Eck' . $entity_type_name,
-          'extends_entity_column_value' => ['IS NULL' => TRUE],
-        ],
-        ['limit' => 0]
-      )['values'];
-    }
+    $custom_groups['::global::'] = civicrm_api3(
+      'CustomGroup',
+      'get',
+      [
+        'extends' => 'Eck' . $entity_type_name,
+        'extends_entity_column_value' => ['IS NULL' => TRUE],
+      ],
+      ['limit' => 0]
+    )['values'];
 
     if ($sub_type_name) {
-      $custom_groups += civicrm_api3(
+      $custom_groups[$sub_type_name] = civicrm_api3(
         'CustomGroup',
         'get',
         [

@@ -26,6 +26,7 @@ class CRM_Eck_Page_EntityTypes extends CRM_Core_Page {
     foreach ($entity_types as &$entity_type) {
       // TODO: Differentiate between sub types.
       $entity_type['custom_groups'] = CRM_Eck_DAO_EckEntityType::getCustomGroups($entity_type['name']);
+      $entity_type['sub_types'] = CRM_Eck_DAO_EckEntityType::getSubTypes($entity_type['name']);
     }
     $this->assign('entity_types', $entity_types);
     CRM_Core_Session::singleton()->pushUserContext(CRM_Utils_System::url('civicrm/admin/eck/entity-types', 'reset=1'));
