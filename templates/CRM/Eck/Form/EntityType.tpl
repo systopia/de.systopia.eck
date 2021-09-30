@@ -37,14 +37,19 @@
         <div class="crm-accordion-body">
           <p class="description">{ts 1=$customGroupAdminUrl}You may add custom fields to this entity type using <a href="%1">CiviCRM's custom groups</a>.{/ts}</p>
             {if !empty($customGroups)}
-              <p class="description">{ts}The following custom groups extend this entity type:{/ts}</p>
-              <ul>
-                  {foreach from=$customGroups item=customGroup}
-                    <li>
-                      <a href="{$customGroup.browse_url}">{$customGroup.title}</a>
-                    </li>
-                  {/foreach}
-              </ul>
+              <p class="description">{ts}The following custom groups extend this entity type or its sub types:{/ts}</p>
+              {foreach from=$customGroups item=subTypeGroups key=subTypeName}
+                {if !empty($subTypeGroups)}
+                  <h3>{if $subTypeName == '::global::'}{ts}For all sub types{/ts}{else}{$subTypes.$subTypeName}{/if}</h3>
+                    <ul>
+                    {foreach from=$subTypeGroups item=customGroup}
+                      <li>
+                        <a href="{$customGroup.browse_url}">{$customGroup.title}</a>
+                      </li>
+                    {/foreach}
+                    </ul>
+                {/if}
+              {/foreach}
             {/if}
         </div>
       </div>

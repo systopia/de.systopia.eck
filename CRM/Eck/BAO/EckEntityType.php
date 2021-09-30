@@ -38,20 +38,6 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
   } */
 
   /**
-   * Retrieves a list of sub types for the given entity type.
-   *
-   * @param string $entity_type_name
-   *   The name of the entity type to retrieve a list of sub types for.
-   *
-   * @return array
-   *   A list of sub types for the given entity type.
-   */
-  public static function getSubTypes($entity_type_name) {
-    // TODO: Retrieve sub types for the given entity type.
-    return [];
-  }
-
-  /**
    * Evaluate call of non-existing static method.
    *
    * The method to call must be prefixed with an existing ECK entity type,
@@ -79,7 +65,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
       && method_exists(__CLASS__, $method)
       && in_array($method, $allowed_methods)
     ) {
-      return self::$method($arguments);
+      return static::$method($entity_type);
     }
     else {
       trigger_error(

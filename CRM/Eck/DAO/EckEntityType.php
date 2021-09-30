@@ -87,11 +87,28 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
   protected $_customGroups = [];
 
   /**
+   * The sub types defined for this entity type.
+   *
+   * @var array
+   */
+  protected $_subTypes = [];
+
+  /**
    * Class constructor.
    */
   public function __construct() {
     $this->__table = 'civicrm_eck_entity_type';
     parent::__construct();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function initialize() {
+    parent::initialize();
+
+//    $this->_customGroups = static::getCustomGroups($this->name);
+//    $this->_subTypes = static::getSubTypes($this->name);
   }
 
   /**
@@ -204,13 +221,62 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
    *
    * @return array
    */
-  public static function getCustomGroups($entity_type_name) {
-    return  civicrm_api3(
-      'CustomGroup',
+  public static function getCustomGroups($entity_type_name, $sub_type_name = NULL, $exclude_global = FALSE) {
+    $custom_groups = [];
+
+    if (!$exclude_global) {
+      $custom_groups = civicrm_api3(
+        'CustomGroup',
+        'get',
+        [
+          'extends' => 'Eck' . $entity_type_name,
+          'extends_entity_column_value' => ['IS NULL' => TRUE],
+        ],
+        ['limit' => 0]
+      )['values'];
+    }
+
+    if ($sub_type_name) {
+      $custom_groups += civicrm_api3(
+        'CustomGroup',
+        'get',
+        [
+          'extends' => 'Eck' . $entity_type_name,
+          'extends_entity_column_value' => [
+            'LIKE' => CRM_Utils_Array::implodePadded($sub_type_name),
+          ],
+        ],
+        ['limit' => 0]
+      )['values'];
+    }
+
+    return $custom_groups;
+  }
+
+  /**
+   * Retrieves a list of sub types for the given entity type.
+   *
+   * @param string $entity_type_name
+   *   The name of the entity type to retrieve a list of sub types for.
+   *
+   * @return array
+   *   A list of sub types for the given entity type.
+   */
+  public static function getSubTypes($entity_type_name) {
+    $result = civicrm_api3(
+      'OptionValue',
       'get',
-      ['extends' => 'Eck' . $entity_type_name],
+      [
+        'option_group_id' => 'eck_sub_types',
+        'grouping' => $entity_type_name,
+      ],
       ['limit' => 0]
     )['values'];
+
+    return array_combine(
+      array_column($result, 'value'),
+      array_column($result, 'label')
+    );
   }
 
   /**

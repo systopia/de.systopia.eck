@@ -28,6 +28,8 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
 
   protected $_customGroups = [];
 
+  protected $_subTypes = [];
+
   /**
    * {@inheritDoc}
    */
@@ -53,12 +55,12 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           $this->setTitle(E::ts('Edit Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
 
           // Retrieve custom groups for this entity type.
-          $this->_customGroups = civicrm_api3(
-            'CustomGroup',
-            'get',
-            ['extends' => 'Eck' . $this->_entityTypeName],
-            ['limit' => 0]
-          )['values'];
+          $this->_customGroups['::global::'] = CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName);
+
+          $this->_subTypes = CRM_Eck_DAO_EckEntityType::getSubTypes($this->_entityTypeName);
+          foreach ($this->_subTypes as $sub_type_name => $sub_type_label) {
+            $this->_customGroups[$sub_type_name] = CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName, $sub_type_name, TRUE);
+          }
           break;
         case CRM_Core_Action::DELETE:
           $this->setTitle(E::ts('Delete Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
@@ -104,16 +106,19 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
 
         // Add links to custom groups.
         $this->assign('customGroupAdminUrl', CRM_Utils_System::url('civicrm/admin/custom/group'));
-        foreach ($this->_customGroups as &$custom_group) {
-          $custom_group['browse_url'] = CRM_Utils_System::url(
-            'civicrm/admin/custom/group/field',
-            [
-              'action' => CRM_Core_Action::BROWSE,
-              'gid' => $custom_group['id'],
-            ]
-          );
+        foreach ($this->_customGroups as $sub_type_name => $sub_type_groups) {
+          foreach ($sub_type_groups as &$custom_group) {
+            $custom_group['browse_url'] = CRM_Utils_System::url(
+              'civicrm/admin/custom/group/field',
+              [
+                'action' => CRM_Core_Action::BROWSE,
+                'gid' => $custom_group['id'],
+              ]
+            );
+          }
         }
         $this->assign('customGroups', $this->_customGroups);
+        $this->assign('subTypes', $this->_subTypes);
         break;
       case CRM_Core_Action::DELETE:
         // TODO: Build "delete" form.
