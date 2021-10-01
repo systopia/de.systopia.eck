@@ -172,6 +172,9 @@ function eck_civicrm_themes(&$themes) {
   _eck_civix_civicrm_themes($themes);
 }
 
+/**
+ * Implements hook_civicrm_container().
+ */
 function eck_civicrm_container(\Symfony\Component\DependencyInjection\ContainerBuilder $container) {
   // Register our API Providers.
   // The API provider is used to process incoming api calls and process them

@@ -28,7 +28,10 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
 
   public static $_log = TRUE;
 
-  public function __construct($entityType) {
+  public function __construct($entityType = NULL) {
+    if (!isset($entityType)) {
+      throw new Exception(E::ts('No ECK entity type given.'));
+    }
     static::$_entityType = $entityType;
     parent::__construct();
   }
@@ -175,6 +178,38 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
     }
 
     return $details;
+  }
+
+  /**
+   * @param string $tableAlias
+   * @param string $entity_type
+   * @return array
+   *
+   * @see CRM_Core_DAO::getSelectWhereClause()
+   */
+  public static function getSelectWhereClause($tableAlias = NULL, $entity_type = NULL) {
+    if (!isset($entity_type)) {
+      throw new Exception(E::ts('No ECK entity type given.'));
+    }
+
+    /**
+     * Copied and adapted from CRM_Core_DAO::getSelectWhereClause().
+     * We need to always pass the ECK entity type into the DAO constructor and
+     * static methods where objects are being instantiated.
+     * @see \CRM_Eck_DAO_Entity::getSelectWhereClause()
+     */
+    $bao = new static($entity_type);
+    if ($tableAlias === NULL) {
+      $tableAlias = $bao->tableName();
+    }
+    $clauses = [];
+    foreach ((array) $bao->addSelectWhereClause() as $field => $vals) {
+      $clauses[$field] = NULL;
+      if ($vals) {
+        $clauses[$field] = "(`$tableAlias`.`$field` IS NULL OR (`$tableAlias`.`$field` " . implode(" AND `$tableAlias`.`$field` ", (array) $vals) . '))';
+      }
+    }
+    return $clauses;
   }
 
 }

@@ -97,31 +97,47 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   }
 
   public function invokeGet($apiRequest) {
-    $defaults = [];
-    if (0 === strpos($apiRequest['entity'], 'Eck')) {
-      $entity_type = civicrm_api3(
-        'EckEntityType',
-        'getsingle',
-        ['name' => substr($apiRequest['entity'], strlen('Eck'))]
-      );
-      $table_name = 'civicrm_eck_' . strtolower($entity_type['name']);
-      $query = "
-      SELECT *
-      FROM {$table_name}
-    ;";
-      // TODO: Implement params filtering and sorting.
+    $bao_name = 'CRM_Eck_BAO_Entity';
+    $entity = $apiRequest['entity'];
+    $params = $apiRequest['params'];
+    /**
+     * Copied and adapted from _civicrm_api3_basic_get().
+     * We need to always pass the ECK entity type into the DAO constructor and
+     * static methods where objects are being instantiated.
+     * Therefore, we need our own Api3SelectQuery class and override some static
+     * methods in CRM_Eck_DAO_Entity.
+     * @see \Civi\Eck\API\Api3SelectQuery
+     * @see \CRM_Eck_DAO_Entity::getSelectWhereClause()
+     */
+    $entity = $entity ?: CRM_Core_DAO_AllCoreTables::getBriefName($bao_name);
+    $options = _civicrm_api3_get_options_from_params($params);
 
-      $dao = \CRM_Core_DAO::executeQuery($query);
-      $entities = [];
-      while ($dao->fetch()) {
-        $entity = $dao->toArray();
-        $entities[$entity['id']] = $entity;
-      }
-      return civicrm_api3_create_success($entities, $apiRequest['params'], $apiRequest['entity'], 'get');
+    // Skip query if table doesn't exist yet due to pending upgrade
+    if (!$bao_name::tableHasBeenAdded()) {
+      \Civi::log()->warning("Could not read from {$entity} before table has been added. Upgrade required.", ['civi.tag' => 'upgrade_needed']);
+      $result = [];
     }
     else {
-      throw new Exception(E::ts('Invalid Eck entity type.'));
+      $query = new Api3SelectQuery($entity, $params['check_permissions'] ?? FALSE);
+      $query->where = $params;
+      if ($options['is_count']) {
+        $query->select = ['count_rows'];
+      }
+      else {
+        $query->select = array_keys(array_filter($options['return']));
+        $query->orderBy = $options['sort'];
+        $query->isFillUniqueFields = $uniqueFields;
+      }
+      $query->limit = $options['limit'];
+      $query->offset = $options['offset'];
+      $query->merge($sql);
+      $result = $query->run();
     }
+
+    if ($returnAsSuccess) {
+      return civicrm_api3_create_success($result, $params, $entity, 'get');
+    }
+    return $result;
   }
 
 }
