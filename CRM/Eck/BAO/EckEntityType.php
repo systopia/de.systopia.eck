@@ -50,6 +50,10 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
    * the static method name, which is being resolved here.
    * @see \CRM_Core_BAO_CustomGroup::getExtendedObjectTypes()
    *
+   * TODO: This makes all is_callable() calls unreliable and may cause errors
+   *       everywhere. We'll need to find a better way for passing the entity
+   *       type name into static::getSubTypes().
+   *
    * @param $funName
    * @param $arguments
    *
@@ -59,13 +63,14 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
     $allowed_methods = [
       'getSubTypes',
     ];
-    [$entity_type, $method] = explode('.', $funName);
+    $method = explode('.', $funName);
     if (
-      self::objectExists($entity_type, __CLASS__, TRUE)
-      && method_exists(__CLASS__, $method)
-      && in_array($method, $allowed_methods)
+      count($method) == 2
+      && self::objectExists($method[0], __CLASS__, TRUE)
+      && method_exists(__CLASS__, $method[1])
+      && in_array($method[1], $allowed_methods)
     ) {
-      return static::$method($entity_type);
+      return static::{$method[1]}($method[0]);
     }
     else {
       trigger_error(
