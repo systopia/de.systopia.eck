@@ -16,7 +16,8 @@
 namespace Civi\Eck\API;
 
 use CRM_Eck_ExtensionUtil as E;
-use \Civi\API\Event\ResolveEvent;
+use Civi\API\Event\ResolveEvent;
+use Civi\Api4\Event\CreateApi4RequestEvent;
 use Civi\API\Provider\ProviderInterface as API_ProviderInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -26,6 +27,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
 
   public static function getSubscribedEvents() {
     return [
+      'civi.api4.createRequest' => 'onApi4CreateRequest',
       'civi.api.resolve' => 'onApiResolve',
     ];
   }
@@ -66,6 +68,19 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
       );
     }
     return static::$_entityTypes;
+  }
+
+  public function onApi4CreateRequest(CreateApi4RequestEvent $event) {
+    if (strpos($event->entityName, 'Eck') === 0) {
+      $entity_type = substr($event->entityName, strlen('Eck'));
+      if (
+        $entity_type != 'EntityType'
+        && in_array($entity_type, static::getEntityTypes())
+      ) {
+        $event->className = 'CRM_Eck_BAO_Entity';
+        $event->args = [$entity_type];
+      }
+    }
   }
 
   public function onApiResolve(ResolveEvent $event) {
