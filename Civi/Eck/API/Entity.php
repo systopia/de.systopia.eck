@@ -15,9 +15,11 @@
 
 namespace Civi\Eck\API;
 
+use Civi\Api4\Event;
 use CRM_Eck_ExtensionUtil as E;
 use Civi\API\Event\ResolveEvent;
 use Civi\Api4\Event\CreateApi4RequestEvent;
+use Civi\Core\Event\GenericHookEvent;
 use Civi\API\Provider\ProviderInterface as API_ProviderInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -29,6 +31,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
     return [
       'civi.api4.createRequest' => 'onApi4CreateRequest',
       'civi.api.resolve' => 'onApiResolve',
+      'civi.api4.entityTypes' => 'onApi4EntityTypes',
     ];
   }
   /**
@@ -37,7 +40,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
    * @return array<string>
    */
   public function getEntityNames($version) {
-    return static::getEntityTypes();
+    return static::getEntityTypeNames();
   }
 
   /**
@@ -49,25 +52,45 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
    */
   public function getActionNames($version, $entity) {
     $actions = [];
-    if (in_array($entity, static::getEntityTypes())) {
+    if (in_array($entity, static::getEntityTypeNames())) {
       $actions[] = 'get';
+      $actions[] = 'getfields';
     }
     return $actions;
   }
 
+  public static function getEntityTypeNames() {
+    return array_column(static::getEntityTypes(), 'name');
+  }
+
   public static function getEntityTypes() {
     if (!isset(static::$_entityTypes)) {
-      static::$_entityTypes = array_map(
-        function($name) {
-          return 'Eck' . $name;
-        },
-        array_column(
-          civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'],
-          'name'
-        )
+      $entity_types = civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'];
+      static::$_entityTypes = array_combine(
+        array_map(
+          function ($name) {
+            return 'Eck' . $name;
+          },
+          array_column($entity_types, 'name')
+        ),
+        $entity_types
       );
     }
     return static::$_entityTypes;
+  }
+
+  public function onApi4EntityTypes(GenericHookEvent $event) {
+    $eck_entities = [];
+    foreach (static::getEntityTypes() as $entity_type) {
+      $eck_entities['Eck' . $entity_type['name']] = [
+        'name' => 'Eck' . $entity_type['name'],
+        'title' => $entity_type['label'],
+        'title_plural' => $entity_type['label'],
+        'description' => ts('Entity Construction Kit entity type %1', [1 => $entity_type['label']]),
+        'primary_key' => ['id'],
+      ];
+    }
+    $event->entities = array_merge($event->entities, $eck_entities);
   }
 
   public function onApi4CreateRequest(CreateApi4RequestEvent $event) {
@@ -75,16 +98,16 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
       $entity_type = substr($event->entityName, strlen('Eck'));
       if (
         $entity_type != 'EntityType'
-        && in_array($entity_type, static::getEntityTypes())
+        && in_array($entity_type, static::getEntityTypeNames())
       ) {
-        $event->className = 'CRM_Eck_BAO_Entity';
-        $event->args = [$entity_type];
+        $event->className = 'Civi\Api4\EckEntity';
+        $event->args = [TRUE, $entity_type];
       }
     }
   }
 
   public function onApiResolve(ResolveEvent $event) {
-    if (in_array($event->getApiRequest()['entity'], static::getEntityTypes())) {
+    if (in_array($event->getApiRequest()['entity'], static::getEntityTypeNames())) {
       $event->setApiProvider($this);
       $apiRequest = $event->getApiRequest();
 
