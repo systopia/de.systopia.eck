@@ -15,6 +15,9 @@
 
 namespace Civi\Eck\API;
 
+use Civi\API\Events;
+use Civi\Api4\EckEntity;
+use Civi\Api4\EckEntityType;
 use Civi\Api4\Event;
 use CRM_Eck_ExtensionUtil as E;
 use Civi\API\Event\ResolveEvent;
@@ -54,7 +57,6 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
     $actions = [];
     if (in_array($entity, static::getEntityTypeNames())) {
       $actions[] = 'get';
-      $actions[] = 'getfields';
     }
     return $actions;
   }
@@ -80,6 +82,9 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   }
 
   public function onApi4EntityTypes(GenericHookEvent $event) {
+    // Remove the generic EckEntity entry which should not be available.
+    unset($event->entities['EckEntity']);
+
     $eck_entities = [];
     foreach (static::getEntityTypes() as $entity_type) {
       $eck_entities['Eck' . $entity_type['name']] = [
@@ -130,11 +135,13 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
     switch (strtolower($apiRequest['action'])) {
       case 'get':
         return $this->invokeGet($apiRequest);
-        break;
     }
   }
 
   public function invokeGet($apiRequest) {
+    // TODO: Is this sufficient and correct?
+    return EckEntity::get($apiRequest['params']['check_permissions'], $apiRequest['entity']);
+
     $bao_name = 'CRM_Eck_BAO_Entity';
     $entity = $apiRequest['entity'];
     $params = $apiRequest['params'];

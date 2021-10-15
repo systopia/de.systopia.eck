@@ -176,14 +176,10 @@ function eck_civicrm_themes(&$themes) {
  * Implements hook_civicrm_container().
  */
 function eck_civicrm_container(\Symfony\Component\DependencyInjection\ContainerBuilder $container) {
-  // Register our API Providers.
-  // The API provider is used to process incoming api calls and process them
-  // with the form processor logic.
+  // Register API Provider.
   $apiKernelDefinition = $container->getDefinition('civi_api_kernel');
   $apiProviderDefinition = new Definition('Civi\Eck\API\Entity');
   $apiKernelDefinition->addMethodCall('registerApiProvider', array($apiProviderDefinition));
-//  $apiProviderDefaultsDefinition = new Definition('Civi\Eck\API\EntityTypeDefaults');
-//  $apiKernelDefinition->addMethodCall('registerApiProvider', array($apiProviderDefaultsDefinition));
 }
 
 // --- Functions below this ship commented out. Uncomment as required. ---
