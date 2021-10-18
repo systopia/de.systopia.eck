@@ -15,9 +15,23 @@
 
 namespace Civi\Eck\API;
 
+use Civi\Api4\Utils\CoreUtil;
 use CRM_Eck_ExtensionUtil as E;
 
 class Api4SelectQuery extends \Civi\Api4\Query\Api4SelectQuery {
+
+  public function __construct($apiGet) {
+    // Run the extended class' constructor
+    parent::__construct($apiGet);
+    // Overwrite the query property with the correct table name.
+    $entity = $this->getEntity();
+    $baoName = CoreUtil::getBAOFromApiName($entity);
+    $bao = new $baoName(substr($entity, strlen('Eck')));
+    $tableName = $bao->tableName();
+    $this->query = \CRM_Utils_SQL_Select::from($tableName . ' ' . self::MAIN_TABLE_ALIAS);
+    // Add ACLs first to avoid redundant subclauses
+    $this->query->where($this->getAclClause(self::MAIN_TABLE_ALIAS, $baoName));
+  }
 
   public function getAclClause($tableAlias, $baoName, $stack = []) {
     if (!$this->getCheckPermissions()) {
