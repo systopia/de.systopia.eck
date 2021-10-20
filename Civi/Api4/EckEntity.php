@@ -64,7 +64,7 @@ class EckEntity extends Generic\DAOEntity {
 
   public static function update($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new DAOUpdateAction('Eck' . $entity_type, __FUNCTION__))
+    return (new EckDAOUpdateAction('Eck' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
