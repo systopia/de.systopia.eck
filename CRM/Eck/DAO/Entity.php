@@ -212,4 +212,28 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
     return $clauses;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public static function writeRecord(array $record): CRM_Core_DAO {
+    $hook = empty($record['id']) ? 'create' : 'edit';
+
+    \CRM_Utils_Hook::pre($hook, 'Eck' . $record['entity_type'], $record['id'] ?? NULL, $record);
+    $instance = new self($record['entity_type']);
+    $instance->copyValues($record);
+    $instance->save();
+    \CRM_Utils_Hook::post($hook, 'Eck' . $record['entity_type'], $instance->id, $instance);
+
+    // Store custom field values.
+    if (!empty($record['custom']) && is_array($record['custom'])) {
+      CRM_Core_BAO_CustomValueTable::store($record['custom'], $instance->tableName(), $instance->id);
+    }
+
+    return $instance;
+  }
+
+  public static function getEntityType($entityName) {
+    return strpos($entityName, 'Eck') === 0 ? substr($entityName, strlen('Eck')) : NULL;
+  }
+
 }

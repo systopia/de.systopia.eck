@@ -58,7 +58,7 @@ class EckEntity extends Generic\DAOEntity {
 
   public static function create($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new DAOCreateAction('Eck' . $entity_type, __FUNCTION__))
+    return (new EckDAOCreateAction('Eck' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
