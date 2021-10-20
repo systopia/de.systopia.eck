@@ -28,6 +28,13 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
 
   public static $_log = TRUE;
 
+  /**
+   * @param string $entityType
+   *
+   * @return \CRM_Eck_DAO_Entity
+   *
+   * @throws \Exception
+   */
   public function __construct($entityType = NULL) {
     if (!isset($entityType)) {
       throw new Exception(E::ts('No ECK entity type given.'));
@@ -105,28 +112,18 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           ],
         ],
       ];
-      // TODO: Dynamically define configurable "base property" fields (as
-      //   opposed to custom fields) per entity type.
 
-      CRM_Core_DAO_AllCoreTables::invoke(static::$_className, 'fields_callback', Civi::$statics[static::$_className]['fields']);
+      CRM_Core_DAO_AllCoreTables::invoke(
+        static::$_className,
+        'fields_callback',
+        Civi::$statics[static::$_className]['fields']
+      );
     }
     return Civi::$statics[static::$_className]['fields'];
   }
 
   /**
-   * Fetch object based on array of properties.
-   *
-   * @param string $entityType
-   *   Name of the ECK entity type.
-   * @param array $params
-   *   (reference ) an assoc array of name/value pairs.
-   * @param array $defaults
-   *   (reference ) an assoc array to hold the flattened values.
-   * @param array $returnProperities
-   *   An assoc array of fields that need to be returned, eg array( 'first_name', 'last_name').
-   *
-   * @return object
-   *   an object of type referenced by daoName
+   * {@inheritDoc}
    */
   public static function commonRetrieve($entityType, &$params, &$defaults, $returnProperities = NULL) {
     $object = new self($entityType);
@@ -146,18 +143,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   }
 
   /**
-   * Fetch object based on array of properties.
-   *
-   * @param string $entityType
-   *   Name of the ECK entity type.
-   * @param string $fieldIdName
-   * @param int $fieldId
-   * @param $details
-   * @param array $returnProperities
-   *   An assoc array of fields that need to be returned, eg array( 'first_name', 'last_name').
-   *
-   * @return object
-   *   an object of type referenced by daoName
+   * {@inheritDoc}
    */
   public static function commonRetrieveAll($entityType, $fieldIdName = 'id', $fieldId, &$details, $returnProperities = NULL) {
     $object = new self($entityType);
@@ -181,11 +167,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   }
 
   /**
-   * @param string $tableAlias
-   * @param string $entity_type
-   * @return array
-   *
-   * @see CRM_Core_DAO::getSelectWhereClause()
+   * {@inheritDoc}
    */
   public static function getSelectWhereClause($tableAlias = NULL, $entity_type = NULL) {
     if (!isset($entity_type)) {
