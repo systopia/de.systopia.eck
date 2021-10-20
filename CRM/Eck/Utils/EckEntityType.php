@@ -1,4 +1,19 @@
 <?php
+/*-------------------------------------------------------+
+| CiviCRM Entity Construction Kit                        |
+| Copyright (C) 2021 SYSTOPIA                            |
+| Author: J. Schuppe (schuppe@systopia.de)               |
++--------------------------------------------------------+
+| This program is released as free software under the    |
+| Affero GPL license. You can redistribute it and/or     |
+| modify it under the terms of this license which you    |
+| can read by viewing the included agpl.txt or online    |
+| at www.gnu.org/licenses/agpl.html. Removal of this     |
+| copyright header is strictly prohibited without        |
+| written permission from the original author(s).        |
++--------------------------------------------------------*/
+
+use CRM_Eck_ExtensionUtil as E;
 
 class CRM_Eck_Utils_EckEntityType {
 
@@ -27,9 +42,9 @@ class CRM_Eck_Utils_EckEntityType {
     $method = explode('.', $funName);
     if (
       count($method) == 2
-      && \CRM_Eck_BAO_EckEntityType::objectExists($method[0], 'CRM_Eck_BAO_EckEntityType', TRUE)
-      && method_exists('CRM_Eck_BAO_EckEntityType', $method[1])
       && in_array($method[1], $allowed_methods)
+      && method_exists('CRM_Eck_BAO_EckEntityType', $method[1])
+      && \CRM_Eck_BAO_EckEntityType::objectExists($method[0], 'CRM_Eck_BAO_EckEntityType', TRUE)
     ) {
       return \CRM_Eck_BAO_EckEntityType::{$method[1]}($method[0]);
     }

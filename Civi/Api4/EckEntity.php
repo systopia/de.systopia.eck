@@ -15,6 +15,7 @@
 
 namespace Civi\Api4;
 
+use CRM_Eck_ExtensionUtil as E;
 use Civi\Api4\Generic\BasicReplaceAction;
 use Civi\Api4\Generic\CheckAccessAction;
 use Civi\Api4\Generic\DAOCreateAction;
@@ -24,7 +25,6 @@ use Civi\Api4\Generic\DAOGetFieldsAction;
 use Civi\Api4\Generic\DAOSaveAction;
 use Civi\Api4\Generic\DAOUpdateAction;
 use Civi\Api4\Action\GetActions;
-use CRM_Eck_ExtensionUtil as E;
 
 /**
  * EckEntityType entity.

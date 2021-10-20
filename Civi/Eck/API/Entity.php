@@ -15,11 +15,11 @@
 
 namespace Civi\Eck\API;
 
+use CRM_Eck_ExtensionUtil as E;
 use Civi\API\Events;
 use Civi\Api4\EckEntity;
 use Civi\Api4\EckEntityType;
 use Civi\Api4\Event;
-use CRM_Eck_ExtensionUtil as E;
 use Civi\API\Event\ResolveEvent;
 use Civi\Api4\Event\CreateApi4RequestEvent;
 use Civi\Core\Event\GenericHookEvent;

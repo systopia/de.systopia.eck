@@ -15,8 +15,8 @@
 
 namespace Civi\Eck\API;
 
-use Civi\Api4\Utils\CoreUtil;
 use CRM_Eck_ExtensionUtil as E;
+use Civi\Api4\Utils\CoreUtil;
 
 class Api4SelectQuery extends \Civi\Api4\Query\Api4SelectQuery {
 
