@@ -77,15 +77,15 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
    * - custom groups extending the entity type
    * - subtypes for the entity type
    *
-   * @param string $entity_type
+   * @param array $entity_type
    *   The name of the entity type to create or update.
-   * @param string | null $old_entity_type
+   * @param array | null $old_entity_type
    *   The old name of the entity type to update.
    *
    * @throws \CiviCRM_API3_Exception
    */
   public static function ensureEntityType($entity_type, $old_entity_type = NULL) {
-    $table_name = 'civicrm_eck_' . strtolower($entity_type);
+    $table_name = 'civicrm_eck_' . strtolower($entity_type['name']);
 
     // Update EckEntityType entity.
     civicrm_api3('EckEntityType', 'create', [
@@ -103,7 +103,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
       ]);
 
       // Rename table.
-      $old_table_name = 'civicrm_eck_' . strtolower($old_entity_type);
+      $old_table_name = 'civicrm_eck_' . strtolower($old_entity_type['name']);
       CRM_Core_DAO::executeQuery(
         "
             RENAME TABLE `{$old_table_name}` TO `{$table_name}`;
@@ -114,8 +114,8 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
       // Create table.
       CRM_Core_DAO::executeQuery(
         "
-          CREATE TABLE IF NOT EXISTS `civicrm_eck_{$table_name}` (
-              `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Eck{$entity_type} ID',
+          CREATE TABLE IF NOT EXISTS `{$table_name}` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Eck{$entity_type['name']} ID',
               PRIMARY KEY (`id`)
           )
           ENGINE=InnoDB
@@ -144,29 +144,28 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
     ]);
 
     // Synchronise custom groups.
-    foreach (CRM_Eck_DAO_EckEntityType::getCustomGroups($old_entity_type) as $custom_group) {
+    foreach (CRM_Eck_DAO_EckEntityType::getCustomGroups($old_entity_type['name']) as $custom_group) {
       civicrm_api3(
         'CustomGroup',
         'create',
         [
           'id' => $custom_group['id'],
-          'extends' => 'Eck' . $entity_type,
+          'extends' => 'Eck' . $entity_type['name'],
         ]
       );
     }
 
     // Synchronise subtypes.
-    foreach (self::getSubTypes($old_entity_type) as $sub_type) {
+    foreach (self::getSubTypes($old_entity_type['name'], FALSE) as $sub_type) {
       civicrm_api3(
         'OptionValue',
         'create',
         [
           'id' => $sub_type['id'],
           'option_group_id' => 'eck_sub_types',
-          'grouping' => $entity_type,
-        ],
-        ['limit' => 0]
-      )['values'];
+          'grouping' => $entity_type['name'],
+        ]
+      );
     }
   }
 

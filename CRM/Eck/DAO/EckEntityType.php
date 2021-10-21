@@ -227,32 +227,17 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
    * @return array|mixed
    * @throws \CiviCRM_API3_Exception
    */
-  public static function getCustomGroups($entity_type_name, $sub_type_name = NULL) {
+  public static function getCustomGroups($entity_type_name) {
     $custom_groups = [];
 
-    $custom_groups['::global::'] = civicrm_api3(
+    $custom_groups = civicrm_api3(
       'CustomGroup',
       'get',
       [
         'extends' => 'Eck' . $entity_type_name,
-        'extends_entity_column_value' => ['IS NULL' => TRUE],
       ],
       ['limit' => 0]
     )['values'];
-
-    if ($sub_type_name) {
-      $custom_groups[$sub_type_name] = civicrm_api3(
-        'CustomGroup',
-        'get',
-        [
-          'extends' => 'Eck' . $entity_type_name,
-          'extends_entity_column_value' => [
-            'LIKE' => CRM_Utils_Array::implodePadded($sub_type_name),
-          ],
-        ],
-        ['limit' => 0]
-      )['values'];
-    }
 
     return $custom_groups;
   }
@@ -266,7 +251,7 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
    * @return array
    *   A list of sub types for the given entity type.
    */
-  public static function getSubTypes($entity_type_name) {
+  public static function getSubTypes($entity_type_name, $as_mapping = TRUE) {
     $result = civicrm_api3(
       'OptionValue',
       'get',
@@ -277,10 +262,13 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
       ['limit' => 0]
     )['values'];
 
-    return array_combine(
-      array_column($result, 'value'),
-      array_column($result, 'label')
-    );
+    if ($as_mapping) {
+      $result = array_combine(
+        array_column($result, 'value'),
+        array_column($result, 'label')
+      );
+    }
+    return $result;
   }
 
   /**
@@ -317,6 +305,51 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
   public static function indices($localize = TRUE) {
     $indices = [];
     return ($localize && !empty($indices)) ? CRM_Core_DAO_AllCoreTables::multilingualize(__CLASS__, $indices) : $indices;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function delete($useWhere = FALSE) {
+    $result = parent::delete($useWhere);
+
+    // Delete custom groups. This has to be done before removeing the table due
+    // to FK constraints.
+    foreach (self::getCustomGroups($this->name) as $custom_group) {
+      civicrm_api3('CustomGroup', 'delete', ['id' => $custom_group['id']]);
+    }
+
+    // Drop table.
+    $table_name = 'civicrm_eck_' . strtolower($this->name);
+    CRM_Core_DAO::executeQuery(
+      "
+          DROP TABLE IF EXISTS `{$table_name}`;
+          "
+    );
+
+    // Retrieve existing option value for custom-field-extendable object.
+    try {
+      $option_value = civicrm_api3('OptionValue', 'getsingle', [
+        'option_group_id' => 'cg_extend_objects',
+        'value' => 'Eck' . $this->name,
+        'name' => 'civicrm_eck_' . strtolower($this->name),
+      ]);
+      // Delete cg_extend_objects option values.
+      civicrm_api3('OptionValue', 'delete', [
+        'id' => $option_value['id'],
+      ]);
+    }
+    catch (Exception $exception) {
+      // Option value doesn't exist, nothing to do, although this should not
+      // happen.
+    }
+
+    // Delete subtypes.
+    foreach (self::getSubTypes($this->name, FALSE) as $sub_type) {
+      civicrm_api3('OptionValue', 'delete', ['id' => $sub_type['id']]);
+    }
+
+    return $result;
   }
 
 }

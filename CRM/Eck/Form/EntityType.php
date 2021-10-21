@@ -56,14 +56,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
 
           // Retrieve custom groups for this entity type.
           $this->_subTypes = CRM_Eck_DAO_EckEntityType::getSubTypes($this->_entityTypeName);
-          if (!empty($this->_subTypes)) {
-            foreach ($this->_subTypes as $sub_type_name => $sub_type_label) {
-              $this->_customGroups += CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName, $sub_type_name);
-            }
-          }
-          else {
-            $this->_customGroups = CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName);
-          }
+          $this->_customGroups = CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName);
           break;
         case CRM_Core_Action::DELETE:
           $this->setTitle(E::ts('Delete Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
@@ -82,8 +75,6 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
    * {@inheritDoc}
    */
   public function buildQuickForm() {
-    $entity_types = Civi::settings()->get('eck_entity_types');
-
     switch ($this->_action) {
       case CRM_Core_Action::UPDATE:
       case CRM_Core_Action::ADD:
@@ -109,16 +100,14 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
 
         // Add links to custom groups.
         $this->assign('customGroupAdminUrl', CRM_Utils_System::url('civicrm/admin/custom/group'));
-        foreach ($this->_customGroups as $sub_type_name => $sub_type_groups) {
-          foreach ($sub_type_groups as &$custom_group) {
-            $custom_group['browse_url'] = CRM_Utils_System::url(
-              'civicrm/admin/custom/group/field',
-              [
-                'action' => CRM_Core_Action::BROWSE,
-                'gid' => $custom_group['id'],
-              ]
-            );
-          }
+        foreach ($this->_customGroups as &$custom_group) {
+          $custom_group['browse_url'] = CRM_Utils_System::url(
+            'civicrm/admin/custom/group/field',
+            [
+              'action' => CRM_Core_Action::BROWSE,
+              'gid' => $custom_group['id'],
+            ]
+          );
         }
         $this->assign('customGroups', $this->_customGroups);
         $this->assign('subTypes', $this->_subTypes);
@@ -178,13 +167,13 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
     // error is to be set the latest, overwriting previous error messages for
     // the same element.
 
-    // Enforce PascalCase formatting.
-    if (ucfirst($this->_submitValues['name']) !== $this->_submitValues['name']) {
-      $this->_errors['name'] = E::ts('The entity type name must be in PascalCase (at least first letter uppercase).');
-    }
-
-    // Do not allow duplicate entity type names.
     if ($this->getAction() == CRM_Core_Action::UPDATE || $this->getAction() == CRM_Core_Action::ADD) {
+      // Enforce PascalCase formatting.
+      if (ucfirst($this->_submitValues['name']) !== $this->_submitValues['name']) {
+        $this->_errors['name'] = E::ts('The entity type name must be in PascalCase (at least first letter uppercase).');
+      }
+
+      // Do not allow duplicate entity type names.
       $count = civicrm_api3('EckEntityType', 'getcount', [
         'name' => $values['name']
       ]);
@@ -207,16 +196,13 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
     switch ($this->getAction()) {
       case CRM_Core_Action::ADD:
       case CRM_Core_Action::UPDATE:
-        $values = $this->exportValues();
-        CRM_Eck_BAO_EckEntityType::ensureEntityType($entity_type, $values['name']);
+        $values = $this->exportValues(NULL, TRUE);
+        CRM_Eck_BAO_EckEntityType::ensureEntityType($values, $this->_entityType);
       break;
       case CRM_Core_Action::DELETE:
-        // TODO: Delete entity type, alogn with
-        //   - entity instances of this entity type
-        //   - custom groups
-        //   - cg_extend_objects option value
-        //   - EckEntityType entity
-        //   - database table
+        \Civi\Api4\EckEntityType::delete()
+          ->setWhere([['id', '=', $this->_entityType['id']]])
+          ->execute();
         break;
     }
 
