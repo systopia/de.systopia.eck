@@ -26,6 +26,8 @@ use \Symfony\Component\DependencyInjection\Definition;
  */
 function eck_civicrm_config(&$config) {
   _eck_civix_civicrm_config($config);
+
+  \Civi::dispatcher()->addSubscriber(new CRM_Eck_BAO_EckEntityType());
 }
 
 /**

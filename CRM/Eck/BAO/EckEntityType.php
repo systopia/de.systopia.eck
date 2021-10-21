@@ -14,8 +14,32 @@
 +--------------------------------------------------------*/
 
 use CRM_Eck_ExtensionUtil as E;
+use \Civi\Core\Event\GenericHookEvent;
+use \Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
+class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements EventSubscriberInterface {
+
+  protected static $_entityTypes;
+
+  public static function getEntityTypes() {
+    if (!isset(static::$_entityTypes)) {
+      $entity_types = civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'];
+      static::$_entityTypes = array_combine(
+        array_map(
+          function ($name) {
+            return 'Eck' . $name;
+          },
+          array_column($entity_types, 'name')
+        ),
+        $entity_types
+      );
+    }
+    return static::$_entityTypes;
+  }
+
+  public static function getEntityTypeNames() {
+    return array_column(self::getEntityTypes(), 'name');
+  }
 
   /**
    * Create a new EckEntityType based on array-data

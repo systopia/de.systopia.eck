@@ -45,7 +45,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   public function getEntityNames($version) {
     return array_map(function ($entity_type) {
       return 'Eck' . $entity_type;
-    }, static::getEntityTypeNames());
+    }, \CRM_Eck_BAO_EckEntityType::getEntityTypeNames());
   }
 
   /**
@@ -63,32 +63,12 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
     return $actions;
   }
 
-  public static function getEntityTypeNames() {
-    return array_column(static::getEntityTypes(), 'name');
-  }
-
-  public static function getEntityTypes() {
-    if (!isset(static::$_entityTypes)) {
-      $entity_types = civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'];
-      static::$_entityTypes = array_combine(
-        array_map(
-          function ($name) {
-            return 'Eck' . $name;
-          },
-          array_column($entity_types, 'name')
-        ),
-        $entity_types
-      );
-    }
-    return static::$_entityTypes;
-  }
-
   public function onApi4EntityTypes(GenericHookEvent $event) {
     // Remove the generic EckEntity entry which should not be available.
     unset($event->entities['EckEntity']);
 
     $eck_entities = [];
-    foreach (static::getEntityTypes() as $entity_type) {
+    foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
       $eck_entities['Eck' . $entity_type['name']] = [
         'name' => 'Eck' . $entity_type['name'],
         'title' => $entity_type['label'],
@@ -105,7 +85,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
       $entity_type = substr($event->entityName, strlen('Eck'));
       if (
         $entity_type != 'EntityType'
-        && in_array($entity_type, static::getEntityTypeNames())
+        && in_array($entity_type, \CRM_Eck_BAO_EckEntityType::getEntityTypeNames())
       ) {
         $event->className = 'Civi\Api4\EckEntity';
         $event->args = [TRUE, $entity_type];
