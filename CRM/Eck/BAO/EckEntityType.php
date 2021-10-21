@@ -17,7 +17,7 @@ use CRM_Eck_ExtensionUtil as E;
 use \Civi\Core\Event\GenericHookEvent;
 use \Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements EventSubscriberInterface {
+class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
 
   protected static $_entityTypes;
 
@@ -60,5 +60,114 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Eve
 
     return $instance;
   } */
+
+  public static function ensureEntityTypes() {
+    // Synchronise cg_extend_objects option group.
+    foreach (self::getEntityTypes() as $entity_type) {
+      self::ensureEntityType($entity_type);
+    }
+  }
+
+  /**
+   * Given an ECKEntityType name (and optionally its old name, if it is about to
+   * be renamed), make sure all data structures are being set-up correctly:
+   * - the EckEntityType entity itself
+   * - the corresponding schema table
+   * - the entry in the "cg_extend_objects" option group
+   * - custom groups extending the entity type
+   * - subtypes for the entity type
+   *
+   * @param string $entity_type
+   *   The name of the entity type to create or update.
+   * @param string | null $old_entity_type
+   *   The old name of the entity type to update.
+   *
+   * @throws \CiviCRM_API3_Exception
+   */
+  public static function ensureEntityType($entity_type, $old_entity_type = NULL) {
+    $table_name = 'civicrm_eck_' . strtolower($entity_type);
+
+    // Update EckEntityType entity.
+    civicrm_api3('EckEntityType', 'create', [
+      'id' => $old_entity_type['id'] ?? NULL,
+      'name' => $entity_type['name'],
+      'label' => $entity_type['label'],
+    ]);
+
+    if ($old_entity_type) {
+      // Retrieve existing option value for custom-field-extendable object.
+      $option_value = civicrm_api3('OptionValue', 'getsingle', [
+        'option_group_id' => 'cg_extend_objects',
+        'value' => 'Eck' . $old_entity_type['name'],
+        'name' => 'civicrm_eck_' . strtolower($old_entity_type['name']),
+      ]);
+
+      // Rename table.
+      $old_table_name = 'civicrm_eck_' . strtolower($old_entity_type);
+      CRM_Core_DAO::executeQuery(
+        "
+            RENAME TABLE `{$old_table_name}` TO `{$table_name}`;
+            "
+      );
+    }
+    else {
+      // Create table.
+      CRM_Core_DAO::executeQuery(
+        "
+          CREATE TABLE IF NOT EXISTS `civicrm_eck_{$table_name}` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Eck{$entity_type} ID',
+              PRIMARY KEY (`id`)
+          )
+          ENGINE=InnoDB
+          DEFAULT CHARSET=utf8
+          COLLATE=utf8_unicode_ci;
+          "
+      );
+    }
+
+    // Synchronize cg_extend_objects option values.
+    civicrm_api3('OptionValue', 'create', [
+      'id' => $old_entity_type ? $option_value['id'] : NULL,
+      'option_group_id' => 'cg_extend_objects',
+      'label' => $entity_type['label'],
+      'value' => 'Eck' . $entity_type['name'],
+      /**
+       * Call a "virtual" static method on EckEntityType, which is being
+       * resolved using a __callStatic() implementation for retrieving a
+       * list of subtypes.
+       * @see \CRM_Eck_Utils_EckEntityType::__callStatic()
+       * @see \CRM_Core_BAO_CustomGroup::getExtendedObjectTypes()
+       */
+      'description' => "CRM_Eck_Utils_EckEntityType::{$entity_type['name']}.getSubTypes;",
+      'name' => 'civicrm_eck_' . strtolower($entity_type['name']),
+      'is_reserved' => 1,
+    ]);
+
+    // Synchronise custom groups.
+    foreach (CRM_Eck_DAO_EckEntityType::getCustomGroups($old_entity_type) as $custom_group) {
+      civicrm_api3(
+        'CustomGroup',
+        'create',
+        [
+          'id' => $custom_group['id'],
+          'extends' => 'Eck' . $entity_type,
+        ]
+      );
+    }
+
+    // Synchronise subtypes.
+    foreach (self::getSubTypes($old_entity_type) as $sub_type) {
+      civicrm_api3(
+        'OptionValue',
+        'create',
+        [
+          'id' => $sub_type['id'],
+          'option_group_id' => 'eck_sub_types',
+          'grouping' => $entity_type,
+        ],
+        ['limit' => 0]
+      )['values'];
+    }
+  }
 
 }

@@ -208,75 +208,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       case CRM_Core_Action::ADD:
       case CRM_Core_Action::UPDATE:
         $values = $this->exportValues();
-        // Create or update entity type.
-        $result = civicrm_api3('EckEntityType', 'create', [
-          'id' => $this->_entityType['id'] ?? NULL,
-          'name' => $values['name'],
-          'label' => $values['label'],
-        ]);
-        $entity_type = reset($result['values']);
-        $old_table_name = 'civicrm_eck_' . strtolower($this->_entityTypeName);
-        $table_name = 'civicrm_eck_' . strtolower($values['name']);
-
-        if ($this->getAction() == CRM_Core_Action::UPDATE) {
-          // Rename existing table.
-          CRM_Core_DAO::executeQuery(
-            "
-            RENAME TABLE `{$old_table_name}` TO `{$table_name}`;
-            "
-          );
-
-          // Retrieve existing option value for custom-field-extendable object.
-          $option_value = civicrm_api3('OptionValue', 'getsingle', [
-            'option_group_id' => 'cg_extend_objects',
-            'value' => 'Eck' . $this->_entityType['name'],
-            'name' => 'civicrm_eck_' . strtolower($this->_entityType['name']),
-          ]);
-        }
-        elseif ($this->getAction() == CRM_Core_Action::ADD) {
-          // Create table if not exists.
-          CRM_Core_DAO::executeQuery(
-            "
-          CREATE TABLE IF NOT EXISTS `civicrm_eck_{$table_name}` (
-              `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Eck{$values['name']} ID',
-              PRIMARY KEY (`id`)
-          )
-          ENGINE=InnoDB
-          DEFAULT CHARSET=utf8
-          COLLATE=utf8_unicode_ci;
-          "
-          );
-        }
-
-        // Synchronize cg_object_exstends option values.
-        civicrm_api3('OptionValue', 'create', [
-          'id' => $option_value['id'] ?? NULL,
-          'option_group_id' => 'cg_extend_objects',
-          'label' => $entity_type['label'],
-          'value' => 'Eck' . $entity_type['name'],
-          /**
-           * Call a "virtual" static method on EckEntityType, which is being
-           * resolved using a __callStatic() implementation for retrieving a
-           * list of sub types.
-           * @see \CRM_Eck_BAO_EckEntityType::__callStatic()
-           * @see \CRM_Core_BAO_CustomGroup::getExtendedObjectTypes()
-           */
-          'description' => "CRM_Eck_BAO_EckEntityType::{$entity_type['name']}.getSubTypes;",
-          'name' => 'civicrm_eck_' . strtolower($entity_type['name']),
-          'is_reserved' => 1,
-        ]);
-
-        // Synchronise custom groups.
-        foreach ($this->_customGroups as $custom_group) {
-          civicrm_api3(
-            'CustomGroup',
-            'create',
-            [
-              'id' => $custom_group['id'],
-              'extends' => 'Eck' . $values['name'],
-            ]
-          );
-        }
+        CRM_Eck_BAO_EckEntityType::ensureEntityType($entity_type, $values['name']);
       break;
       case CRM_Core_Action::DELETE:
         // TODO: Delete entity type, alogn with
