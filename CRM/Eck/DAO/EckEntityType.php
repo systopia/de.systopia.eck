@@ -102,23 +102,13 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public function initialize() {
-    parent::initialize();
-
-//    $this->_customGroups = static::getCustomGroups($this->name);
-//    $this->_subTypes = static::getSubTypes($this->name);
-  }
-
-  /**
    * Returns localized title of this entity.
    *
    * @param bool $plural
    *   Whether to return the plural version of the title.
    */
   public static function getEntityTitle($plural = FALSE) {
-    return $plural ? E::ts('Eck Entity Types') : E::ts('Eck Entity Type');
+    return $plural ? E::ts('ECK Entity Types') : E::ts('ECK Entity Type');
   }
 
   /**
@@ -376,9 +366,13 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public function delete($useWhere = FALSE) {
+    // TODO: Delete entities of this type.
+
     $result = parent::delete($useWhere);
 
-    // Delete custom groups. This has to be done before removeing the table due
+    // TODO: Delete custom fields in custom groups extending this entity type?
+
+    // Delete custom groups. This has to be done before removing the table due
     // to FK constraints.
     foreach (self::getCustomGroups($this->name) as $custom_group) {
       civicrm_api3('CustomGroup', 'delete', ['id' => $custom_group['id']]);

@@ -104,11 +104,13 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
 
       // Rename table.
       $old_table_name = 'civicrm_eck_' . strtolower($old_entity_type['name']);
-      CRM_Core_DAO::executeQuery(
-        "
+      if ($old_table_name != $table_name) {
+        CRM_Core_DAO::executeQuery(
+          "
             RENAME TABLE `{$old_table_name}` TO `{$table_name}`;
             "
-      );
+        );
+      }
     }
     else {
       // Create table.
@@ -116,6 +118,8 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
         "
           CREATE TABLE IF NOT EXISTS `{$table_name}` (
               `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Eck{$entity_type['name']} ID',
+              `title` text NOT NULL   COMMENT 'The entity title.',
+              `subtype` text NOT NULL   COMMENT 'The entity subtype.',
               PRIMARY KEY (`id`)
           )
           ENGINE=InnoDB

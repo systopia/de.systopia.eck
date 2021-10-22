@@ -29,6 +29,27 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   public static $_log = TRUE;
 
   /**
+   * Unique entity ID.
+   *
+   * @var int
+   */
+  public $id;
+
+  /**
+   * The entity title.
+   *
+   * @var int
+   */
+  public $title;
+
+  /**
+   * The entity subtype.
+   *
+   * @var int
+   */
+  public $subtype;
+
+  /**
    * @param string $entityType
    *
    * @return \CRM_Eck_DAO_Entity
@@ -75,6 +96,9 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public static function &fields() {
+    // TODO: This is being called without the constructor being called
+    //   beforehand, so this will not always work due to static variables not
+    //   being set.
     if (!isset(Civi::$statics[static::$_className]['fields'])) {
       Civi::$statics[static::$_className]['fields'] = [
         'id' => [
@@ -109,6 +133,26 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'add' => '4.3',
           'html' => [
             'type' => 'Text',
+          ],
+        ],
+        'subtype' => [
+          'name' => 'subtype',
+          'title' => E::ts('Subtype'),
+          'type' => CRM_Utils_Type::T_STRING,
+          'description' => E::ts('The entity subtype.'),
+          'required' => TRUE,
+          'where' => static::getTableName() . '.subtype',
+          'export' => TRUE,
+          'table_name' => static::getTableName(),
+          'entity' => static::$_entityType,
+          'bao' => 'CRM_Eck_DAO_Entity',
+          'localizable' => 0,
+          'add' => '4.3',
+          'html' => [
+            'type' => 'Select',
+          ],
+          'pseudoconstant' => [
+            'callback' => 'CRM_Eck_Utils_EckEntityType::' . static::$_entityType . '.getSubTypes',
           ],
         ],
       ];
