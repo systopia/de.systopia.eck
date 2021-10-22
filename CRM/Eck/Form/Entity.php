@@ -54,25 +54,7 @@ class CRM_Eck_Form_Entity extends CRM_Core_Form {
 
   public function postProcess() {
     $values = $this->exportValues();
-    $options = $this->getColorOptions();
-    CRM_Core_Session::setStatus(E::ts('You picked color "%1"', array(
-      1 => $options[$values['favorite_color']],
-    )));
     parent::postProcess();
-  }
-
-  public function getColorOptions() {
-    $options = array(
-      '' => E::ts('- select -'),
-      '#f00' => E::ts('Red'),
-      '#0f0' => E::ts('Green'),
-      '#00f' => E::ts('Blue'),
-      '#f0f' => E::ts('Purple'),
-    );
-    foreach (array('1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e') as $f) {
-      $options["#{$f}{$f}{$f}"] = E::ts('Grey (%1)', array(1 => $f));
-    }
-    return $options;
   }
 
   /**

@@ -49,20 +49,6 @@
               <li>
                 <a href="{crmURL p='civicrm/admin/eck/entity-type' q="reset=1&action=delete&type=$entity_type_name"}">{ts}Delete{/ts}</a>
               </li>
-              {if !empty($entity_type.custom_groups)}
-                <!--
-                <li>
-                    {ts}Manage custom fields{/ts}
-                  <ul>
-                      {foreach from=$entity_type.custom_groups item=custom_group key=custom_group_id}
-                        <li>
-                          <a href="{crmURL p='civicrm/admin/custom/group/field' q="reset=1&action=browse&gid=$custom_group_id"}">{$custom_group.title}</a>
-                        </li>
-                      {/foreach}
-                  </ul>
-                </li>
-                -->
-              {/if}
             </ul>
           </td>
         </tr>

@@ -24,8 +24,6 @@ class CRM_Eck_Page_EntityTypes extends CRM_Core_Page {
     $entity_types = civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'];
 
     foreach ($entity_types as &$entity_type) {
-      // TODO: Differentiate between sub types.
-      $entity_type['custom_groups'] = CRM_Eck_DAO_EckEntityType::getCustomGroups($entity_type['name']);
       $entity_type['sub_types'] = CRM_Eck_DAO_EckEntityType::getSubTypes($entity_type['name']);
     }
     $this->assign('entity_types', $entity_types);

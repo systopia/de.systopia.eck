@@ -13,6 +13,12 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/admin/eck/subtype</path>
+    <page_callback>CRM_Eck_Form_EckSubtype</page_callback>
+    <title>EckSubtype</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/eck/entity/list</path>
     <page_callback>CRM_Eck_Page_EntityList</page_callback>
     <title>EntityList</title>
@@ -28,12 +34,6 @@
     <path>civicrm/admin/eck/entity</path>
     <page_callback>CRM_Eck_Form_Entity</page_callback>
     <title>Entity</title>
-    <access_arguments>access CiviCRM</access_arguments>
-  </item>
-  <item>
-    <path>civicrm/admin/eck/subtype</path>
-    <page_callback>CRM_Eck_Form_EckSubtype</page_callback>
-    <title>EckSubtype</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
 </menu>
