@@ -20,15 +20,13 @@ use CRM_Eck_ExtensionUtil as E;
  *
  * @see https://docs.civicrm.org/dev/en/latest/framework/quickform/
  */
-class CRM_Eck_Form_EntityType extends CRM_Core_Form {
+class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
 
-  protected $_entityTypeName;
+  protected $_subTypeValue;
 
-  protected $_entityType = [];
+  protected $_subType;
 
   protected $_customGroups = [];
-
-  protected $_subTypes = [];
 
   /**
    * {@inheritDoc}
@@ -37,37 +35,49 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
     $this->setAction(CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? 'add');
 
     if ($this->_action == CRM_Core_Action::ADD) {
-      $this->setTitle(E::ts('Add Entity Type'));
-    }
-    elseif ($this->_action == CRM_Core_Action::UPDATE || $this->_action == CRM_Core_Action::DELETE) {
-      if (!($this->_entityTypeName = CRM_Utils_Request::retrieve('type', 'String', $this))) {
+      if (!($this->_subTypeValue = CRM_Utils_Request::retrieve('type', 'String', $this))) {
         throw new Exception(E::ts('No entity type given.'));
       }
+      $this->setTitle(E::ts('Add Subtype'));
+      $this->_subType = [
+        'grouping' => CRM_Utils_Request::retrieve('type', 'String', $this, FALSE)
+      ];
+    }
+    elseif ($this->_action == CRM_Core_Action::UPDATE || $this->_action == CRM_Core_Action::DELETE) {
+      if (!($this->_subTypeValue = CRM_Utils_Request::retrieve('subtype', 'String', $this))) {
+        throw new Exception(E::ts('No subtype given.'));
+      }
       try {
-        $this->_entityType = civicrm_api3(
-          'EckEntityType',
+        $this->_subType = civicrm_api3(
+          'OptionValue',
           'getsingle',
-          ['name' => $this->_entityTypeName]
+          [
+            'option_group_id' => 'eck_sub_types',
+            'value' => $this->_subTypeValue,
+          ]
         );
       }
       catch (Exception $exception) {
-        throw new Exception(E::ts('Invalid entity type.'));
+        throw new Exception(E::ts('Invalid subtype.'));
       }
       switch ($this->_action) {
         case CRM_Core_Action::UPDATE:
-          $this->setTitle(E::ts('Edit Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
-
-          // Retrieve custom groups for this entity type.
-          $this->_subTypes = CRM_Eck_DAO_EckEntityType::getSubTypes($this->_entityTypeName);
+          $this->setTitle(E::ts('Edit Subtype <em>%1</em>', [1 => $this->_subType['label']]));
           $this->_customGroups = array_filter(
-            CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName),
+            CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_subType['grouping']),
             function($custom_group) {
-              return empty($custom_group['extends_entity_column_value']);
+              return
+                isset($custom_group['extends_entity_column_value'])
+                && is_array($custom_group['extends_entity_column_value'])
+                && in_array(
+                  $this->_subType['value'],
+                  $custom_group['extends_entity_column_value']
+                );
             }
           );
           break;
         case CRM_Core_Action::DELETE:
-          $this->setTitle(E::ts('Delete Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
+          $this->setTitle(E::ts('Delete Subtype <em>%1</em>', [1 => $this->_subType['label']]));
           break;
       }
     }
@@ -75,41 +85,34 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       throw new Exception(E::ts('Invalid action.'));
     }
 
-    $this->assign('entityType', $this->_entityType);
+    $this->assign('subType', $this->_subType);
 
     // Set redirect destination.
-    $this->controller->_destination = CRM_Utils_System::url('civicrm/admin/eck/entity-types', 'reset=1');
+    $this->controller->_destination = CRM_Utils_System::url(
+      'civicrm/admin/eck/entity-type',
+      'reset=1&action=update&type=' . $this->_subType['grouping']
+    );
   }
 
-  /**
-   * {@inheritDoc}
-   */
   public function buildQuickForm() {
     switch ($this->_action) {
       case CRM_Core_Action::UPDATE:
       case CRM_Core_Action::ADD:
         $submit_button_caption = E::ts('Save');
 
-        foreach (CRM_Eck_DAO_EckEntityType::fields() as $field) {
-          if ($field['name'] != 'id') {
-            $this->addField(
-              $field['name'],
-              [
-                'entity' => 'EckEntityType',
-                'name' => $field['name'],
-                'action' => 'create',
-                'context' => array_search(
-                  $this->_action,
-                  CRM_Core_Action::$_names
-                ),
-              ],
-              $field['required']
-            );
-          }
-        }
+        $this->add(
+          'text',
+          'label', // OptionValue.label
+          E::ts('Subtype name'),
+          NULL,
+          TRUE
+        );
 
         // Add links to custom groups.
-        $this->assign('customGroupAdminUrl', CRM_Utils_System::url('civicrm/admin/custom/group'));
+        $this->assign(
+          'customGroupAdminUrl',
+          CRM_Utils_System::url('civicrm/admin/custom/group')
+        );
         foreach ($this->_customGroups as &$custom_group) {
           $custom_group['browse_url'] = CRM_Utils_System::url(
             'civicrm/admin/custom/group/field',
@@ -120,13 +123,10 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           );
         }
         $this->assign('customGroups', $this->_customGroups);
-        $this->assign('subTypes', $this->_subTypes);
         break;
       case CRM_Core_Action::DELETE:
         $submit_button_caption = E::ts('Delete');
         break;
-      default:
-        throw new Exception(E::ts('Invalid operation.'));
     }
 
     $this->addButtons(
@@ -158,60 +158,29 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       if (isset($values[$elementName])) {
         $this->getElement($elementName)->setValue($values[$elementName]);
       }
-      elseif (isset($this->_entityType[$elementName])) {
-        $this->getElement($elementName)->setValue($this->_entityType[$elementName]);
+      elseif (isset($this->_subType[$elementName])) {
+        $this->getElement($elementName)->setValue($this->_subType[$elementName]);
       }
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public function validate() {
-    parent::validate();
-
-    $values = $this->exportValues();
-
-    // Note: Since each field can only have one error, the most significant
-    // error is to be set the latest, overwriting previous error messages for
-    // the same element.
-
-    if ($this->getAction() == CRM_Core_Action::UPDATE || $this->getAction() == CRM_Core_Action::ADD) {
-      // Enforce PascalCase formatting.
-      if (ucfirst($this->_submitValues['name']) !== $this->_submitValues['name']) {
-        $this->_errors['name'] = E::ts('The entity type name must be in PascalCase (at least first letter uppercase).');
-      }
-
-      // Do not allow duplicate entity type names.
-      $count = civicrm_api3('EckEntityType', 'getcount', [
-        'name' => $values['name']
-      ]);
-      if (
-        // case-insensitive checking according to API/database behavior.
-        strtolower($values['name']) != strtolower($this->_entityType['name'] ?? NULL)
-        && $count > 0
-      ) {
-        $this->_errors['name'] = E::ts('An entity type with this name already exists.');
-      }
-    }
-
-    return (0 == count($this->_errors));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public function postProcess() {
     switch ($this->getAction()) {
       case CRM_Core_Action::ADD:
       case CRM_Core_Action::UPDATE:
         $values = $this->exportValues(NULL, TRUE);
-        CRM_Eck_BAO_EckEntityType::ensureEntityType($values, $this->_entityType);
-      break;
+        // Update OptionValue name and label.
+        civicrm_api3('OptionValue', 'create', [
+          'id' => $this->_subType['id'],
+          'name' => $values['label'],
+          'label' => $values['label'],
+        ]);
+        break;
       case CRM_Core_Action::DELETE:
-        \Civi\Api4\EckEntityType::delete()
-          ->setWhere([['id', '=', $this->_entityType['id']]])
-          ->execute();
+        // TODO: Delete CustomFields in CustomGroup attached to subtype.
+        // TODO: Delete CustomGroups attached to subtype.
+        // TODO: Delete entities of subtype.
+        // TODO: Delete subtype (from OptionGroup).
         break;
     }
 
@@ -219,9 +188,9 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
   }
 
   /**
-   * Retrieves fields/elements defined in this form.
+   * Get the fields/elements defined in this form.
    *
-   * @return string[]
+   * @return array (string)
    */
   public function getRenderableElementNames() {
     // The _elements list includes some items which should not be

@@ -12,77 +12,108 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*}
 
-<div class="crm-block crm-form-block">
+{crmScope extensionKey='de.systopia.eck'}
+  <div class="crm-block crm-form-block">
 
-  <div class="crm-submit-buttons">
-      {include file="CRM/common/formButtons.tpl" location="top"}
-  </div>
+    <div class="crm-submit-buttons">
+        {include file="CRM/common/formButtons.tpl" location="top"}
+    </div>
 
-    {if $action == 1 or $action == 2}
+      {if $action == 1 or $action == 2}
 
-        {foreach from=$elementNames item=elementName}
-          <div class="crm-section">
-            <div class="label">{$form.$elementName.label}</div>
-            <div class="content">
-                {if $elementName == 'name'}<span>Eck</span>{/if}
-                {$form.$elementName.html}
+          {foreach from=$elementNames item=elementName}
+            <div class="crm-section">
+              <div class="label">{$form.$elementName.label}</div>
+              <div class="content">
+                  {if $elementName == 'name'}<span>Eck</span>{/if}
+                  {$form.$elementName.html}
+              </div>
+              <div class="clear"></div>
             </div>
-            <div class="clear"></div>
+          {/foreach}
+
+          {* Sub types *}
+        <div class="crm-accordion-wrapper">
+          <div class="crm-accordion-header">{ts}Sub types{/ts}</div>
+          <div class="crm-accordion-body">
+
+            <div class="crm-block crm-content-block">
+              <table class="row-highlight">
+                <thead>
+                <tr>
+                  <th>{ts}Subtype{/ts}</th>
+                  <th>{ts}Operations{/ts}</th>
+                </tr>
+                </thead>
+                  {if !empty($subTypes)}
+                    <tr>
+                        {foreach from=$subTypes item=subTypeLabel key=subTypeValue}
+                          <td>{$subTypeLabel}</td>
+                          <td>
+                            <ul>
+                              <li>
+                                <a href="{crmURL p="civicrm/admin/eck/subtype" q="reset=1&action=update&subtype=$subTypeValue"}">{ts}Edit{/ts}</a>
+                              </li>
+                              <li>
+                                <a href="{crmURL p="civicrm/admin/eck/subtype" q="reset=1&action=delete&subtype=$subTypeValue"}">{ts}Delete{/ts}</a>
+                              </li>
+                            </ul>
+                          </td>
+                        {/foreach}
+                    </tr>
+                  {else}
+                    <tr>
+                      <td colspan="2">{ts}No subtypes{/ts}</td>
+                    </tr>
+                  {/if}
+              </table>
+            </div>
+
+              {if $action == 2}
+                <div class="action-link">
+                    {capture assign=entityTypeName}{$entityType.name}{/capture}
+                    {crmButton p='civicrm/admin/eck/subtype' q="reset=1&action=add&type=$entityTypeName" id="newEckSubtype"  icon="plus-circle"}{ts}Add Subtype{/ts}{/crmButton}
+                </div>
+              {else}
+                <p class="description">{ts}You may add subtypes after saving this new entity type.{/ts}</p>
+              {/if}
+
           </div>
-        {/foreach}
-
-        {* Sub types *}
-      <div class="crm-accordion-wrapper">
-        <div class="crm-accordion-header">{ts}Sub types{/ts}</div>
-        <div class="crm-accordion-body">
-          <p class="description">{ts 1=$optionGroupAdminUrl}You may manage sub types of this entity type using the <code>eck_sub_types</code> option group.{/ts}</p>
-            {if !empty($subTypes)}
-                <ul>
-                  {foreach from=$subTypes item=subType}
-                      <li>{$subType}</li>
-                  {/foreach}
-                </ul>
-            {/if}
         </div>
-      </div>
-
-        {* Custom groups links *}
-      <div class="crm-accordion-wrapper">
-        <div class="crm-accordion-header">{ts}Custom Groups{/ts}</div>
-        <div class="crm-accordion-body">
-          <p class="description">{ts 1=$customGroupAdminUrl}You may add custom fields to this entity type using <a href="%1">CiviCRM's custom groups</a>.{/ts}</p>
-            {if !empty($customGroups)}
-              <p class="description">{ts}The following custom groups extend this entity type or its sub types:{/ts}</p>
-              {foreach from=$customGroups item=subTypeGroups key=subTypeName}
-                {if !empty($subTypeGroups)}
-                  <h3>{if $subTypeName == '::global::'}{ts}For all sub types{/ts}{else}{$subTypes.$subTypeName}{/if}</h3>
-                    <ul>
-                    {foreach from=$subTypeGroups item=customGroup}
+          {* Custom groups links *}
+        <div class="crm-accordion-wrapper">
+          <div class="crm-accordion-header">{ts}Custom Groups{/ts}</div>
+          <div class="crm-accordion-body">
+            <p class="description">{ts 1=$customGroupAdminUrl}You may add custom fields to this entity type using
+                <a href="%1">CiviCRM's custom groups</a>
+                .{/ts}</p>
+            <p class="description">{ts 1=$customGroupAdminUrl}You may administer custom fields for subtypes of this entity type by editing the subtype.{/ts}</p>
+              {if !empty($customGroups)}
+                <p class="description">{ts}The following custom groups extend all subtypes of this entity type:{/ts}</p>
+                <ul>
+                    {foreach from=$customGroups item=customGroup}
                       <li>
                         <a href="{$customGroup.browse_url}">{$customGroup.title}</a>
                       </li>
                     {/foreach}
-                    </ul>
-                {/if}
-              {/foreach}
-            {/if}
+                </ul>
+              {/if}
+          </div>
         </div>
-      </div>
-
-    {elseif $action == 8}
-
-      <div class="crm-section no-label">
-        <div class="status">
-          <p>{ts 1=$entityTypeLabel}Do you want to delete the entity type <em>%1</em>?{/ts}</p>
-          <p>{ts}This involves deleting all custom fields attached to this entity type and all currently existing entities of this type.{/ts}</p>
-          <p class="crm-error">{ts}This action cannot be undone.{/ts}</p>
+      {elseif $action == 8}
+        <div class="crm-section no-label">
+          <div class="status">
+            <p>{ts 1=$entityType.label}Do you want to delete the entity type<em>%1</em>?{/ts}
+            </p>
+            <p>{ts}This involves deleting all custom fields attached to this entity type and all currently existing entities of this type.{/ts}</p>
+            <p class="crm-error">{ts}This action cannot be undone.{/ts}</p>
+          </div>
         </div>
-      </div>
+      {/if}
 
-    {/if}
+    <div class="crm-submit-buttons">
+        {include file="CRM/common/formButtons.tpl" location="bottom"}
+    </div>
 
-  <div class="crm-submit-buttons">
-      {include file="CRM/common/formButtons.tpl" location="bottom"}
   </div>
-
-</div>
+{/crmScope}
