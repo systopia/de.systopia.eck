@@ -177,10 +177,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
         ]);
         break;
       case CRM_Core_Action::DELETE:
-        // TODO: Delete CustomFields in CustomGroup attached to subtype.
-        // TODO: Delete CustomGroups attached to subtype.
-        // TODO: Delete entities of subtype.
-        // TODO: Delete subtype (from OptionGroup).
+        CRM_Eck_BAO_EckEntityType::deleteSubType($this->_subType['value']);
         break;
     }
 

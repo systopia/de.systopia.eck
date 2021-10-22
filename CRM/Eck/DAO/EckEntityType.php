@@ -272,6 +272,71 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
   }
 
   /**
+   * Deletes a subtype, which involves:
+   * - deleting all entities of this subtype
+   * - deleting all custom fields in custom groups attached to this subtype
+   * - deleting all custom groups attached to this subtype
+   * - deleting the subtype option value from the "eck_sub_types" option group
+   *
+   * @param $sub_type_value
+   *   The value of the subtype in the "eck_sub_types" option group.
+   *
+   * @throws \Exception
+   */
+  public static function deleteSubType($sub_type_value) {
+    $sub_type = civicrm_api3(
+      'OptionValue',
+      'getsingle',
+      [
+        'option_group_id' => 'eck_sub_types',
+        'value' => $sub_type_value
+      ]
+    );
+
+    // Delete entities of subtype.
+    civicrm_api4(
+      $sub_type['grouping'],
+      'delete',
+      [
+        'where' => [
+          ['id', 'IS NOT NULL'],
+        ],
+      ]
+    );
+
+    // TODO: Delete CustomFields in CustomGroup attached to subtype.
+
+    // Delete CustomGroups attached to subtype.
+    $custom_groups = array_filter(
+      CRM_Eck_DAO_EckEntityType::getCustomGroups($sub_type['grouping']),
+      function($custom_group) use ($sub_type_value) {
+        return
+          isset($custom_group['extends_entity_column_value'])
+          && is_array($custom_group['extends_entity_column_value'])
+          && in_array(
+            $sub_type_value,
+            $custom_group['extends_entity_column_value']
+          );
+      }
+    );
+    foreach (CRM_Eck_DAO_EckEntityType::getCustomGroups($sub_type['grouping']) as $custom_group) {
+      if (
+        isset($custom_group['extends_entity_column_value'])
+        && is_array($custom_group['extends_entity_column_value'])
+        && in_array(
+          $sub_type_value,
+          $custom_group['extends_entity_column_value']
+        )
+      ) {
+        civicrm_api3('CustomGroup', 'delete', ['id' => $custom_group['id']]);
+      }
+    }
+
+    // Delete subtype.
+    civicrm_api3('OptionValue', 'delete', ['id' => $sub_type['id']]);
+  }
+
+  /**
    * Returns the list of fields that can be imported
    *
    * @param bool $prefix
