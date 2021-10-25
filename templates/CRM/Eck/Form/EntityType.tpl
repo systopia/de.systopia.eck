@@ -46,8 +46,8 @@
                 </tr>
                 </thead>
                   {if !empty($subTypes)}
-                    <tr>
-                        {foreach from=$subTypes item=subTypeLabel key=subTypeValue}
+                      {foreach from=$subTypes item=subTypeLabel key=subTypeValue}
+                        <tr>
                           <td>{$subTypeLabel}</td>
                           <td>
                             <ul>
@@ -59,8 +59,8 @@
                               </li>
                             </ul>
                           </td>
-                        {/foreach}
-                    </tr>
+                        </tr>
+                      {/foreach}
                   {else}
                     <tr>
                       <td colspan="2">{ts}No subtypes{/ts}</td>

@@ -147,29 +147,30 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
       'is_reserved' => 1,
     ]);
 
-    // Synchronise custom groups.
-    foreach (CRM_Eck_DAO_EckEntityType::getCustomGroups($old_entity_type['name']) as $custom_group) {
-      civicrm_api3(
-        'CustomGroup',
-        'create',
-        [
-          'id' => $custom_group['id'],
-          'extends' => 'Eck' . $entity_type['name'],
-        ]
-      );
-    }
-
-    // Synchronise subtypes.
-    foreach (self::getSubTypes($old_entity_type['name'], FALSE) as $sub_type) {
-      civicrm_api3(
-        'OptionValue',
-        'create',
-        [
-          'id' => $sub_type['id'],
-          'option_group_id' => 'eck_sub_types',
-          'grouping' => $entity_type['name'],
-        ]
-      );
+    if ($old_entity_type) {
+      // Synchronise custom groups.
+      foreach (CRM_Eck_DAO_EckEntityType::getCustomGroups($old_entity_type['name']) as $custom_group) {
+        civicrm_api3(
+          'CustomGroup',
+          'create',
+          [
+            'id' => $custom_group['id'],
+            'extends' => 'Eck' . $entity_type['name'],
+          ]
+        );
+      }
+      // Synchronise subtypes.
+      foreach (self::getSubTypes($old_entity_type['name'], FALSE) as $sub_type) {
+        civicrm_api3(
+          'OptionValue',
+          'create',
+          [
+            'id' => $sub_type['id'],
+            'option_group_id' => 'eck_sub_types',
+            'grouping' => $entity_type['name'],
+          ]
+        );
+      }
     }
   }
 

@@ -35,12 +35,13 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
     $this->setAction(CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? 'add');
 
     if ($this->_action == CRM_Core_Action::ADD) {
-      if (!($this->_subTypeValue = CRM_Utils_Request::retrieve('type', 'String', $this))) {
+      if (!($this->_entityType = CRM_Utils_Request::retrieve('type', 'String', $this))) {
         throw new Exception(E::ts('No entity type given.'));
       }
       $this->setTitle(E::ts('Add Subtype'));
       $this->_subType = [
-        'grouping' => CRM_Utils_Request::retrieve('type', 'String', $this, FALSE)
+        'grouping' => $this->_entityType,
+        'option_group_id' => 'eck_sub_types',
       ];
     }
     elseif ($this->_action == CRM_Core_Action::UPDATE || $this->_action == CRM_Core_Action::DELETE) {
@@ -170,11 +171,10 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
       case CRM_Core_Action::UPDATE:
         $values = $this->exportValues(NULL, TRUE);
         // Update OptionValue name and label.
-        civicrm_api3('OptionValue', 'create', [
-          'id' => $this->_subType['id'],
+        civicrm_api3('OptionValue', 'create', array_merge($this->_subType, [
           'name' => $values['label'],
           'label' => $values['label'],
-        ]);
+        ]));
         break;
       case CRM_Core_Action::DELETE:
         CRM_Eck_BAO_EckEntityType::deleteSubType($this->_subType['value']);
