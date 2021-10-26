@@ -408,6 +408,9 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
       civicrm_api3('OptionValue', 'delete', ['id' => $sub_type['id']]);
     }
 
+    // Flush schema cache.
+    CRM_Core_DAO_AllCoreTables::reinitializeCache();
+
     return $result;
   }
 

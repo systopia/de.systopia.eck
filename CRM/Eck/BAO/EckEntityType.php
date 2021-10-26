@@ -172,6 +172,9 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
         );
       }
     }
+
+    // Flush schema cache.
+    CRM_Core_DAO_AllCoreTables::reinitializeCache();
   }
 
 }
