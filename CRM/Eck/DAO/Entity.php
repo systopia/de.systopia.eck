@@ -149,11 +149,11 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'localizable' => 0,
           'add' => '4.3',
           'html' => [
-            'type' => 'Select',
+            'type' => 'Text',
           ],
-          'pseudoconstant' => [
-            'callback' => 'CRM_Eck_Utils_EckEntityType::' . static::$_entityType . '.getSubTypes',
-          ],
+//          'pseudoconstant' => [
+//            'callback' => 'CRM_Eck_Utils_EckEntityType::' . static::$_entityType . '.getSubTypes',
+//          ],
         ],
       ];
 
