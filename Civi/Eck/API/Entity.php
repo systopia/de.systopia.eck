@@ -159,11 +159,10 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
           else {
             $query->select = array_keys(array_filter($options['return']));
             $query->orderBy = $options['sort'];
-            $query->isFillUniqueFields = $uniqueFields;
+            $query->isFillUniqueFields = FALSE;
           }
           $query->limit = $options['limit'];
           $query->offset = $options['offset'];
-          $query->merge($sql);
           $result = $query->run();
         }
         $result = civicrm_api3_create_success($result, $params, $entity, 'get');

@@ -13,6 +13,7 @@
 +--------------------------------------------------------*}
 
 {crmScope extensionKey='de.systopia.eck'}
+  {capture assign="entity_type_name"}{$entity_type.name}{/capture}
   <div class="crm-block crm-content-block">
     <table class="row-highlight">
       <thead>
@@ -30,7 +31,7 @@
               {foreach from=$fields item=field key=field_name}
                 <td>
                     {if $field_name == 'title'}
-                      <a href="{crmURL p="civicrm/eck/entity" q="reset=1&action=view&id=$entity_id"}">
+                      <a href="{crmURL p="civicrm/eck/entity" q="reset=1&action=view&type=$entity_type_name&id=$entity_id"}">
                           {$entity.$field_name}
                       </a>
                     {else}

@@ -19,7 +19,7 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
 
   public function run() {
 
-    // TODO: Get ECK entity type from request query.
+    // Retrieve ECK entity type.
     if (!$entity_type_name = CRM_Utils_Request::retrieve('type', 'String', $this)) {
       throw new CRM_Core_Exception('No entity type given.');
     }
@@ -31,22 +31,49 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
       throw new Exception(E::ts('Invalid entity type.'));
     }
 
-    // TODO: Get ECK entity ID from request query.
+    // Retrieve ECK entity using the API.
     if (!$entity_id = CRM_Utils_Request::retrieve('id', 'Integer', $this)) {
       throw new CRM_Core_Exception('No entity ID given.');
     }
+    $entity = civicrm_api3('Eck' . $entity_type_name, 'getsingle', ['id' => $entity_id]);
 
-    // TODO: Get ECK entity using the API.
-    $entity = civicrm_api3('Eck' . $entity_type['name'], 'getsingle', ['id' => $entity_id]);
-
-    // TODO: Get fields for subtype of the entity.
-    $fields = civicrm_api3('Eck' . $entity_type['name'], 'getfields', ['subtype' => $entity['subtype']]);
+    // Retrieve fields.
+    $fields = civicrm_api3('Eck' . $entity_type_name, 'getfields', ['subtype' => $entity['subtype']])['values'];
+    $fields = array_filter($fields, function($key) {
+      return strpos($key, 'custom_') !== 0;
+    }, ARRAY_FILTER_USE_KEY);
     $this->assign('fields', $fields);
 
-    // TODO: Set page title.
+    // Set page title.
     CRM_Utils_System::setTitle($entity['title']);
 
-    // TODO: Assign entity properties as template variables.
+    // Retrieve and build custom data view.
+    $custom_group_tree = CRM_Core_BAO_CustomGroup::getTree(
+      'Eck' . $entity_type_name,
+      [],
+      $entity_id,
+      NULL,
+      [$entity['subtype']],
+      NULL,
+      FALSE,
+      NULL,
+      FALSE,
+      CRM_Core_Permission::VIEW
+    );
+    CRM_Core_BAO_CustomGroup::buildCustomDataView(
+      $this,
+      $custom_group_tree,
+      FALSE,
+      NULL,
+      NULL,
+      NULL,
+      $entity_id
+    );
+
+    // Replace subtype value with its name.
+    $subtypes = CRM_Eck_BAO_EckEntityType::getSubTypes($entity_type_name);
+    $entity['subtype'] = $subtypes[$entity['subtype']];
+
     $this->assign('entity', $entity);
 
     parent::run();

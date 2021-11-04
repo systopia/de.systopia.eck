@@ -13,6 +13,27 @@
 +--------------------------------------------------------*}
 
 {crmScope extensionKey='de.systopia.eck'}
-{$entity}
-{$fields}
+  <div class="crm-block crm-content-block">
+
+    <div class="crm-container section-shown">
+      <table class="no-border">
+        <tbody>
+        {foreach from=$fields item="field" key="field_name"}
+          <tr>
+            <th>{$field.title}</th>
+            <td>{$entity.$field_name}</td>
+          </tr>
+        {/foreach}
+        </tbody>
+      </table>
+    </div>
+
+      {if $viewCustomData}
+          {capture assign="multiRecordDisplay"}0{/capture}
+          {capture assign="groupId"}0{/capture}
+          {capture assign="skipTitle"}0{/capture}
+          {include file="CRM/Custom/Page/CustomDataView.tpl"}
+      {/if}
+
+  </div>
 {/crmScope}
