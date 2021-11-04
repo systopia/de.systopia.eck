@@ -62,7 +62,6 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           $this->_customGroups = array_filter(
             CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName),
             function($custom_group) {
-              // TODO: "extends_entity_column_value" is not being returned by the API!
               return empty($custom_group['extends_entity_column_value']);
             }
           );
