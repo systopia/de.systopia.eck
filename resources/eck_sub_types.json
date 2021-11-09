@@ -1,0 +1,11 @@
+{
+    "_lookup": ["name"],
+    "_translate": ["title", "description"],
+    "name": "eck_sub_types",
+    "title": "ECK Subtypes",
+    "description": "Entity Construction Kit Entity Subtypes",
+    "is_reserved": "1",
+    "is_active": "1",
+    "is_locked": "1",
+    "_values": []
+}
