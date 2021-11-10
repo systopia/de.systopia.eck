@@ -60,7 +60,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
     if (!isset($entityType)) {
       throw new Exception(E::ts('No ECK entity type given.'));
     }
-    static::$_entityType = $entityType;
+    self::$_entityType = $entityType;
     parent::__construct();
   }
 
@@ -68,9 +68,9 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public function initialize() {
-    $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => static::$_entityType]);
-    static::$_className = 'CRM_Eck_DAO_' . $entity_type['name'];
-    static::$_tableName = 'civicrm_eck_' . strtolower($entity_type['name']);
+    $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => self::$_entityType]);
+    self::$_className = 'CRM_Eck_DAO_' . $entity_type['name'];
+    self::$_tableName = 'civicrm_eck_' . strtolower($entity_type['name']);
 
     parent::initialize();
   }
@@ -79,17 +79,17 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public static function getTableName() {
-    return self::getLocaleTableName(static::$_tableName ?? NULL);
+    return self::getLocaleTableName(self::$_tableName ?? NULL);
   }
 
   /**
    * {@inheritDoc}
    */
   public static function &fieldKeys() {
-    if (!isset(Civi::$statics[static::$_className]['fieldKeys'])) {
-      Civi::$statics[static::$_className]['fieldKeys'] = array_flip(CRM_Utils_Array::collect('name', static::fields()));
+    if (!isset(Civi::$statics[self::$_className]['fieldKeys'])) {
+      Civi::$statics[self::$_className]['fieldKeys'] = array_flip(CRM_Utils_Array::collect('name', static::fields()));
     }
-    return Civi::$statics[static::$_className]['fieldKeys'];
+    return Civi::$statics[self::$_className]['fieldKeys'];
   }
 
   /**
@@ -99,8 +99,8 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
     // TODO: This is being called without the constructor being called
     //   beforehand, so this will not always work due to static variables not
     //   being set.
-    if (!isset(Civi::$statics[static::$_className]['fields'])) {
-      Civi::$statics[static::$_className]['fields'] = [
+    if (!isset(Civi::$statics[self::$_className]['fields'])) {
+      Civi::$statics[self::$_className]['fields'] = [
         'id' => [
           'name' => 'id',
           'title' => E::ts('ID'),
@@ -110,7 +110,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'where' => static::getTableName() . '.id',
           'export' => TRUE,
           'table_name' => static::getTableName(),
-          'entity' => static::$_entityType,
+          'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
           'add' => '4.3',
@@ -127,7 +127,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'where' => static::getTableName() . '.title',
           'export' => TRUE,
           'table_name' => static::getTableName(),
-          'entity' => static::$_entityType,
+          'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 1,
           'add' => '4.3',
@@ -144,7 +144,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'where' => static::getTableName() . '.subtype',
           'export' => TRUE,
           'table_name' => static::getTableName(),
-          'entity' => static::$_entityType,
+          'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
           'add' => '4.3',
@@ -152,18 +152,18 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
             'type' => 'Text',
           ],
 //          'pseudoconstant' => [
-//            'callback' => 'CRM_Eck_Utils_EckEntityType::' . static::$_entityType . '.getSubTypes',
+//            'callback' => 'CRM_Eck_Utils_EckEntityType::' . self::$_entityType . '.getSubTypes',
 //          ],
         ],
       ];
 
       CRM_Core_DAO_AllCoreTables::invoke(
-        static::$_className,
+        self::$_className,
         'fields_callback',
-        Civi::$statics[static::$_className]['fields']
+        Civi::$statics[self::$_className]['fields']
       );
     }
-    return Civi::$statics[static::$_className]['fields'];
+    return Civi::$statics[self::$_className]['fields'];
   }
 
   /**
