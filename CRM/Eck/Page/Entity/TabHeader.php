@@ -67,11 +67,17 @@ class CRM_Eck_Page_Entity_TabHeader {
       'class' => 'ajaxForm',
     ];
 
-    $tabs = [];
-    $tabs['view'] = ['title' => ts('View')] + $default;
-
     $entityID = $page->getVar('_id');
     $entityType = $page->getVar('_entityType');
+
+    $tabs = [];
+    $tabs['view'] = [
+        'title' => ts('View'),
+        'link' => CRM_Utils_System::url(
+          'civicrm/eck/entity/view',
+          "reset=1&type={$entityType['name']}&id={$entityID}"
+        ),
+      ] + $default;
 
     // see if any other modules want to add any tabs
     // note: status of 'valid' flag of any injected tab, needs to be taken care in the hook implementation.
@@ -81,39 +87,13 @@ class CRM_Eck_Page_Entity_TabHeader {
       ['entity_id' => $entityID, 'entity_type' => $entityType]
     );
 
-    $fullName = $page->getVar('_name');
-    $className = CRM_Utils_String::getClassName($fullName);
-    $new = '';
-
-    // hack for special cases.
-    switch ($className) {
-      default:
-        $class = strtolower($className);
-        break;
-    }
-
-    if (array_key_exists($class, $tabs)) {
-      $tabs[$class]['current'] = TRUE;
-      $qfKey = $page->get('qfKey');
-      if ($qfKey) {
-        $tabs[$class]['qfKey'] = "&qfKey={$qfKey}";
-      }
-    }
-
     if ($entityID) {
-      $reset = !empty($_GET['reset']) ? 'reset=1&' : '';
-
       foreach ($tabs as $key => $value) {
         if (!isset($tabs[$key]['qfKey'])) {
           $tabs[$key]['qfKey'] = NULL;
         }
 
-        $action = 'view';
-        $link = "civicrm/eck/entity/{$key}";
-        $query = "{$reset}type={$entityType['name']}&id={$entityID}{$tabs[$key]['qfKey']}";
-
-        $tabs[$key]['link'] = (isset($value['link']) ? $value['link'] :
-          CRM_Utils_System::url($link, $query));
+        $tabs[$key]['link'] = $value['link'] ?? $value['url'] ?? NULL;
       }
     }
 

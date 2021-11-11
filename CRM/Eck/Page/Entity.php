@@ -41,6 +41,7 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
     }
     try {
       $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => $entity_type_name]);
+      $entity_type['table_name'] = (new CRM_Eck_BAO_Entity($entity_type_name))->tableName();
       $this->assign('entity_type', $entity_type);
       $this->_entityType = $entity_type;
     }
