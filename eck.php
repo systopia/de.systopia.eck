@@ -201,11 +201,30 @@ function eck_civicrm_container(\Symfony\Component\DependencyInjection\ContainerB
 function eck_civicrm_navigationMenu(&$menu) {
   _eck_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
     'label' => E::ts('ECK Entity Types'),
-    'name' => 'eck',
+    'name' => 'eck_entity_types',
     'url' => 'civicrm/admin/eck/entity-types',
     'permission' => 'administer CiviCRM',
     'operator' => 'OR',
     'separator' => 0,
+    'icon' => 'fa fa-cubes',
   ));
+
+  _eck_civix_insert_navigation_menu($menu, NULL, array(
+    'label' => E::ts('Custom Entities'),
+    'name' => 'eck_entities',
+    'operator' => 'OR',
+    'separator' => 0,
+    'icon' => 'fa fa-cubes',
+  ));
+  foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
+    _eck_civix_insert_navigation_menu($menu, 'eck_entities', array(
+      'label' => $entity_type['label'],
+      'name' => 'eck_' . $entity_type['name'],
+      'url' => 'civicrm/eck/entity/list?reset=1&type=' . $entity_type['name'],
+      'permission' => 'access CiviCRM',
+      'operator' => 'OR',
+      'separator' => 0,
+    ));
+  }
   _eck_civix_navigationMenu($menu);
 }
