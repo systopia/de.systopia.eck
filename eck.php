@@ -198,14 +198,14 @@ function eck_civicrm_container(\Symfony\Component\DependencyInjection\ContainerB
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu
  */
-//function eck_civicrm_navigationMenu(&$menu) {
-//  _eck_civix_insert_navigation_menu($menu, 'Mailings', array(
-//    'label' => E::ts('New subliminal message'),
-//    'name' => 'mailing_subliminal_message',
-//    'url' => 'civicrm/mailing/subliminal',
-//    'permission' => 'access CiviMail',
-//    'operator' => 'OR',
-//    'separator' => 0,
-//  ));
-//  _eck_civix_navigationMenu($menu);
-//}
+function eck_civicrm_navigationMenu(&$menu) {
+  _eck_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
+    'label' => E::ts('ECK Entity Types'),
+    'name' => 'eck',
+    'url' => 'civicrm/admin/eck/entity-types',
+    'permission' => 'administer CiviCRM',
+    'operator' => 'OR',
+    'separator' => 0,
+  ));
+  _eck_civix_navigationMenu($menu);
+}

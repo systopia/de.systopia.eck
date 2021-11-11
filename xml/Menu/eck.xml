@@ -3,8 +3,10 @@
   <item>
     <path>civicrm/admin/eck/entity-types</path>
     <page_callback>CRM_Eck_Page_EntityTypes</page_callback>
-    <title>EntityTypes</title>
+    <title>ECK EntityTypes</title>
     <access_arguments>administer CiviCRM</access_arguments>
+    <desc>The Entity Construction Kit extension allows you to create and manage custom CiviCRM entities.</desc>
+    <adminGroup>Customize Data and Screens</adminGroup>
   </item>
   <item>
     <path>civicrm/admin/eck/entity-type</path>
