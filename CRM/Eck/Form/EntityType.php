@@ -41,7 +41,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
     }
     elseif ($this->_action == CRM_Core_Action::UPDATE || $this->_action == CRM_Core_Action::DELETE) {
       if (!($this->_entityTypeName = CRM_Utils_Request::retrieve('type', 'String', $this))) {
-        throw new Exception(E::ts('No entity type given.'));
+        throw new Exception(E::ts('No ECK entity type given.'));
       }
       try {
         $this->_entityType = civicrm_api3(
@@ -51,7 +51,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
         );
       }
       catch (Exception $exception) {
-        throw new Exception(E::ts('Invalid entity type.'));
+        throw new Exception(E::ts('Invalid ECK entity type.'));
       }
       switch ($this->_action) {
         case CRM_Core_Action::UPDATE:

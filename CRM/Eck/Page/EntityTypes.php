@@ -19,7 +19,7 @@ class CRM_Eck_Page_EntityTypes extends CRM_Core_Page {
 
   public function run() {
     // Example: Set the page-title dynamically; alternatively, declare a static title in xml/Menu/*.xml
-    CRM_Utils_System::setTitle(E::ts('Entity Types'));
+    CRM_Utils_System::setTitle(E::ts('ECK Entity Types'));
 
     $entity_types = civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'];
 

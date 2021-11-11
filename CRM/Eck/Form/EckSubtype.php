@@ -36,7 +36,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
 
     if ($this->_action == CRM_Core_Action::ADD) {
       if (!($this->_entityType = CRM_Utils_Request::retrieve('type', 'String', $this))) {
-        throw new Exception(E::ts('No entity type given.'));
+        throw new Exception(E::ts('No ECK entity type given.'));
       }
       $this->setTitle(E::ts('Add Subtype'));
       $this->_subType = [

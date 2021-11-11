@@ -35,7 +35,7 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
 
     // Retrieve ECK entity type.
     if (!$entity_type_name = CRM_Utils_Request::retrieve('type', 'String', $this)) {
-      throw new CRM_Core_Exception('No entity type given.');
+      throw new CRM_Core_Exception('No ECK entity type given.');
     }
     try {
       $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => $entity_type_name]);
@@ -43,7 +43,7 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
       $this->_entityType = $entity_type;
     }
     catch (Exception $exception) {
-      throw new Exception(E::ts('Invalid entity type.'));
+      throw new Exception(E::ts('Invalid ECK entity type.'));
     }
 
     // Retrieve ECK entity using the API.
