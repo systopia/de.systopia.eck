@@ -64,7 +64,7 @@ class CRM_Eck_Page_Entity_TabHeader {
       'valid' => TRUE,
       'active' => TRUE,
       'current' => FALSE,
-      'class' => 'ajaxForm',
+      'class' => 'livePage',
     ];
 
     $entityID = $page->getVar('_id');
