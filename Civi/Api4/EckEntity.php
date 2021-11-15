@@ -52,7 +52,7 @@ class EckEntity extends Generic\DAOEntity {
 
   public static function save($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new DAOSaveAction('Eck' . $entity_type, __FUNCTION__))
+    return (new EckDAOSaveAction('Eck' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
