@@ -66,6 +66,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
     foreach (self::getEntityTypes() as $entity_type) {
       self::ensureEntityType($entity_type);
     }
+    CRM_Core_BAO_Navigation::resetNavigation();
   }
 
   /**
@@ -84,7 +85,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
    *
    * @throws \CiviCRM_API3_Exception
    */
-  public static function ensureEntityType($entity_type, $old_entity_type = NULL) {
+  public static function ensureEntityType($entity_type, $old_entity_type = NULL, $rebuild_menu = FALSE) {
     $table_name = 'civicrm_eck_' . strtolower($entity_type['name']);
 
     // Update EckEntityType entity.
@@ -175,6 +176,11 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
 
     // Flush schema cache.
     CRM_Core_DAO_AllCoreTables::reinitializeCache();
+
+    // Clear navigation cache (for navigation menu items).
+    if ($rebuild_menu) {
+      CRM_Core_BAO_Navigation::resetNavigation();
+    }
   }
 
 }

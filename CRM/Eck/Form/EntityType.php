@@ -206,7 +206,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       case CRM_Core_Action::ADD:
       case CRM_Core_Action::UPDATE:
         $values = $this->exportValues(NULL, TRUE);
-        CRM_Eck_BAO_EckEntityType::ensureEntityType($values, $this->_entityType);
+        CRM_Eck_BAO_EckEntityType::ensureEntityType($values, $this->_entityType, TRUE);
       break;
       case CRM_Core_Action::DELETE:
         \Civi\Api4\EckEntityType::delete()

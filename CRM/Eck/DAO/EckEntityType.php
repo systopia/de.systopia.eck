@@ -411,6 +411,9 @@ class CRM_Eck_DAO_EckEntityType extends CRM_Core_DAO {
     // Flush schema cache.
     CRM_Core_DAO_AllCoreTables::reinitializeCache();
 
+    // Flush navigation cache.
+    CRM_Core_BAO_Navigation::resetNavigation();
+
     return $result;
   }
 
