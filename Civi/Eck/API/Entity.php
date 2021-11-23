@@ -32,8 +32,8 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
 
   public static function getSubscribedEvents() {
     return [
-      'civi.api4.createRequest' => 'onApi4CreateRequest',
-      'civi.api.resolve' => 'onApiResolve',
+      'civi.api4.createRequest' => [['onApi4CreateRequest', Events::W_EARLY]],
+      'civi.api.resolve' => [['onApiResolve', Events::W_EARLY]],
       'civi.api4.entityTypes' => [['onApi4EntityTypes', Events::W_EARLY]],
     ];
   }
@@ -95,10 +95,13 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
 
   public function onApiResolve(ResolveEvent $event) {
     $apiRequest = $event->getApiRequest();
-    if (in_array(
-      $apiRequest['entity'],
-      static::getEntityNames($apiRequest['version'])
-    )) {
+    if (
+      $apiRequest['entity'] != 'EckEntityType'
+      && in_array(
+        $apiRequest['entity'],
+        static::getEntityNames($apiRequest['version'])
+      )
+    ) {
       $event->setApiProvider($this);
       $apiRequest = $event->getApiRequest();
 
