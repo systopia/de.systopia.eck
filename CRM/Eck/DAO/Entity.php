@@ -63,7 +63,10 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    */
   public function __construct($entityType = NULL) {
     if (!isset($entityType)) {
-      throw new Exception(E::ts('No ECK entity type given.'));
+      // TODO: We can't just throw an exception as this leads to errors
+      //       everywhere, e.g. for get API actions on entities that reference
+      //       at least one ECK entity.
+//      throw new Exception(E::ts('No ECK entity type given.'));
     }
     self::$_entityType = $entityType;
     parent::__construct();
@@ -73,9 +76,11 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public function initialize() {
-    $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => self::$_entityType]);
-    self::$_className = 'CRM_Eck_DAO_' . $entity_type['name'];
-    self::$_tableName = 'civicrm_eck_' . strtolower($entity_type['name']);
+    if (self::$_entityType) {
+      $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => self::$_entityType]);
+      self::$_className = 'CRM_Eck_DAO_' . $entity_type['name'];
+      self::$_tableName = 'civicrm_eck_' . strtolower($entity_type['name']);
+    }
 
     parent::initialize();
   }
