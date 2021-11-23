@@ -225,7 +225,10 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    */
   public static function getSelectWhereClause($tableAlias = NULL, $entity_type = NULL) {
     if (!isset($entity_type)) {
-      throw new Exception(E::ts('No ECK entity type given.'));
+      // TODO: We can't just throw an exception as this leads to errors
+      //       everywhere, e.g. for get API actions on entities that reference
+      //       at least one ECK entity.
+//      throw new Exception(E::ts('No ECK entity type given.'));
     }
 
     /**
