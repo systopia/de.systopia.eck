@@ -33,7 +33,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   public static function getSubscribedEvents() {
     return [
       'civi.api4.createRequest' => [['onApi4CreateRequest', Events::W_EARLY]],
-      'civi.api.resolve' => [['onApiResolve', Events::W_EARLY]],
+      'civi.api.resolve' => 'onApiResolve',
       'civi.api4.entityTypes' => [['onApi4EntityTypes', Events::W_EARLY]],
     ];
   }
