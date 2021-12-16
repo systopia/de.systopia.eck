@@ -1,0 +1,256 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de_DE\n"
+
+#: CRM/Eck/DAO/EckEntityType.php CRM/Eck/Page/EntityTypes.php eck.php
+msgid "ECK Entity Types"
+msgstr ""
+
+#: CRM/Eck/DAO/EckEntityType.php
+msgid "ECK Entity Type"
+msgstr ""
+
+#: CRM/Eck/DAO/EckEntityType.php
+msgid "Unique EckEntityType ID"
+msgstr ""
+
+#: CRM/Eck/DAO/EckEntityType.php
+msgid "Entity Type"
+msgstr ""
+
+#: CRM/Eck/DAO/EckEntityType.php
+msgid "The entity type's name"
+msgstr ""
+
+#: CRM/Eck/DAO/EckEntityType.php
+msgid "Label"
+msgstr ""
+
+#: CRM/Eck/DAO/EckEntityType.php
+msgid "The entity type's human-readable name"
+msgstr ""
+
+#: CRM/Eck/DAO/Entity.php
+msgid "ID"
+msgstr ""
+
+#: CRM/Eck/DAO/Entity.php
+msgid "The unique entity ID."
+msgstr ""
+
+#: CRM/Eck/DAO/Entity.php
+msgid "Title"
+msgstr ""
+
+#: CRM/Eck/DAO/Entity.php
+msgid "The entity title."
+msgstr ""
+
+#: CRM/Eck/DAO/Entity.php templates/CRM/Eck/Form/EntityType.tpl
+msgid "Subtype"
+msgstr ""
+
+#: CRM/Eck/DAO/Entity.php
+msgid "The entity subtype."
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
+msgid "No ECK entity type given."
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php templates/CRM/Eck/Form/EntityType.tpl
+msgid "Add Subtype"
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php
+msgid "No subtype given."
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php
+msgid "Invalid subtype."
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php
+msgid "Edit Subtype <em>%1</em>"
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php
+msgid "Delete Subtype <em>%1</em>"
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
+msgid "Invalid action."
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
+msgid "Save"
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php
+msgid "Subtype name"
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
+#: templates/CRM/Eck/Form/EntityType.tpl templates/CRM/Eck/Page/EntityTypes.tpl
+msgid "Delete"
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
+msgid "Cancel"
+msgstr ""
+
+#: CRM/Eck/Form/Entity.php
+msgid "Submit"
+msgstr ""
+
+#: CRM/Eck/Form/EntityType.php templates/CRM/Eck/Page/EntityTypes.tpl
+msgid "Add Entity Type"
+msgstr ""
+
+#: CRM/Eck/Form/EntityType.php CRM/Eck/Page/Entity/View.php
+#: CRM/Eck/Page/Entity.php CRM/Eck/Page/EntityList.php
+msgid "Invalid ECK entity type."
+msgstr ""
+
+#: CRM/Eck/Form/EntityType.php
+msgid "Edit Entity Type <em>%1</em>"
+msgstr ""
+
+#: CRM/Eck/Form/EntityType.php
+msgid "Delete Entity Type <em>%1</em>"
+msgstr ""
+
+#: CRM/Eck/Form/EntityType.php
+msgid "Invalid operation."
+msgstr ""
+
+#: CRM/Eck/Form/EntityType.php
+msgid ""
+"The entity type name must be in PascalCase (at least first letter uppercase)."
+msgstr ""
+
+#: CRM/Eck/Form/EntityType.php
+msgid "An entity type with this name already exists."
+msgstr ""
+
+#: CRM/Eck/Page/Entity/TabHeader.php
+msgid "View"
+msgstr ""
+
+#: CRM/Eck/Upgrader/Base.php
+msgid "Upgrade %1 to revision %2"
+msgstr ""
+
+#: Civi/Eck/API/Entity.php
+msgid "Entity Construction Kit entity type %1"
+msgstr ""
+
+#: eck.php
+msgid "Custom Entities"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EckSubtype.tpl templates/CRM/Eck/Form/EntityType.tpl
+msgid "Custom Groups"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EckSubtype.tpl
+msgid ""
+"You may add custom fields to this subtype using <a href=\"%1\">CiviCRM's "
+"custom groups</a>."
+msgstr ""
+
+#: templates/CRM/Eck/Form/EckSubtype.tpl
+msgid "The following custom groups extend this subtype:"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EckSubtype.tpl
+msgid "Do you want to delete the subtype <em>%1</em>?"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EckSubtype.tpl
+msgid ""
+"This involves deleting all custom fields attached to this subtype and all "
+"currently existing entities of this subtype."
+msgstr ""
+
+#: templates/CRM/Eck/Form/EckSubtype.tpl templates/CRM/Eck/Form/EntityType.tpl
+msgid "This action cannot be undone."
+msgstr ""
+
+#: templates/CRM/Eck/Form/EntityType.tpl templates/CRM/Eck/Page/EntityTypes.tpl
+msgid "Sub types"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EntityType.tpl templates/CRM/Eck/Page/EntityList.tpl
+#: templates/CRM/Eck/Page/EntityTypes.tpl
+msgid "Operations"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EntityType.tpl templates/CRM/Eck/Page/EntityTypes.tpl
+msgid "Edit"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EntityType.tpl
+msgid "No subtypes"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EntityType.tpl
+msgid "You may add subtypes after saving this new entity type."
+msgstr ""
+
+#: templates/CRM/Eck/Form/EntityType.tpl
+msgid ""
+"You may add custom fields to this entity type using\n"
+"                <a href=\"%1\">CiviCRM's custom groups</a>\n"
+"                ."
+msgstr ""
+
+#: templates/CRM/Eck/Form/EntityType.tpl
+msgid ""
+"You may administer custom fields for subtypes of this entity type by editing "
+"the subtype."
+msgstr ""
+
+#: templates/CRM/Eck/Form/EntityType.tpl
+msgid "The following custom groups extend all subtypes of this entity type:"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EntityType.tpl
+msgid "Do you want to delete the entity type<em>%1</em>?"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EntityType.tpl
+msgid ""
+"This involves deleting all custom fields attached to this entity type and "
+"all currently existing entities of this type."
+msgstr ""
+
+#: templates/CRM/Eck/Page/EntityList.tpl
+msgid "No entities"
+msgstr ""
+
+#: templates/CRM/Eck/Page/EntityList.tpl
+msgid "Add %1"
+msgstr ""
+
+#: templates/CRM/Eck/Page/EntityTypes.tpl
+msgid "Entity type"
+msgstr ""
+
+#: templates/CRM/Eck/Page/EntityTypes.tpl
+msgid "Internal Name"
+msgstr ""
+
+#: templates/CRM/Eck/Page/EntityTypes.tpl
+msgid "List entities"
+msgstr ""
