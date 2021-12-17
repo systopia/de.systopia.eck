@@ -29,6 +29,19 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   public static $_log = TRUE;
 
   /**
+   * Paths for accessing this entity in the UI.
+   *
+   * @var string[]
+   */
+  protected static $_paths = [
+    'browse' => 'civicrm/eck/entity/list?reset=1&type=[eck_type]&id=[id]',
+    'view' => 'civicrm/eck/entity?reset=1&action=view&type=[eck_type]&id=[id]',
+    'add' => '', // TODO: Add path when UI is ready.
+    'update' => '', // TODO: Add path when UI is ready.
+    'delete' => '', // TODO: Add path when UI is ready.
+  ];
+
+  /**
    * Unique entity ID.
    *
    * @var int
