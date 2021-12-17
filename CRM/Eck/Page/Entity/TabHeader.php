@@ -97,6 +97,15 @@ class CRM_Eck_Page_Entity_TabHeader {
       }
     }
 
+    // Load requested tab.
+    $current = CRM_Utils_Request::retrieve(
+      'selectedChild',
+      'Alphanumeric'
+    );
+    if (isset($tabs[$current])) {
+      $tabs[$current]['current'] = TRUE;
+    }
+
     return $tabs;
   }
 
