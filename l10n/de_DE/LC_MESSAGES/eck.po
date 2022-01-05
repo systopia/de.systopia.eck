@@ -14,15 +14,15 @@ msgstr ""
 
 #: CRM/Eck/DAO/EckEntityType.php CRM/Eck/Page/EntityTypes.php eck.php
 msgid "ECK Entity Types"
-msgstr "ECK Entitätstypen"
+msgstr "ECK-Entitätstypen"
 
 #: CRM/Eck/DAO/EckEntityType.php
 msgid "ECK Entity Type"
-msgstr "ECK Entitätstyp"
+msgstr "ECK-Entitätstyp"
 
 #: CRM/Eck/DAO/EckEntityType.php
 msgid "Unique EckEntityType ID"
-msgstr "Eindeutige EckEntityType ID"
+msgstr "Eindeutige EckEntityType-ID"
 
 #: CRM/Eck/DAO/EckEntityType.php
 msgid "Entity Type"
@@ -62,31 +62,31 @@ msgstr "Untertyp"
 
 #: CRM/Eck/DAO/Entity.php
 msgid "The entity subtype."
-msgstr "Der Unterart der Entität."
+msgstr "Der Untertyp der Entität."
 
 #: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
 msgid "No ECK entity type given."
-msgstr "Kein ECK Entitätstyp angegben"
+msgstr "Kein ECK-Entitätstyp angegben."
 
 #: CRM/Eck/Form/EckSubtype.php templates/CRM/Eck/Form/EntityType.tpl
 msgid "Add Subtype"
-msgstr "Unterart hinzufügen"
+msgstr "Untertyp hinzufügen"
 
 #: CRM/Eck/Form/EckSubtype.php
 msgid "No subtype given."
-msgstr "Keine Unterart angegeben."
+msgstr "Kein Untertyp angegeben."
 
 #: CRM/Eck/Form/EckSubtype.php
 msgid "Invalid subtype."
-msgstr "Ungültige Unterart"
+msgstr "Ungültiger Untertyp."
 
 #: CRM/Eck/Form/EckSubtype.php
 msgid "Edit Subtype <em>%1</em>"
-msgstr "Unterart <em>%1</em> bearbeiten"
+msgstr "Untertyp <em>%1</em> bearbeiten"
 
 #: CRM/Eck/Form/EckSubtype.php
 msgid "Delete Subtype <em>%1</em>"
-msgstr "Unterart <em>%1</em> löschen"
+msgstr "Untertyp <em>%1</em> löschen"
 
 #: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
 msgid "Invalid action."
@@ -98,7 +98,7 @@ msgstr "Speichern"
 
 #: CRM/Eck/Form/EckSubtype.php
 msgid "Subtype name"
-msgstr "Name der Unterart"
+msgstr "Name des Untertyps"
 
 #: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
 #: templates/CRM/Eck/Form/EntityType.tpl templates/CRM/Eck/Page/EntityTypes.tpl
@@ -124,7 +124,7 @@ msgstr "Ungültiger Entitätstyp."
 
 #: CRM/Eck/Form/EntityType.php
 msgid "Edit Entity Type <em>%1</em>"
-msgstr "Entitättyp <em>%1</em> bearbeiten"
+msgstr "Entitätstyp <em>%1</em> bearbeiten"
 
 #: CRM/Eck/Form/EntityType.php
 msgid "Delete Entity Type <em>%1</em>"
@@ -151,11 +151,11 @@ msgstr "Anzeigen"
 
 #: CRM/Eck/Upgrader/Base.php
 msgid "Upgrade %1 to revision %2"
-msgstr ""
+msgstr "Aktualisieren von %1 auf Revision %2"
 
 #: Civi/Eck/API/Entity.php
 msgid "Entity Construction Kit entity type %1"
-msgstr ""
+msgstr "Entity-Construction-Kit-Eintitätstyp %1"
 
 #: eck.php
 msgid "Custom Entities"
@@ -170,25 +170,25 @@ msgid ""
 "You may add custom fields to this subtype using <a href=\"%1\">CiviCRM's "
 "custom groups</a>."
 msgstr ""
-"Benutzerdefinierte Felder können dieser Unterart mit Hilfe von <a href="
-"\"%1\">CiviCRM's Feldgruppen</a> hinzugefügt werden."
+"Benutzerdefinierte Felder können diesem Untertyp mit Hilfe von <a href="
+"\"%1\">CiviCRMs benutzerdefinierter Feldgruppen</a> hinzugefügt werden."
 
 #: templates/CRM/Eck/Form/EckSubtype.tpl
 msgid "The following custom groups extend this subtype:"
 msgstr ""
-"Folgende benutzerdefinierte Feldgruppen werden von dieser Unterart genutzt:"
+"Folgende benutzerdefinierte Feldgruppen werden von diesem Untertyp genutzt:"
 
 #: templates/CRM/Eck/Form/EckSubtype.tpl
 msgid "Do you want to delete the subtype <em>%1</em>?"
-msgstr "Soll diese Unterart wirklich gelöscht werden <em>%1</em>?"
+msgstr "Soll der Untertyp <em>%1</em> gelöscht werden?"
 
 #: templates/CRM/Eck/Form/EckSubtype.tpl
 msgid ""
 "This involves deleting all custom fields attached to this subtype and all "
 "currently existing entities of this subtype."
 msgstr ""
-"Dabei werden auch alle Entities dieser Unterart sowie die Zuweisung "
-"benutzerdefinierter Feldgruppen zu diesem Untertyp gelöscht."
+"Dabei werden auch alle Entitäten dieser Unterart sowie die diesem Untertyp "
+"zugeordneten benutzerdefinierten Felder gelöscht."
 
 #: templates/CRM/Eck/Form/EckSubtype.tpl templates/CRM/Eck/Form/EntityType.tpl
 msgid "This action cannot be undone."
@@ -196,12 +196,12 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: templates/CRM/Eck/Form/EntityType.tpl templates/CRM/Eck/Page/EntityTypes.tpl
 msgid "Sub types"
-msgstr "Unterarten"
+msgstr "Untertypen"
 
 #: templates/CRM/Eck/Form/EntityType.tpl templates/CRM/Eck/Page/EntityList.tpl
 #: templates/CRM/Eck/Page/EntityTypes.tpl
 msgid "Operations"
-msgstr "Optionen"
+msgstr "Operationen"
 
 #: templates/CRM/Eck/Form/EntityType.tpl templates/CRM/Eck/Page/EntityTypes.tpl
 msgid "Edit"
@@ -209,12 +209,12 @@ msgstr "Bearbeiten"
 
 #: templates/CRM/Eck/Form/EntityType.tpl
 msgid "No subtypes"
-msgstr "Keine Unterarten"
+msgstr "Keine Untertypen"
 
 #: templates/CRM/Eck/Form/EntityType.tpl
 msgid "You may add subtypes after saving this new entity type."
 msgstr ""
-"Unterarten können nach dem Anlegen des neuen Entitätstyps hinzugefügt werden."
+"Untertypen können nach dem Anlegen des neuen Entitätstyps hinzugefügt werden."
 
 #: templates/CRM/Eck/Form/EntityType.tpl
 msgid ""
@@ -222,32 +222,34 @@ msgid ""
 "                <a href=\"%1\">CiviCRM's custom groups</a>\n"
 "                ."
 msgstr ""
-"Benutzerdefinierte Felder können dieser Unterart mit Hilfe von\n"
-"<a href=\"%1\">CiviCRM's Feldgruppen</a> hinzugefügt werden."
+"Benutzerdefinierte Felder können diesem Untertyp mit Hilfe von\n"
+"<a href=\"%1\">CiviCRMs benutzerdefinierter Feldgruppen</a> hinzugefügt "
+"werden."
 
 #: templates/CRM/Eck/Form/EntityType.tpl
 msgid ""
 "You may administer custom fields for subtypes of this entity type by editing "
 "the subtype."
 msgstr ""
-"Benutzerdefinierte Felder können beim Bearbeiten der Unterart spezifiziert "
-"werden."
+"Benutzerdefinierte Felder für Untertypen können beim Bearbeiten des "
+"Untertyps verwaltet werden."
 
 #: templates/CRM/Eck/Form/EntityType.tpl
 msgid "The following custom groups extend all subtypes of this entity type:"
-msgstr "Folgende Feldgruppen werden für diesen Entitätstyp genutzt:"
+msgstr ""
+"Folgende Feldgruppen werden für alle Subtypen dieses Entitätstyps genutzt:"
 
 #: templates/CRM/Eck/Form/EntityType.tpl
 msgid "Do you want to delete the entity type<em>%1</em>?"
-msgstr "Soll der Entitätstyp <em>%1</em> wirklich gelsöcht werden?"
+msgstr "Soll der Entitätstyp <em>%1</em> gelöscht werden?"
 
 #: templates/CRM/Eck/Form/EntityType.tpl
 msgid ""
 "This involves deleting all custom fields attached to this entity type and "
 "all currently existing entities of this type."
 msgstr ""
-"Dabei werden auch alle Entities dieses Entitätstyps sowie die Zuweisung "
-"benutzerdefinierter Feldgruppen zu diesem Entitätstyp gelöscht."
+"Dabei werden auch alle Entitäten dieses Entitätstyps sowie die diesem "
+"zugeordneten benutzerdefinierten Felder gelöscht."
 
 #: templates/CRM/Eck/Page/EntityList.tpl
 msgid "No entities"
