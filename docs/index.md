@@ -7,11 +7,6 @@ standard CiviCRM entities are not sufficient.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
-## Requirements
-
-* PHP v7.2+
-* CiviCRM (5.40)
-
 ## Development
 
 This extension employs principles lined out in the following references:
