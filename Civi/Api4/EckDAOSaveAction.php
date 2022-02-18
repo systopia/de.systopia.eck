@@ -37,7 +37,7 @@ class EckDAOSaveAction extends Generic\DAOSaveAction {
    */
   public function __construct($entityName, $actionName) {
     parent::__construct($entityName, $actionName);
-    $this->entityType = \CRM_Eck_DAO_Entity::getEntityType($entityName);
+    $this->entityType = \CRM_Eck_BAO_Entity::getEntityType($entityName);
   }
 
   /**
