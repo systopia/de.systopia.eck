@@ -212,7 +212,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   /**
    * {@inheritDoc}
    */
-  public static function commonRetrieveAll($entityType, $fieldIdName = 'id', $fieldId, &$details, $returnProperities = NULL) {
+  public static function commonRetrieveAll($entityType, $fieldIdName, $fieldId, &$details, $returnProperities = NULL) {
     $object = new self($entityType);
     $object->$fieldIdName = $fieldId;
 
