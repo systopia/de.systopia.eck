@@ -17,4 +17,8 @@ use CRM_Eck_ExtensionUtil as E;
 
 class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity {
 
+  public static function getEntityType($entityName) {
+    return strpos($entityName, 'Eck') === 0 ? substr($entityName, strlen('Eck')) : NULL;
+  }
+
 }

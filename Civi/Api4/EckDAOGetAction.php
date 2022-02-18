@@ -30,7 +30,7 @@ class EckDAOGetAction extends Generic\DAOGetAction {
       $rows = $query->run();
       // Always include ECK entity type.
       $rows = array_map(function($row) {
-        return $row + ['entity_type' => \CRM_Eck_DAO_Entity::getEntityType($this->getEntityName())];
+        return $row + ['entity_type' => \CRM_Eck_BAO_Entity::getEntityType($this->getEntityName())];
       }, $rows);
       \CRM_Utils_API_HTMLInputCoder::singleton()->decodeRows($rows);
       $result->exchangeArray($rows);

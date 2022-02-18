@@ -310,8 +310,4 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
     return $instance;
   }
 
-  public static function getEntityType($entityName) {
-    return strpos($entityName, 'Eck') === 0 ? substr($entityName, strlen('Eck')) : NULL;
-  }
-
 }
