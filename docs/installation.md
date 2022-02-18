@@ -3,7 +3,7 @@
 ## Requirements
 
 * PHP v7.2+
-* CiviCRM (5.40)
+* CiviCRM (5.43)
 
 ## Installation (Web UI)
 
