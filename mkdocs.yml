@@ -8,6 +8,7 @@ theme:
 nav:
   - 'Introduction': index.md
   - 'Installation': installation.md
+  - 'Adding Entities': adding-entities.md
 
 markdown_extensions:
   - attr_list
