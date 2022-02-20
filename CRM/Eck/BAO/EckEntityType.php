@@ -119,8 +119,8 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
         "
           CREATE TABLE IF NOT EXISTS `{$table_name}` (
               `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Eck{$entity_type['name']} ID',
-              `title` text NOT NULL   COMMENT 'The entity title.',
-              `subtype` text NOT NULL   COMMENT 'The entity subtype.',
+              `title` text NOT NULL   COMMENT 'The {$entity_type['name']} title.',
+              `subtype` text DEFAULT NULL COMMENT 'The {$entity_type['name']} subtype.',
               PRIMARY KEY (`id`)
           )
           ENGINE=InnoDB

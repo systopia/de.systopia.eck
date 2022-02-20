@@ -163,7 +163,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'title' => E::ts('Subtype'),
           'type' => CRM_Utils_Type::T_STRING,
           'description' => E::ts('The entity subtype.'),
-          'required' => TRUE,
+          'required' => FALSE,
           'where' => static::getTableName() . '.subtype',
           'export' => TRUE,
           'table_name' => static::getTableName(),
@@ -172,7 +172,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'localizable' => 0,
           'add' => '4.3',
           'html' => [
-            'type' => 'Text',
+            'type' => 'Select',
           ],
 //          'pseudoconstant' => [
 //            'callback' => 'CRM_Eck_Utils_EckEntityType::' . self::$_entityType . '.getSubTypes',
