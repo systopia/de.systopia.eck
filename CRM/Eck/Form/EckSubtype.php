@@ -65,7 +65,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
         case CRM_Core_Action::UPDATE:
           $this->setTitle(E::ts('Edit Subtype <em>%1</em>', [1 => $this->_subType['label']]));
           $this->_customGroups = array_filter(
-            CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_subType['grouping']),
+            CRM_Eck_BAO_EckEntityType::getCustomGroups($this->_subType['grouping']),
             function($custom_group) {
               return
                 isset($custom_group['extends_entity_column_value'])
