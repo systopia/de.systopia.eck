@@ -14,10 +14,8 @@
 +--------------------------------------------------------*/
 
 use CRM_Eck_ExtensionUtil as E;
-use \Civi\Core\Event\GenericHookEvent;
-use \Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
+class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements \Civi\Test\HookInterface {
 
   /**
    * @return array[]
@@ -39,24 +37,61 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
   }
 
   /**
-   * Create a new EckEntityType based on array-data
-   *
-   * @param array $params key-value pairs
-   * @return CRM_Eck_DAO_EckEntityType|NULL
-   *
-  public static function create($params) {
-    $className = 'CRM_Eck_DAO_EckEntityType';
-    $entityName = 'EckEntityType';
-    $hook = empty($params['id']) ? 'create' : 'edit';
+   * Event fired before an action is taken on an EckEntityType.
+   * @param \Civi\Core\Event\PreEvent $event
+   */
+  public static function self_hook_civicrm_pre(\Civi\Core\Event\PreEvent $event) {
+    // Perform cleanup before deleting an EckEntityType
+    if ($event->action === 'delete') {
+      $eckTypeName = self::getFieldValue(parent::class, $event->id);
 
-    CRM_Utils_Hook::pre($hook, $entityName, CRM_Utils_Array::value('id', $params), $params);
-    $instance = new $className();
-    $instance->copyValues($params);
-    $instance->save();
-    CRM_Utils_Hook::post($hook, $entityName, $instance->id, $instance);
+      // Delete custom groups. This has to be done before removing the table due
+      // to FK constraints.
+      civicrm_api4('CustomGroup', 'delete', [
+        'checkPermissions' => FALSE,
+        'where' => [['extends', '=', 'Eck' . $eckTypeName]],
+      ]);
 
-    return $instance;
-  } */
+      // Drop table.
+      $table_name = 'civicrm_eck_' . strtolower($eckTypeName);
+      CRM_Core_DAO::executeQuery("DROP TABLE IF EXISTS `{$table_name}`");
+
+      // Delete existing option value for custom-field-extendable object.
+      civicrm_api4('OptionValue', 'delete', [
+        'checkPermissions' => FALSE,
+        'where' => [
+          ['option_group_id:name', '=', 'cg_extend_objects'],
+          ['value', '=', 'Eck' . $eckTypeName],
+        ],
+      ]);
+
+      // Delete subtypes.
+      civicrm_api4('OptionValue', 'delete', [
+        'checkPermissions' => FALSE,
+        'where' => [
+          ['option_group_id:name', '=', 'eck_sub_types'],
+          ['grouping', '=', $eckTypeName],
+        ],
+      ]);
+    }
+  }
+
+  /**
+   * Event fired after an action is taken on an EckEntityType.
+   * @param \Civi\Core\Event\PostEvent $event
+   */
+  public static function self_hook_civicrm_post(\Civi\Core\Event\PostEvent $event) {
+    // Reset cache of entity types
+    Civi::$statics['EckEntityTypes'] = NULL;
+
+    // Flush schema cache.
+    CRM_Core_DAO_AllCoreTables::reinitializeCache();
+    Civi::cache('metadata')->clear();
+
+    // Flush navigation cache.
+    CRM_Core_BAO_Navigation::resetNavigation();
+  }
+
 
   public static function ensureEntityTypes() {
     // Synchronise cg_extend_objects option group.

@@ -6,6 +6,7 @@
   <name>civicrm_eck_entity_type</name>
   <comment>Custom CiviCRM entity types</comment>
   <log>true</log>
+  <title>ECK Entity Type</title>
 
   <field>
     <name>id</name>
@@ -31,6 +32,12 @@
       <type>Text</type>
     </html>
   </field>
+
+  <index>
+    <name>UI_name</name>
+    <fieldName>name</fieldName>
+    <unique>true</unique>
+  </index>
 
   <field>
     <name>label</name>
