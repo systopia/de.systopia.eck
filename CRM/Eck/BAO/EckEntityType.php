@@ -150,7 +150,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
 
     if ($old_entity_type) {
       // Synchronise custom groups.
-      foreach (CRM_Eck_DAO_EckEntityType::getCustomGroups($old_entity_type['name']) as $custom_group) {
+      foreach (self::getCustomGroups($old_entity_type['name']) as $custom_group) {
         civicrm_api3(
           'CustomGroup',
           'create',
@@ -181,6 +181,104 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
     if ($rebuild_menu) {
       CRM_Core_BAO_Navigation::resetNavigation();
     }
+  }
+
+  /**
+   * Retrieves custom groups extending this entity type.
+   *
+   * @param $entity_type_name
+   *   The name of the entity type to retrieve custom groups for.
+   *
+   * @return array
+   */
+  public static function getCustomGroups($entity_type_name):array {
+    return (array) civicrm_api4('CustomGroup', 'get', [
+      'where' => [['extends', '=', 'Eck' . $entity_type_name]],
+    ]);
+  }
+
+  /**
+   * Retrieves a list of sub types for the given entity type.
+   *
+   * @param string $entity_type_name
+   *   The name of the entity type to retrieve a list of sub types for.
+   * @param bool $as_mapping
+   * @return array
+   *   A list of sub types for the given entity type.
+   */
+  public static function getSubTypes($entity_type_name, $as_mapping = TRUE):array {
+    $result = civicrm_api4('OptionValue', 'get', [
+      'where' => [
+        ['option_group_id:name', '=', 'eck_sub_types'],
+        ['grouping', '=', $entity_type_name],
+      ],
+    ]);
+    return $as_mapping ?
+      $result->indexBy('value')->column('label') :
+      (array) $result;
+  }
+
+  /**
+   * Deletes a subtype, which involves:
+   * - deleting all entities of this subtype
+   * - deleting all custom fields in custom groups attached to this subtype
+   * - deleting all custom groups attached to this subtype
+   * - deleting the subtype option value from the "eck_sub_types" option group
+   *
+   * @param $sub_type_value
+   *   The value of the subtype in the "eck_sub_types" option group.
+   *
+   * @throws \Exception
+   */
+  public static function deleteSubType($sub_type_value) {
+    $sub_type = civicrm_api4('OptionValue', 'get', [
+      'where' => [
+        ['option_group_id:name', '=', 'eck_sub_types'],
+        ['value', '=', $sub_type_value],
+      ]
+    ]);
+
+    // Delete entities of subtype.
+    civicrm_api4($sub_type['grouping'], 'delete', [
+      'where' => [
+        ['id', 'IS NOT NULL'],
+      ],
+    ]);
+
+    // TODO: Delete CustomFields in CustomGroup attached to subtype.
+
+    // Delete CustomGroups attached to subtype.
+    $custom_groups = array_filter(
+      CRM_Eck_BAO_EckEntityType::getCustomGroups($sub_type['grouping']),
+      function ($custom_group) use ($sub_type_value) {
+        return
+          isset($custom_group['extends_entity_column_value'])
+          && is_array($custom_group['extends_entity_column_value'])
+          && in_array(
+            $sub_type_value,
+            $custom_group['extends_entity_column_value']
+          );
+      }
+    );
+    foreach (CRM_Eck_BAO_EckEntityType::getCustomGroups($sub_type['grouping']) as $custom_group) {
+      if (
+        isset($custom_group['extends_entity_column_value'])
+        && is_array($custom_group['extends_entity_column_value'])
+        && in_array(
+          $sub_type_value,
+          $custom_group['extends_entity_column_value']
+        )
+      ) {
+        civicrm_api4('CustomGroup', 'delete', [
+          'where' => [['id', '=', $custom_group['id']]],
+        ]);
+      }
+    }
+
+    // Delete subtype.
+    civicrm_api4('OptionValue', 'delete', [
+      'where' => [['id', '=', $sub_type['id']]],
+    ]);
   }
 
 }

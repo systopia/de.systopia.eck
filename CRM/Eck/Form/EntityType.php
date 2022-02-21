@@ -58,9 +58,9 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           $this->setTitle(E::ts('Edit Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
 
           // Retrieve custom groups for this entity type.
-          $this->_subTypes = CRM_Eck_DAO_EckEntityType::getSubTypes($this->_entityTypeName);
+          $this->_subTypes = CRM_Eck_BAO_EckEntityType::getSubTypes($this->_entityTypeName);
           $this->_customGroups = array_filter(
-            CRM_Eck_DAO_EckEntityType::getCustomGroups($this->_entityTypeName),
+            CRM_Eck_BAO_EckEntityType::getCustomGroups($this->_entityTypeName),
             function($custom_group) {
               return empty($custom_group['extends_entity_column_value']);
             }
