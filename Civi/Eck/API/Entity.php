@@ -40,12 +40,10 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   /**
    * @param int $version
    *   API version.
-   * @return array<string>
+   * @return string[]
    */
   public function getEntityNames($version) {
-    return array_map(function ($entity_type) {
-      return 'Eck' . $entity_type;
-    }, \CRM_Eck_BAO_EckEntityType::getEntityTypeNames());
+    return array_column(\CRM_Eck_BAO_EckEntityType::getEntityTypes(), 'entity_name');
   }
 
   /**
