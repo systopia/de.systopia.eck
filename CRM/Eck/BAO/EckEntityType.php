@@ -24,9 +24,9 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
    */
   public static function getEntityTypes(): array {
     if (!isset(Civi::$statics['EckEntityTypes'])) {
-      Civi::$statics['EckEntityTypes'] = (array) \Civi\Api4\EckEntityType::get(FALSE)
-        ->addSelect('*', 'CONCAT("Eck", name) AS entity_name')
-        ->execute();
+      Civi::$statics['EckEntityTypes'] = CRM_Core_DAO::executeQuery(
+        'SELECT *, CONCAT("Eck", name) AS entity_name FROM `civicrm_eck_entity_type`;'
+      )->fetchAll('id');
     }
     return Civi::$statics['EckEntityTypes'];
   }
