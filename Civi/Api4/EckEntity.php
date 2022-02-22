@@ -18,22 +18,19 @@ namespace Civi\Api4;
 use CRM_Eck_ExtensionUtil as E;
 use Civi\Api4\Generic\BasicReplaceAction;
 use Civi\Api4\Generic\CheckAccessAction;
-use Civi\Api4\Generic\DAOCreateAction;
 use Civi\Api4\Generic\DAODeleteAction;
-use Civi\Api4\Generic\DAOGetAction;
 use Civi\Api4\Generic\DAOGetFieldsAction;
-use Civi\Api4\Generic\DAOSaveAction;
-use Civi\Api4\Generic\DAOUpdateAction;
 use Civi\Api4\Action\GetActions;
 
 /**
- * EckEntityType entity.
+ * Virtual ECK Entity.
  *
+ * Provides an API entity for every EckEntityType.
  * Provided by the Entity Construction Kit extension.
  *
  * @package Civi\Api4
  */
-class EckEntity extends Generic\DAOEntity {
+class EckEntity {
 
   /**
    * {@inheritDoc}
@@ -97,5 +94,8 @@ class EckEntity extends Generic\DAOEntity {
     return $dao ? $dao::getEntityTitle($plural) : ($plural ? \CRM_Utils_String::pluralize($entity_type) : $entity_type);
   }
 
+  public static function permissions() {
+    return []; // FIXME: Add per-entity-type permissions
+  }
 
 }

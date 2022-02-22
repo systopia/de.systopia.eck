@@ -64,9 +64,6 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   }
 
   public function onApi4EntityTypes(GenericHookEvent $event) {
-    // Remove the generic EckEntity entry which should not be available.
-    unset($event->entities['EckEntity']);
-
     $eck_entities = [];
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
       $eck_entities['Eck' . $entity_type['name']] = [
