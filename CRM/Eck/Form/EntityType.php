@@ -183,9 +183,10 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       }
 
       // Do not allow duplicate entity type names.
-      $count = civicrm_api3('EckEntityType', 'getcount', [
-        'name' => $values['name']
-      ]);
+      $count = civicrm_api4('EckEntityType', 'get', [
+        'select' => ['row_count'],
+        'where' => [['name', '=', $values['name']]],
+      ])->count();
       if (
         // case-insensitive checking according to API/database behavior.
         strtolower($values['name']) != strtolower($this->_entityType['name'] ?? NULL)

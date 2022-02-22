@@ -52,13 +52,13 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
       throw new CRM_Core_Exception('No entity ID given.');
     }
     $this->_id = $entity_id;
-    $entity = civicrm_api3('Eck_' . $entity_type_name, 'getsingle', ['id' => $entity_id]);
-
+    $entity = civicrm_api4('Eck_' . $entity_type_name, 'get', [
+      'where' => [['id', '=', $entity_id]],
+    ])->single();
     // Retrieve fields.
-    $fields = civicrm_api3('Eck_' . $entity_type_name, 'getfields', ['subtype' => $entity['subtype']])['values'];
-    $fields = array_filter($fields, function($key) {
-      return strpos($key, 'custom_') !== 0;
-    }, ARRAY_FILTER_USE_KEY);
+    $fields = civicrm_api4('Eck_' . $entity_type_name, 'getfields', [
+      'where' => [['type', '=', 'Field']],
+    ], 'name');
     $this->assign('fields', $fields);
 
     // Set page title.
