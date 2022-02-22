@@ -45,6 +45,14 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements \Ci
     if ($event->action === 'delete') {
       $eckTypeName = self::getFieldValue(parent::class, $event->id);
 
+      // Delete entities of this type.
+      civicrm_api4('Eck' . $eckTypeName, 'delete', [
+        'checkPermissions' => FALSE,
+        'where' => [['id', 'IS NOT NULL']],
+      ]);
+
+      // TODO: Delete custom fields in custom groups extending this entity type?
+
       // Delete custom groups. This has to be done before removing the table due
       // to FK constraints.
       civicrm_api4('CustomGroup', 'delete', [
