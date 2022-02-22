@@ -19,25 +19,22 @@ use \Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
 
-  protected static $_entityTypes;
-
-  public static function getEntityTypes() {
-    if (!isset(static::$_entityTypes)) {
-      $entity_types = civicrm_api3('EckEntityType', 'get', [], ['limit' => 0])['values'];
-      static::$_entityTypes = array_combine(
-        array_map(
-          function ($name) {
-            return 'Eck' . $name;
-          },
-          array_column($entity_types, 'name')
-        ),
-        $entity_types
-      );
+  /**
+   * @return array[]
+   */
+  public static function getEntityTypes(): array {
+    if (!isset(Civi::$statics['EckEntityTypes'])) {
+      Civi::$statics['EckEntityTypes'] = CRM_Core_DAO::executeQuery(
+        'SELECT *, CONCAT("Eck", name) AS entity_name FROM `civicrm_eck_entity_type`;'
+      )->fetchAll('id');
     }
-    return static::$_entityTypes;
+    return Civi::$statics['EckEntityTypes'];
   }
 
-  public static function getEntityTypeNames() {
+  /**
+   * @return string[]
+   */
+  public static function getEntityTypeNames(): array {
     return array_column(self::getEntityTypes(), 'name');
   }
 
@@ -193,6 +190,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
    */
   public static function getCustomGroups($entity_type_name):array {
     return (array) civicrm_api4('CustomGroup', 'get', [
+      'checkPermissions' => FALSE,
       'where' => [['extends', '=', 'Eck' . $entity_type_name]],
     ]);
   }
@@ -208,6 +206,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
    */
   public static function getSubTypes($entity_type_name, $as_mapping = TRUE):array {
     $result = civicrm_api4('OptionValue', 'get', [
+      'checkPermissions' => FALSE,
       'where' => [
         ['option_group_id:name', '=', 'eck_sub_types'],
         ['grouping', '=', $entity_type_name],
@@ -232,17 +231,17 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
    */
   public static function deleteSubType($sub_type_value) {
     $sub_type = civicrm_api4('OptionValue', 'get', [
+      'checkPermissions' => FALSE,
       'where' => [
         ['option_group_id:name', '=', 'eck_sub_types'],
         ['value', '=', $sub_type_value],
-      ]
+      ],
     ]);
 
     // Delete entities of subtype.
     civicrm_api4($sub_type['grouping'], 'delete', [
-      'where' => [
-        ['id', 'IS NOT NULL'],
-      ],
+      'checkPermissions' => FALSE,
+      'where' => [['id', 'IS NOT NULL']],
     ]);
 
     // TODO: Delete CustomFields in CustomGroup attached to subtype.
@@ -270,6 +269,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
         )
       ) {
         civicrm_api4('CustomGroup', 'delete', [
+          'checkPermissions' => FALSE,
           'where' => [['id', '=', $custom_group['id']]],
         ]);
       }
@@ -277,6 +277,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
 
     // Delete subtype.
     civicrm_api4('OptionValue', 'delete', [
+      'checkPermissions' => FALSE,
       'where' => [['id', '=', $sub_type['id']]],
     ]);
   }
