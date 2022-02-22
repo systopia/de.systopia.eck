@@ -90,9 +90,8 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    */
   public function initialize() {
     if (self::$_entityType) {
-      $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => self::$_entityType]);
-      self::$_className = 'CRM_Eck_DAO_' . $entity_type['name'];
-      self::$_tableName = 'civicrm_eck_' . strtolower($entity_type['name']);
+      self::$_className = 'CRM_Eck_DAO_' . self::$_entityType;
+      self::$_tableName = 'civicrm_eck_' . strtolower(self::$_entityType);
     }
 
     parent::initialize();
@@ -248,7 +247,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
      * Copied and adapted from CRM_Core_DAO::getSelectWhereClause().
      * We need to always pass the ECK entity type into the DAO constructor and
      * static methods where objects are being instantiated.
-     * @see \CRM_Eck_DAO_Entity::getSelectWhereClause()
+     * @see \CRM_Core_DAO::getSelectWhereClause()
      */
     $bao = new static($entity_type);
     if ($tableAlias === NULL) {

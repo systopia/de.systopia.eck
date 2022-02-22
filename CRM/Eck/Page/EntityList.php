@@ -14,6 +14,7 @@
 +--------------------------------------------------------*/
 
 use CRM_Eck_ExtensionUtil as E;
+use Civi\Api4\EckEntityType;
 
 class CRM_Eck_Page_EntityList extends CRM_Core_Page {
 
@@ -23,7 +24,7 @@ class CRM_Eck_Page_EntityList extends CRM_Core_Page {
     }
 
     try {
-      $entity_type = civicrm_api3('EckEntityType', 'getsingle', ['name' => $entity_type_name]);
+      $entity_type = EckEntityType::get(FALSE)->addWhere('name', '=', $entity_type_name)->execute()->single();
       $this->assign('entity_type', $entity_type);
     }
     catch (Exception $exception) {
