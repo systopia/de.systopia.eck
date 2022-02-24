@@ -14,6 +14,7 @@
 +--------------------------------------------------------*/
 
 use CRM_Eck_ExtensionUtil as E;
+use Civi\Api4\EckEntityType;
 
 /**
  * Form controller class
@@ -44,11 +45,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
         throw new Exception(E::ts('No ECK entity type given.'));
       }
       try {
-        $this->_entityType = civicrm_api3(
-          'EckEntityType',
-          'getsingle',
-          ['name' => $this->_entityTypeName]
-        );
+        $this->_entityType = EckEntityType::get(FALSE)->addWhere('name', '=', $this->_entityTypeName)->execute()->single();
       }
       catch (Exception $exception) {
         throw new Exception(E::ts('Invalid ECK entity type.'));
