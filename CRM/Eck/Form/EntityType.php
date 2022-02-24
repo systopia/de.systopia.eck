@@ -107,6 +107,9 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
             );
           }
         }
+        if ($this->_action === CRM_Core_Action::UPDATE) {
+          $this->getElement('name')->freeze();
+        }
 
         // Add links to custom groups.
         $this->assign('customGroupAdminUrl', CRM_Utils_System::url('civicrm/admin/custom/group'));
@@ -202,15 +205,24 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
    * {@inheritDoc}
    */
   public function postProcess() {
+    $values = $this->exportValues(NULL, TRUE);
     switch ($this->getAction()) {
       case CRM_Core_Action::ADD:
+        \Civi\Api4\EckEntityType::create()
+          ->setValues($values)
+          ->execute();
+        break;
+
       case CRM_Core_Action::UPDATE:
-        $values = $this->exportValues(NULL, TRUE);
-        CRM_Eck_BAO_EckEntityType::ensureEntityType($values, $this->_entityType, TRUE);
-      break;
+        \Civi\Api4\EckEntityType::update()
+          ->setValues($values)
+          ->addWhere('id', '=', $this->_entityType['id'])
+          ->execute();
+        break;
+
       case CRM_Core_Action::DELETE:
         \Civi\Api4\EckEntityType::delete()
-          ->setWhere([['id', '=', $this->_entityType['id']]])
+          ->addWhere('id', '=', $this->_entityType['id'])
           ->execute();
         break;
     }
