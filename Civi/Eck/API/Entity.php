@@ -61,18 +61,26 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
     return $actions;
   }
 
+  /**
+   * Register each EckEntityType as an APIv4 entity.
+   *
+   * @param GenericHookEvent $event
+   */
   public function onApi4EntityTypes(GenericHookEvent $event) {
-    $eck_entities = [];
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
-      $eck_entities['Eck' . $entity_type['name']] = [
-        'name' => 'Eck' . $entity_type['name'],
+      $event->entities[$entity_type['entity_name']] = [
+        'name' => $entity_type['entity_name'],
         'title' => $entity_type['label'],
         'title_plural' => $entity_type['label'],
         'description' => ts('Entity Construction Kit entity type %1', [1 => $entity_type['label']]),
         'primary_key' => ['id'],
+        'type' => ['EckEntity'],
+        'label_field' => 'title',
+        'searchable' => 'secondary',
+        'paths' => [],
+        'class' => 'Civi\Api4\EckEntity',
       ];
     }
-    $event->entities = array_merge($event->entities, $eck_entities);
   }
 
   public function onApi4CreateRequest(CreateApi4RequestEvent $event) {
