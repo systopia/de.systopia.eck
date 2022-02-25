@@ -155,10 +155,10 @@ function eck_civicrm_entityTypes(&$entityTypes) {
 
   foreach ($eck_entity_types as $entity_type) {
     // "CRM_Eck_DAO_*" is a virtual class name, the corresponding class does not
-    // exist. "CRM_Eck_DAO_EntityType" is therefore defined as the controller
+    // exist. "CRM_Eck_DAO_Entity" is therefore defined as the controller
     // class.
     $entityTypes['CRM_Eck_DAO_' . $entity_type['name']] = [
-      'name' => 'Eck' . $entity_type['name'],
+      'name' => 'Eck_' . $entity_type['name'],
       'class' => 'CRM_Eck_DAO_Entity',
       'table' => 'civicrm_eck_' . strtolower($entity_type['name']),
     ];

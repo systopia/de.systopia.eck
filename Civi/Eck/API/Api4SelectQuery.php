@@ -26,7 +26,7 @@ class Api4SelectQuery extends \Civi\Api4\Query\Api4SelectQuery {
     // Overwrite the query property with the correct table name.
     $entity = $this->getEntity();
     $baoName = CoreUtil::getBAOFromApiName($entity);
-    $bao = new $baoName(substr($entity, strlen('Eck')));
+    $bao = new $baoName(substr($entity, strlen('Eck_')));
     $tableName = $bao->tableName();
     $this->query = \CRM_Utils_SQL_Select::from($tableName . ' ' . self::MAIN_TABLE_ALIAS);
     // Add ACLs first to avoid redundant subclauses
@@ -43,7 +43,7 @@ class Api4SelectQuery extends \Civi\Api4\Query\Api4SelectQuery {
     if (count($stack) === 1 && in_array(reset($stack), $this->aclFields, TRUE)) {
       return [];
     }
-    $clauses = $baoName::getSelectWhereClause($tableAlias, substr($this->getEntity(), strlen('Eck')));
+    $clauses = $baoName::getSelectWhereClause($tableAlias, substr($this->getEntity(), strlen('Eck_')));
     if (!$stack) {
       // Track field clauses added to the main entity
       $this->aclFields = array_keys($clauses);

@@ -222,11 +222,11 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   public static function writeRecord(array $record): CRM_Core_DAO {
     $hook = empty($record['id']) ? 'create' : 'edit';
 
-    \CRM_Utils_Hook::pre($hook, 'Eck' . $record['entity_type'], $record['id'] ?? NULL, $record);
+    \CRM_Utils_Hook::pre($hook, 'Eck_' . $record['entity_type'], $record['id'] ?? NULL, $record);
     $instance = new self($record['entity_type']);
     $instance->copyValues($record);
     $instance->save();
-    \CRM_Utils_Hook::post($hook, 'Eck' . $record['entity_type'], $instance->id, $instance);
+    \CRM_Utils_Hook::post($hook, 'Eck_' . $record['entity_type'], $instance->id, $instance);
 
     // Store custom field values.
     if (!empty($record['custom']) && is_array($record['custom'])) {
@@ -240,7 +240,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public static function deleteRecord(array $record) {
-    $entityName = 'Eck' . $record['entity_type'];
+    $entityName = 'Eck_' . $record['entity_type'];
     if (empty($record['id'])) {
       throw new CRM_Core_Exception("Cannot delete {$entityName} with no id.");
     }

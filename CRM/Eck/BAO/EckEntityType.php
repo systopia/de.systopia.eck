@@ -23,8 +23,8 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements \Ci
   public static function getEntityTypes(): array {
     if (!isset(Civi::$statics['EckEntityTypes'])) {
       Civi::$statics['EckEntityTypes'] = CRM_Core_DAO::executeQuery(
-        'SELECT *, CONCAT("Eck", name) AS entity_name FROM `civicrm_eck_entity_type`;'
-      )->fetchAll('id');
+        'SELECT *, CONCAT("Eck_", name) AS entity_name, CONCAT("civicrm_eck_", LOWER(name)) AS table_name FROM `civicrm_eck_entity_type`;'
+      )->fetchAll('entity_name');
     }
     return Civi::$statics['EckEntityTypes'];
   }
@@ -54,7 +54,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements \Ci
       // Perform cleanup before deleting an EckEntityType
       case 'delete':
         // Delete entities of this type.
-        civicrm_api4('Eck' . $eckTypeName, 'delete', [
+        civicrm_api4('Eck_' . $eckTypeName, 'delete', [
           'checkPermissions' => FALSE,
           'where' => [['id', 'IS NOT NULL']],
         ]);
@@ -65,7 +65,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements \Ci
         // to FK constraints.
         civicrm_api4('CustomGroup', 'delete', [
           'checkPermissions' => FALSE,
-          'where' => [['extends', '=', 'Eck' . $eckTypeName]],
+          'where' => [['extends', '=', 'Eck_' . $eckTypeName]],
         ]);
 
         // Drop table.
@@ -77,7 +77,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements \Ci
           'checkPermissions' => FALSE,
           'where' => [
             ['option_group_id:name', '=', 'cg_extend_objects'],
-            ['value', '=', 'Eck' . $eckTypeName],
+            ['value', '=', 'Eck_' . $eckTypeName],
           ],
         ]);
 
@@ -128,7 +128,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements \Ci
     // Ensure table exists.
     CRM_Core_DAO::executeQuery("
       CREATE TABLE IF NOT EXISTS `{$table_name}` (
-          `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Eck{$entity_type['name']} ID',
+          `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Eck_{$entity_type['name']} ID',
           `title` text NOT NULL   COMMENT 'The entity title.',
           `subtype` text NOT NULL   COMMENT 'The entity subtype.',
           PRIMARY KEY (`id`)
@@ -143,7 +143,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements \Ci
       ->addRecord([
         'option_group_id:name' => 'cg_extend_objects',
         'label' => $entity_type['label'],
-        'value' => 'Eck' . $entity_type['name'],
+        'value' => 'Eck_' . $entity_type['name'],
         /**
          * Call a "virtual" static method on EckEntityType, which is being
          * resolved using a __callStatic() implementation for retrieving a
@@ -170,7 +170,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements \Ci
   public static function getCustomGroups($entity_type_name):array {
     return (array) civicrm_api4('CustomGroup', 'get', [
       'checkPermissions' => FALSE,
-      'where' => [['extends', '=', 'Eck' . $entity_type_name]],
+      'where' => [['extends', '=', 'Eck_' . $entity_type_name]],
     ]);
   }
 

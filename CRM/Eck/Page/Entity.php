@@ -55,7 +55,7 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
       throw new CRM_Core_Exception('No entity ID given.');
     }
     $this->_id = $entity_id;
-    $entity = civicrm_api3('Eck' . $entity_type_name, 'getsingle', ['id' => $entity_id]);
+    $entity = civicrm_api3('Eck_' . $entity_type_name, 'getsingle', ['id' => $entity_id]);
 
     // Set page title.
     CRM_Utils_System::setTitle($entity['title']);
