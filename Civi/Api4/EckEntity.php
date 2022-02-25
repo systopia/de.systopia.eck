@@ -18,7 +18,7 @@ namespace Civi\Api4;
 use CRM_Eck_ExtensionUtil as E;
 use Civi\Api4\Generic\BasicReplaceAction;
 use Civi\Api4\Generic\CheckAccessAction;
-use Civi\Api4\Generic\DAODeleteAction;
+use Civi\Api4\Generic\DAOGetAction;
 use Civi\Api4\Generic\DAOGetFieldsAction;
 use Civi\Api4\Action\GetActions;
 
@@ -33,67 +33,103 @@ use Civi\Api4\Action\GetActions;
 class EckEntity {
 
   /**
-   * {@inheritDoc}
+   * @param string $entity_type
+   * @param bool $checkPermissions
+   * @return DAOGetFieldsAction
    */
-  public static function getFields($checkPermissions = TRUE) {
-    [,$entity_type] = func_get_args();
+  public static function getFields(string $entity_type, $checkPermissions = TRUE) {
     return (new DAOGetFieldsAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function get($checkPermissions = TRUE) {
-    [,$entity_type] = func_get_args();
-    return (new EckDAOGetAction('Eck_' . $entity_type, __FUNCTION__))
+  /**
+   * @param string $entity_type
+   * @param bool $checkPermissions
+   * @return DAOGetAction
+   * @throws \API_Exception
+   */
+  public static function get(string $entity_type, $checkPermissions = TRUE) {
+    return (new DAOGetAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function save($checkPermissions = TRUE) {
-    [,$entity_type] = func_get_args();
+  /**
+   * @param string $entity_type
+   * @param bool $checkPermissions
+   * @return EckDAOSaveAction
+   * @throws \API_Exception
+   */
+  public static function save(string $entity_type, $checkPermissions = TRUE) {
     return (new EckDAOSaveAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function create($checkPermissions = TRUE) {
-    [,$entity_type] = func_get_args();
+  /**
+   * @param string $entity_type
+   * @param bool $checkPermissions
+   * @return EckDAOCreateAction
+   * @throws \API_Exception
+   */
+  public static function create(string $entity_type, $checkPermissions = TRUE) {
     return (new EckDAOCreateAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function update($checkPermissions = TRUE) {
-    [,$entity_type] = func_get_args();
+  /**
+   * @param string $entity_type
+   * @param bool $checkPermissions
+   * @return EckDAOUpdateAction
+   * @throws \API_Exception
+   */
+  public static function update(string $entity_type, $checkPermissions = TRUE) {
     return (new EckDAOUpdateAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function delete($checkPermissions = TRUE) {
-    [,$entity_type] = func_get_args();
-    return (new DAODeleteAction('Eck_' . $entity_type, __FUNCTION__))
+  /**
+   * @param string $entity_type
+   * @param bool $checkPermissions
+   * @return EckDAODeleteAction
+   * @throws \API_Exception
+   */
+  public static function delete(string $entity_type, $checkPermissions = TRUE) {
+    return (new EckDAODeleteAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function replace($checkPermissions = TRUE) {
-    [,$entity_type] = func_get_args();
+  /**
+   * @param string $entity_type
+   * @param bool $checkPermissions
+   * @return BasicReplaceAction
+   * @throws \API_Exception
+   */
+  public static function replace(string $entity_type, $checkPermissions = TRUE) {
     return (new BasicReplaceAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function getActions($checkPermissions = TRUE) {
-    [,$entity_type] = func_get_args();
+  /**
+   * @param string $entity_type
+   * @param bool $checkPermissions
+   * @return GetActions
+   */
+  public static function getActions(string $entity_type, $checkPermissions = TRUE) {
     return (new GetActions('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function checkAccess() {
-    [,$entity_type] = func_get_args();
+  /**
+   * @param string $entity_type
+   * @return CheckAccessAction
+   * @throws \API_Exception
+   */
+  public static function checkAccess(string $entity_type) {
     return new CheckAccessAction('Eck_' . $entity_type, __FUNCTION__);
   }
 
-  protected static function getEntityTitle($plural = FALSE) {
-    [,$entity_type] = func_get_args();
-    $dao = \CRM_Core_DAO_AllCoreTables::getFullName($entity_type);
-    return $dao ? $dao::getEntityTitle($plural) : ($plural ? \CRM_Utils_String::pluralize($entity_type) : $entity_type);
-  }
-
+  /**
+   * @return array
+   */
   public static function permissions() {
     return []; // FIXME: Add per-entity-type permissions
   }

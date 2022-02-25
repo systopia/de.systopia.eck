@@ -90,7 +90,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         in_array($entity_type, \CRM_Eck_BAO_EckEntityType::getEntityTypeNames())
       ) {
         $event->className = 'Civi\Api4\EckEntity';
-        $event->args = [TRUE, $entity_type];
+        $event->args = [$entity_type];
       }
     }
   }
