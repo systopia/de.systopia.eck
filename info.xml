@@ -18,7 +18,7 @@
   <version>1.0-dev</version>
   <develStage>dev</develStage>
   <compatibility>
-    <ver>5.43</ver>
+    <ver>5.47</ver>
   </compatibility>
   <classloader>
     <psr4 prefix="Civi\" path="Civi"/>
