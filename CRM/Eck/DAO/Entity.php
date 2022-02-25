@@ -173,9 +173,6 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'html' => [
             'type' => 'Text',
           ],
-//          'pseudoconstant' => [
-//            'callback' => 'CRM_Eck_Utils_EckEntityType::' . self::$_entityType . '.getSubTypes',
-//          ],
         ],
       ];
 
