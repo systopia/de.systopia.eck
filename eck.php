@@ -14,10 +14,8 @@
 +--------------------------------------------------------*/
 
 require_once 'eck.civix.php';
-// phpcs:disable
 use CRM_Eck_ExtensionUtil as E;
-// phpcs:enable
-use \Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Implements hook_civicrm_config().

@@ -18,8 +18,6 @@ namespace Civi\Eck\API;
 use CRM_Eck_ExtensionUtil as E;
 use Civi\API\Events;
 use Civi\Api4\EckEntity;
-use Civi\Api4\EckEntityType;
-use Civi\Api4\Event;
 use Civi\API\Event\ResolveEvent;
 use Civi\Api4\Event\CreateApi4RequestEvent;
 use Civi\Core\Event\GenericHookEvent;
@@ -28,15 +26,17 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class Entity implements API_ProviderInterface, EventSubscriberInterface {
 
-  protected static $_entityTypes;
-
-  public static function getSubscribedEvents() {
+  /**
+   * @return callable[]
+   */
+  public static function getSubscribedEvents():array {
     return [
       'civi.api4.createRequest' => [['onApi4CreateRequest', Events::W_EARLY]],
       'civi.api.resolve' => 'onApiResolve',
       'civi.api4.entityTypes' => [['onApi4EntityTypes', Events::W_EARLY]],
     ];
   }
+
   /**
    * @param int $version
    *   API version.
@@ -64,6 +64,8 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   /**
    * Register each EckEntityType as an APIv4 entity.
    *
+   * Callback for `civi.api4.entityTypes` event.
+   *
    * @param GenericHookEvent $event
    */
   public function onApi4EntityTypes(GenericHookEvent $event) {
@@ -83,6 +85,11 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
     }
   }
 
+  /**
+   * Callback for `civi.api4.createRequest` event.
+   *
+   * @param CreateApi4RequestEvent $event
+   */
   public function onApi4CreateRequest(CreateApi4RequestEvent $event) {
     if (strpos($event->entityName, 'Eck_') === 0) {
       $entity_type = substr($event->entityName, strlen('Eck_'));
@@ -169,6 +176,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         }
         $result = civicrm_api3_create_success($result, $params, $entity, 'get');
         break;
+
       case 4:
         $result = EckEntity::get($apiRequest['params']['check_permissions'], $apiRequest['entity']);
         break;

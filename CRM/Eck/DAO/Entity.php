@@ -63,7 +63,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   public $subtype;
 
   /**
-   * {@inheritdoc }
+   * @var string
    */
   public static $_labelField = 'title';
 
