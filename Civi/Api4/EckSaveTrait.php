@@ -15,29 +15,24 @@
 
 namespace Civi\Api4;
 
-use CRM_Eck_ExtensionUtil as E;
-use Civi\Api4\Generic\Result;
-use Civi\Api4\Query\Api4SelectQuery;
-
-class EckDAODeleteAction extends Generic\DAODeleteAction {
+trait EckSaveTrait {
 
   /**
-   * @var string $entityType
-   *   The ECK entity type of the entity to create.
+   * Override core function to save items using the appropriate entity type
+   *
+   * @param array[] $items
+   *   Items already formatted by self::writeObjects
+   * @return \CRM_Core_DAO[]
+   *   Array of saved DAO records
    */
-  protected $entityType;
+  protected function write(array $items) {
+    $entityType = \CRM_Eck_BAO_Entity::getEntityType($this->getEntityName());
 
-  /**
-   * @param $entityName
-   * @param $actionName
-   *
-   * @return \EckDAOCreateAction
-   *
-   * @throws \API_Exception
-   */
-  public function __construct($entityName, $actionName) {
-    parent::__construct($entityName, $actionName);
-    $this->entityType = \CRM_Eck_BAO_Entity::getEntityType($entityName);
+    foreach ($items as &$item) {
+      $item['entity_type'] = $entityType;
+    }
+
+    return \CRM_Eck_BAO_Entity::writeRecords($items);
   }
 
 }

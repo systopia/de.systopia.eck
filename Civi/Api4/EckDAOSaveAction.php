@@ -16,38 +16,9 @@
 namespace Civi\Api4;
 
 use CRM_Eck_ExtensionUtil as E;
-use Civi\Api4\Generic\Result;
-use Civi\Api4\Query\Api4SelectQuery;
 
 class EckDAOSaveAction extends Generic\DAOSaveAction {
 
-  /**
-   * @var string $entityType
-   *   The ECK entity type of the entity to create.
-   */
-  protected $entityType;
-
-  /**
-   * @param $entityName
-   * @param $actionName
-   *
-   * @return \EckDAOCreateAction
-   *
-   * @throws \API_Exception
-   */
-  public function __construct($entityName, $actionName) {
-    parent::__construct($entityName, $actionName);
-    $this->entityType = \CRM_Eck_BAO_Entity::getEntityType($entityName);
-  }
-
-  /**
-   * @inheritDoc
-   */
-  public function _run(Result $result) {
-    foreach ($this->records as &$record) {
-      $record['entity_type'] = $this->entityType;
-    }
-    parent::_run($result);
-  }
+  use EckSaveTrait;
 
 }
