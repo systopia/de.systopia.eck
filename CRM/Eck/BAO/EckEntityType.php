@@ -144,14 +144,6 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements \Ci
         'option_group_id:name' => 'cg_extend_objects',
         'label' => $entity_type['label'],
         'value' => 'Eck_' . $entity_type['name'],
-        /**
-         * Call a "virtual" static method on EckEntityType, which is being
-         * resolved using a __callStatic() implementation for retrieving a
-         * list of subtypes.
-         * @see \CRM_Eck_Utils_EckEntityType::__callStatic()
-         * @see \CRM_Core_BAO_CustomGroup::getExtendedObjectTypes()
-         */
-        'description' => "CRM_Eck_Utils_EckEntityType::{$entity_type['name']}.getSubTypes;",
         'name' => 'civicrm_eck_' . strtolower($entity_type['name']),
         'is_reserved' => TRUE,
       ])
