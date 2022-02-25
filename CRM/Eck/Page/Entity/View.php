@@ -52,10 +52,10 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
       throw new CRM_Core_Exception('No entity ID given.');
     }
     $this->_id = $entity_id;
-    $entity = civicrm_api3('Eck' . $entity_type_name, 'getsingle', ['id' => $entity_id]);
+    $entity = civicrm_api3('Eck_' . $entity_type_name, 'getsingle', ['id' => $entity_id]);
 
     // Retrieve fields.
-    $fields = civicrm_api3('Eck' . $entity_type_name, 'getfields', ['subtype' => $entity['subtype']])['values'];
+    $fields = civicrm_api3('Eck_' . $entity_type_name, 'getfields', ['subtype' => $entity['subtype']])['values'];
     $fields = array_filter($fields, function($key) {
       return strpos($key, 'custom_') !== 0;
     }, ARRAY_FILTER_USE_KEY);
@@ -66,7 +66,7 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
 
     // Retrieve and build custom data view.
     $custom_group_tree = CRM_Core_BAO_CustomGroup::getTree(
-      'Eck' . $entity_type_name,
+      'Eck_' . $entity_type_name,
       [],
       $entity_id,
       NULL,

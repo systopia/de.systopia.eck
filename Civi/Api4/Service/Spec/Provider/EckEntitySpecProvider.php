@@ -25,7 +25,7 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
    * @return bool
    */
   public function applies($entity, $action) {
-    return $entity !== 'EckEntityType' && substr($entity, 0, 3) === 'Eck';
+    return (bool) \CRM_Eck_BAO_Entity::getEntityType($entity);
   }
 
   /**

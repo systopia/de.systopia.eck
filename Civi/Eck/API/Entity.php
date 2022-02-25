@@ -84,11 +84,10 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   }
 
   public function onApi4CreateRequest(CreateApi4RequestEvent $event) {
-    if (strpos($event->entityName, 'Eck') === 0) {
-      $entity_type = substr($event->entityName, strlen('Eck'));
+    if (strpos($event->entityName, 'Eck_') === 0) {
+      $entity_type = substr($event->entityName, strlen('Eck_'));
       if (
-        $entity_type != 'EntityType'
-        && in_array($entity_type, \CRM_Eck_BAO_EckEntityType::getEntityTypeNames())
+        in_array($entity_type, \CRM_Eck_BAO_EckEntityType::getEntityTypeNames())
       ) {
         $event->className = 'Civi\Api4\EckEntity';
         $event->args = [TRUE, $entity_type];
@@ -99,11 +98,8 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   public function onApiResolve(ResolveEvent $event) {
     $apiRequest = $event->getApiRequest();
     if (
-      $apiRequest['entity'] != 'EckEntityType'
-      && in_array(
-        $apiRequest['entity'],
-        static::getEntityNames($apiRequest['version'])
-      )
+      strpos($apiRequest['entity'], 'Eck_') === 0 &&
+      in_array($apiRequest['entity'], static::getEntityNames($apiRequest['version']))
     ) {
       $event->setApiProvider($this);
       $apiRequest = $event->getApiRequest();

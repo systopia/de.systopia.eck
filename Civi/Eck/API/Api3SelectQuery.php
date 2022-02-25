@@ -26,7 +26,7 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
     $this->entity = $entity;
     require_once 'api/v3/utils.php';
     $baoName = _civicrm_api3_get_BAO($entity);
-    $bao = new $baoName(substr($entity, strlen('Eck')));
+    $bao = new $baoName(substr($entity, strlen('Eck_')));
 
     $this->entityFieldNames = array_column($baoName::fields(), 'name');
     $this->apiFieldSpec = $this->getFields();
@@ -51,7 +51,7 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
     if (count($stack) === 1 && in_array($stack[0], $this->aclFields)) {
       return [];
     }
-    $clauses = $baoName::getSelectWhereClause($tableAlias, substr($this->entity, strlen('Eck')));
+    $clauses = $baoName::getSelectWhereClause($tableAlias, substr($this->entity, strlen('Eck_')));
     if (!$stack) {
       // Track field clauses added to the main entity
       $this->aclFields = array_keys($clauses);

@@ -37,55 +37,55 @@ class EckEntity {
    */
   public static function getFields($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new DAOGetFieldsAction('Eck' . $entity_type, __FUNCTION__))
+    return (new DAOGetFieldsAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
   public static function get($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new EckDAOGetAction('Eck' . $entity_type, __FUNCTION__))
+    return (new EckDAOGetAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
   public static function save($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new EckDAOSaveAction('Eck' . $entity_type, __FUNCTION__))
+    return (new EckDAOSaveAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
   public static function create($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new EckDAOCreateAction('Eck' . $entity_type, __FUNCTION__))
+    return (new EckDAOCreateAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
   public static function update($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new EckDAOUpdateAction('Eck' . $entity_type, __FUNCTION__))
+    return (new EckDAOUpdateAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
   public static function delete($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new DAODeleteAction('Eck' . $entity_type, __FUNCTION__))
+    return (new DAODeleteAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
   public static function replace($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new BasicReplaceAction('Eck' . $entity_type, __FUNCTION__))
+    return (new BasicReplaceAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
   public static function getActions($checkPermissions = TRUE) {
     [,$entity_type] = func_get_args();
-    return (new GetActions('Eck' . $entity_type, __FUNCTION__))
+    return (new GetActions('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
   public static function checkAccess() {
     [,$entity_type] = func_get_args();
-    return new CheckAccessAction('Eck' . $entity_type, __FUNCTION__);
+    return new CheckAccessAction('Eck_' . $entity_type, __FUNCTION__);
   }
 
   protected static function getEntityTitle($plural = FALSE) {

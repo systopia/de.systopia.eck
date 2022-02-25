@@ -28,7 +28,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
 
     // APIv4 entity should now exist
     $newEntity = \Civi\Api4\Entity::get(FALSE)
-      ->addWhere('name', '=', 'EckTest_One_Type')
+      ->addWhere('name', '=', 'Eck_Test_One_Type')
       ->execute()->single();
     $this->assertEquals('Test One Type', $newEntity['title']);
     $this->assertEquals('secondary', $newEntity['searchable']);
@@ -43,7 +43,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       ->setLoadOptions(TRUE)
       ->addWhere('name', '=', 'extends')
       ->execute()->single();
-    $this->assertArrayHasKey('EckTest_One_Type', $extends['options']);
+    $this->assertArrayHasKey('Eck_Test_One_Type', $extends['options']);
 
     // Delete the entity type
     $deleted = EckEntityType::delete(FALSE)
@@ -53,7 +53,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
 
     // APIv4 entity should no longer exist
     $entities = \Civi\Api4\Entity::get(FALSE)
-      ->addWhere('name', '=', 'EckTest_One_Type')
+      ->addWhere('name', '=', 'Eck_Test_One_Type')
       ->execute();
     $this->assertCount(0, $entities);
 
@@ -65,7 +65,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       ->setLoadOptions(TRUE)
       ->addWhere('name', '=', 'extends')
       ->execute()->single();
-    $this->assertArrayNotHasKey('EckTest_One_Type', $extends['options']);
+    $this->assertArrayNotHasKey('Eck_Test_One_Type', $extends['options']);
   }
 
   public function testRenameEntityType():void {
@@ -175,7 +175,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       'loadOptions' => TRUE,
     ], 'name');
     $this->assertEquals($entityName, $fields['title']['entity']);
-    $this->assertEquals('civicrm_eck_' . strtolower(substr($entityName, 3)), $fields['id']['table_name']);
+    $this->assertEquals('civicrm_' . strtolower($entityName), $fields['id']['table_name']);
     $this->assertEquals(['one' => 'One', 'two' => 'Two'], $fields['subtype']['options']);
     $this->assertEquals('Custom', $fields['My_Entity_Fields.MyField1']['type']);
     $this->assertArrayHasKey('One_Subtype_Fields.MyField2', $fields);
@@ -208,7 +208,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       ->setRecords(\CRM_Utils_Array::makeNonAssociative($subTypes, 'value', 'label'))
       ->execute();
 
-    return 'Eck' . $entityType['name'];
+    return 'Eck_' . $entityType['name'];
   }
 
 }
