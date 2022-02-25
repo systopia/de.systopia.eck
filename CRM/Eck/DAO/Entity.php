@@ -191,50 +191,6 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   /**
    * {@inheritDoc}
    */
-  public static function commonRetrieve($entityType, &$params, &$defaults, $returnProperities = NULL) {
-    $object = new self($entityType);
-    $object->copyValues($params);
-
-    // return only specific fields if returnproperties are sent
-    if (!empty($returnProperities)) {
-      $object->selectAdd();
-      $object->selectAdd(implode(',', $returnProperities));
-    }
-
-    if ($object->find(TRUE)) {
-      self::storeValues($object, $defaults);
-      return $object;
-    }
-    return NULL;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public static function commonRetrieveAll($entityType, $fieldIdName, $fieldId, &$details, $returnProperities = NULL) {
-    $object = new self($entityType);
-    $object->$fieldIdName = $fieldId;
-
-    // return only specific fields if returnproperties are sent
-    if (!empty($returnProperities)) {
-      $object->selectAdd();
-      $object->selectAdd('id');
-      $object->selectAdd(implode(',', $returnProperities));
-    }
-
-    $object->find();
-    while ($object->fetch()) {
-      $defaults = [];
-      self::storeValues($object, $defaults);
-      $details[$object->id] = $defaults;
-    }
-
-    return $details;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public static function getSelectWhereClause($tableAlias = NULL, $entity_type = NULL) {
     if (!isset($entity_type)) {
       // TODO: We can't just throw an exception as this leads to errors
