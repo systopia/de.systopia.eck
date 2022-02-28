@@ -182,16 +182,89 @@ function eck_civicrm_container(\Symfony\Component\DependencyInjection\ContainerB
   $apiKernelDefinition->addMethodCall('registerApiProvider', array($apiProviderDefinition));
 }
 
-// --- Functions below this ship commented out. Uncomment as required. ---
+/**
+ * Implements hook_civicrm_pre().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_pre
+ */
+function eck_civicrm_pre($action, $entity, $id, &$params) {
+  if ($entity === 'EckEntityType') {
+    $eckTypeName = $id ? CRM_Core_DAO::getFieldValue('CRM_Eck_DAO_EckEntityType', $id) : NULL;
+
+    switch ($action) {
+      case 'edit':
+        // Do not allow entity type to be renamed, as the table name depends on it
+        if (isset($params['name']) && $params['name'] !== $eckTypeName) {
+          throw new Exception('Renaming an EckEntityType is not allowed.');
+        }
+        break;
+
+      // Perform cleanup before deleting an EckEntityType
+      case 'delete':
+        // Delete entities of this type.
+        civicrm_api4('Eck_' . $eckTypeName, 'delete', [
+          'checkPermissions' => FALSE,
+          'where' => [['id', 'IS NOT NULL']],
+        ]);
+
+        // TODO: Delete custom fields in custom groups extending this entity type?
+
+        // Delete custom groups. This has to be done before removing the table due
+        // to FK constraints.
+        civicrm_api4('CustomGroup', 'delete', [
+          'checkPermissions' => FALSE,
+          'where' => [['extends', '=', 'Eck_' . $eckTypeName]],
+        ]);
+
+        // Drop table.
+        $table_name = 'civicrm_eck_' . strtolower($eckTypeName);
+        CRM_Core_DAO::executeQuery("DROP TABLE IF EXISTS `{$table_name}`");
+
+        // Delete existing option value for custom-field-extendable object.
+        civicrm_api4('OptionValue', 'delete', [
+          'checkPermissions' => FALSE,
+          'where' => [
+            ['option_group_id:name', '=', 'cg_extend_objects'],
+            ['value', '=', 'Eck_' . $eckTypeName],
+          ],
+        ]);
+
+        // Delete subtypes.
+        civicrm_api4('OptionValue', 'delete', [
+          'checkPermissions' => FALSE,
+          'where' => [
+            ['option_group_id:name', '=', 'eck_sub_types'],
+            ['grouping', '=', $eckTypeName],
+          ],
+        ]);
+        break;
+    }
+  }
+}
 
 /**
- * Implements hook_civicrm_preProcess().
+ * Implements hook_civicrm_post().
  *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_preProcess
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_post
  */
-//function eck_civicrm_preProcess($formName, &$form) {
-//
-//}
+function eck_civicrm_post($action, $entity, $id, $object) {
+  if ($entity === 'EckEntityType') {
+    // Create tables, etc.
+    if ($action === 'create') {
+      CRM_Eck_BAO_EckEntityType::ensureEntityType($object->toArray());
+    }
+
+    // Reset cache of entity types
+    Civi::$statics['EckEntityTypes'] = NULL;
+
+    // Flush schema cache.
+    CRM_Core_DAO_AllCoreTables::reinitializeCache();
+    Civi::cache('metadata')->clear();
+
+    // Flush navigation cache.
+    CRM_Core_BAO_Navigation::resetNavigation();
+  }
+}
 
 /**
  * Implements hook_civicrm_navigationMenu().
