@@ -139,6 +139,12 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     ]);
     $this->assertCount(1, $deleted);
 
+    $firstRecordCount = civicrm_api4($firstEntity, 'get', [
+      'checkPermissions' => FALSE,
+      'select' => ['row_count'],
+    ]);
+    $this->assertCount(1, $firstRecordCount);
+
     $secondRecords = civicrm_api4($secondEntity, 'get', [
       'checkPermissions' => FALSE,
       'orderBy' => ['subtype' => 'ASC'],

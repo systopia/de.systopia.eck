@@ -240,6 +240,9 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public static function deleteRecord(array $record) {
+    if (empty($record['entity_type'])) {
+      throw new CRM_Core_Exception("Eck entity type not specified.");
+    }
     $entityName = 'Eck_' . $record['entity_type'];
     if (empty($record['id'])) {
       throw new CRM_Core_Exception("Cannot delete {$entityName} with no id.");
