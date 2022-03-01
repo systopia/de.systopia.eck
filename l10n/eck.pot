@@ -11,7 +11,7 @@ msgid "Unique EckEntityType ID"
 msgstr ""
 
 #: ./CRM/Eck/DAO/EckEntityType.php
-msgid "Entity Type"
+msgid "Name"
 msgstr ""
 
 #: ./CRM/Eck/DAO/EckEntityType.php
