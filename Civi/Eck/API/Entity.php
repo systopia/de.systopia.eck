@@ -17,8 +17,6 @@ namespace Civi\Eck\API;
 
 use CRM_Eck_ExtensionUtil as E;
 use Civi\API\Events;
-use Civi\Api4\EckEntity;
-use Civi\API\Event\ResolveEvent;
 use Civi\Api4\Event\CreateApi4RequestEvent;
 use Civi\Core\Event\GenericHookEvent;
 use Civi\API\Provider\ProviderInterface as API_ProviderInterface;
@@ -32,33 +30,27 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   public static function getSubscribedEvents():array {
     return [
       'civi.api4.createRequest' => [['onApi4CreateRequest', Events::W_EARLY]],
-      'civi.api.resolve' => 'onApiResolve',
       'civi.api4.entityTypes' => [['onApi4EntityTypes', Events::W_EARLY]],
     ];
   }
 
   /**
+   * Not needed for APIv4
    * @param int $version
-   *   API version.
-   * @return string[]
+   * @return array
    */
   public function getEntityNames($version) {
-    return array_column(\CRM_Eck_BAO_EckEntityType::getEntityTypes(), 'entity_name');
+    return [];
   }
 
   /**
+   * Not needed for APIv4
    * @param int $version
-   *   API version.
    * @param string $entity
-   *   API entity.
-   * @return array<string>
+   * @return array
    */
   public function getActionNames($version, $entity) {
-    $actions = [];
-    if (in_array($entity, static::getEntityNames($version))) {
-      $actions[] = 'get';
-    }
-    return $actions;
+    return [];
   }
 
   /**
@@ -104,86 +96,10 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
     }
   }
 
-  public function onApiResolve(ResolveEvent $event) {
-    $apiRequest = $event->getApiRequest();
-    if (
-      strpos($apiRequest['entity'], 'Eck_') === 0 &&
-      in_array($apiRequest['entity'], static::getEntityNames($apiRequest['version']))
-    ) {
-      $event->setApiProvider($this);
-      $apiRequest = $event->getApiRequest();
-
-      // TODO: Copied this from Civi\FormProcessor\API\FormProcessor - is this needed?
-      if (
-        strtolower($apiRequest['action']) == 'getfields'
-        || strtolower($apiRequest['action']) == 'getoptions'
-      ) {
-        $event->stopPropagation();
-      }
-    }
-  }
-
   /**
-   * @param array $apiRequest
-   *   The full description of the API request.
-   * @return array
-   *   structured response data (per civicrm_api3_create_success)
-   * @see civicrm_api3_create_success
-   * @throws \Exception
+   * Not needed for APIv4
    */
   public function invoke($apiRequest) {
-    switch (strtolower($apiRequest['action'])) {
-      case 'get':
-        return $this->invokeGet($apiRequest);
-    }
-  }
-
-  public function invokeGet($apiRequest) {
-    switch ($apiRequest['version']) {
-      case 3:
-        $bao_name = 'CRM_Eck_BAO_Entity';
-        $entity = $apiRequest['entity'];
-        $params = $apiRequest['params'];
-        /**
-         * Copied and adapted from _civicrm_api3_basic_get().
-         * We need to always pass the ECK entity type into the DAO constructor
-         * and static methods where objects are being instantiated.
-         * Therefore, we need our own Api3SelectQuery class and override some
-         * static methods in CRM_Eck_DAO_Entity.
-         * @see \Civi\Eck\API\Api3SelectQuery
-         * @see \CRM_Eck_DAO_Entity::getSelectWhereClause()
-         */
-        $entity = $entity ?: CRM_Core_DAO_AllCoreTables::getBriefName($bao_name);
-        $options = _civicrm_api3_get_options_from_params($params);
-
-        // Skip query if table doesn't exist yet due to pending upgrade
-        if (!$bao_name::tableHasBeenAdded()) {
-          \Civi::log()->warning("Could not read from {$entity} before table has been added. Upgrade required.", ['civi.tag' => 'upgrade_needed']);
-          $result = [];
-        }
-        else {
-          $query = new Api3SelectQuery($entity, $params['check_permissions'] ?? FALSE);
-          $query->where = $params;
-          if ($options['is_count']) {
-            $query->select = ['count_rows'];
-          }
-          else {
-            $query->select = array_keys(array_filter($options['return']));
-            $query->orderBy = $options['sort'];
-            $query->isFillUniqueFields = FALSE;
-          }
-          $query->limit = $options['limit'];
-          $query->offset = $options['offset'];
-          $result = $query->run();
-        }
-        $result = civicrm_api3_create_success($result, $params, $entity, 'get');
-        break;
-
-      case 4:
-        $result = EckEntity::get($apiRequest['params']['check_permissions'], $apiRequest['entity']);
-        break;
-    }
-    return $result;
   }
 
 }

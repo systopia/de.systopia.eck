@@ -33,12 +33,11 @@ class CRM_Eck_Page_EntityList extends CRM_Core_Page {
 
     CRM_Utils_System::setTitle($entity_type['label']);
 
-    $entities = civicrm_api3('Eck_' . $entity_type_name, 'get', [], ['limit' => 0])['values'];
+    $entities = (array) civicrm_api4('Eck_' . $entity_type_name, 'get', [], 'id');
     $this->assign('entities', $entities);
-    $fields = civicrm_api3('Eck_' . $entity_type_name, 'getfields')['values'];
-    $fields = array_filter($fields, function($key) {
-      return strpos($key, 'custom_') !== 0;
-    }, ARRAY_FILTER_USE_KEY);
+    $fields = civicrm_api4('Eck_' . $entity_type_name, 'getfields', [
+      'where' => [['type', '=', 'Field']],
+    ], 'name');
     $this->assign('fields', $fields);
 
     parent::run();

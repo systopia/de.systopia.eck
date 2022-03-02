@@ -25,7 +25,7 @@
       </tr>
       </thead>
       <tbody>
-      {if not empty($entities)}
+      {if $entities}
           {foreach from=$entities item=entity key=entity_id}
             <tr>
               {foreach from=$fields item=field key=field_name}
