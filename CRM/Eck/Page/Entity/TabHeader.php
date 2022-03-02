@@ -65,6 +65,10 @@ class CRM_Eck_Page_Entity_TabHeader {
       'active' => TRUE,
       'current' => FALSE,
       'class' => 'livePage',
+      'extra' => FALSE,
+      'template' => FALSE,
+      'count' => FALSE,
+      'icon' => FALSE,
     ];
 
     $entityID = $page->getVar('_id');
@@ -86,6 +90,11 @@ class CRM_Eck_Page_Entity_TabHeader {
       $tabs,
       ['entity_id' => $entityID, 'entity_type' => $entityType]
     );
+    // Add default properties to each tab in case implementations missed that.
+    // @url https://github.com/civicrm/civicrm-core/pull/22135
+    foreach ($tabs as &$tab) {
+      $tab += $default;
+    }
 
     if ($entityID) {
       foreach ($tabs as $key => $value) {
