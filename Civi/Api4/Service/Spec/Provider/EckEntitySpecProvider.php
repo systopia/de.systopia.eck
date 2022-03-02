@@ -39,7 +39,11 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
    */
   public static function getSubTypes($spec, $values, $returnFormat, $checkPermissions) {
     $entityType = \CRM_Eck_BAO_Entity::getEntityType($spec->getEntity());
-    return \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType);
+    $options = \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType, FALSE);
+    foreach ($options as &$option) {
+      $option['id'] = $option['value'];
+    }
+    return $options;
   }
 
 }

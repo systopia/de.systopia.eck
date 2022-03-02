@@ -102,8 +102,8 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     $saved = civicrm_api4($firstEntity, 'save', [
       'checkPermissions' => FALSE,
       'records' => [
-        ['title' => 'Abc', 'subtype' => 'one'],
-        ['title' => 'Def', 'subtype' => 'two'],
+        ['title' => 'Abc', 'subtype:name' => 'one'],
+        ['title' => 'Def', 'subtype:name' => 'two'],
       ],
     ]);
     $this->assertCount(2, $saved);
@@ -111,31 +111,32 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     $saved = civicrm_api4($secondEntity, 'save', [
       'checkPermissions' => FALSE,
       'records' => [
-        ['title' => 'Abc', 'subtype' => 'one'],
-        ['title' => 'Def', 'subtype' => 'three'],
+        ['title' => 'Abc', 'subtype:name' => 'one'],
+        ['title' => 'Def', 'subtype:name' => 'three'],
       ],
     ]);
     $this->assertCount(2, $saved);
 
     civicrm_api4($secondEntity, 'update', [
       'checkPermissions' => FALSE,
-      'where' => [['subtype', '=', 'one']],
+      'where' => [['subtype:name', '=', 'one']],
       'values' => ['title' => 'New'],
     ]);
 
     $firstRecords = civicrm_api4($firstEntity, 'get', [
+      'select' => ['title', 'subtype:name'],
       'checkPermissions' => FALSE,
       'orderBy' => ['subtype' => 'ASC'],
     ]);
     $this->assertCount(2, $firstRecords);
     $this->assertEquals('Abc', $firstRecords[0]['title']);
-    $this->assertEquals('one', $firstRecords[0]['subtype']);
+    $this->assertEquals('one', $firstRecords[0]['subtype:name']);
     $this->assertEquals('Def', $firstRecords[1]['title']);
-    $this->assertEquals('two', $firstRecords[1]['subtype']);
+    $this->assertEquals('two', $firstRecords[1]['subtype:name']);
 
     $deleted = civicrm_api4($firstEntity, 'delete', [
       'checkPermissions' => FALSE,
-      'where' => [['subtype', '=', 'one']],
+      'where' => [['subtype:name', '=', 'one']],
     ]);
     $this->assertCount(1, $deleted);
 
@@ -146,18 +147,31 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     $this->assertCount(1, $firstRecordCount);
 
     $secondRecords = civicrm_api4($secondEntity, 'get', [
+      'select' => ['title', 'subtype:name'],
       'checkPermissions' => FALSE,
       'orderBy' => ['subtype' => 'ASC'],
     ]);
     $this->assertCount(2, $secondRecords);
     $this->assertEquals('New', $secondRecords[0]['title']);
-    $this->assertEquals('one', $secondRecords[0]['subtype']);
+    $this->assertEquals('one', $secondRecords[0]['subtype:name']);
     $this->assertEquals('Def', $secondRecords[1]['title']);
-    $this->assertEquals('three', $secondRecords[1]['subtype']);
+    $this->assertEquals('three', $secondRecords[1]['subtype:name']);
   }
 
   public function testEntityCustomFields() {
     $entityName = $this->createEntity(['one' => 'One', 'two' => 'Two']);
+
+    $fields = (array) civicrm_api4($entityName, 'getFields', [
+      'checkPermissions' => FALSE,
+      'loadOptions' => ['id', 'name'],
+    ], 'name');
+    $this->assertEquals($entityName, $fields['title']['entity']);
+    $this->assertEquals('civicrm_' . strtolower($entityName), $fields['id']['table_name']);
+
+    $subTypeKeys = array_column($fields['subtype']['options'], 'id', 'name');
+
+    $this->assertEquals(['one', 'two'], array_keys($subTypeKeys));
+
     CustomGroup::create(FALSE)
       ->addValue('title', 'My Entity Fields')
       ->addValue('extends', $entityName)
@@ -169,7 +183,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     CustomGroup::create(FALSE)
       ->addValue('title', 'One Subtype Fields')
       ->addValue('extends', $entityName)
-      ->addValue('extends_entity_column_value', ['one'])
+      ->addValue('extends_entity_column_value', [$subTypeKeys['one']])
       ->addChain('fields', CustomField::save()
         ->addDefault('custom_group_id', '$id')
         ->addDefault('html_type', 'Text')
@@ -178,23 +192,19 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
 
     $fields = (array) civicrm_api4($entityName, 'getFields', [
       'checkPermissions' => FALSE,
-      'loadOptions' => TRUE,
     ], 'name');
-    $this->assertEquals($entityName, $fields['title']['entity']);
-    $this->assertEquals('civicrm_' . strtolower($entityName), $fields['id']['table_name']);
-    $this->assertEquals(['one' => 'One', 'two' => 'Two'], $fields['subtype']['options']);
     $this->assertEquals('Custom', $fields['My_Entity_Fields.MyField1']['type']);
     $this->assertArrayHasKey('One_Subtype_Fields.MyField2', $fields);
 
     $subTypeOneFields = civicrm_api4($entityName, 'getFields', [
       'checkPermissions' => FALSE,
-      'values' => ['subtype' => 'one'],
+      'values' => ['subtype' => $subTypeKeys['one']],
     ], 'name');
     $this->assertArrayHasKey('One_Subtype_Fields.MyField2', $subTypeOneFields);
 
     $subTypeTwoFields = civicrm_api4($entityName, 'getFields', [
       'checkPermissions' => FALSE,
-      'values' => ['subtype' => 'two'],
+      'values' => ['subtype' => $subTypeKeys['two']],
     ], 'name');
     // FIXME: This is actually a bug in CiviCRM-core.
     // @see https://github.com/civicrm/civicrm-core/pull/22827
@@ -211,7 +221,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     OptionValue::save(FALSE)
       ->addDefault('option_group_id:name', 'eck_sub_types')
       ->addDefault('grouping', $entityType['name'])
-      ->setRecords(\CRM_Utils_Array::makeNonAssociative($subTypes, 'value', 'label'))
+      ->setRecords(\CRM_Utils_Array::makeNonAssociative($subTypes, 'name', 'label'))
       ->execute();
 
     return 'Eck_' . $entityType['name'];
