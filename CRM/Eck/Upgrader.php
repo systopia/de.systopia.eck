@@ -28,38 +28,20 @@ class CRM_Eck_Upgrader extends CRM_Eck_Upgrader_Base {
 
   /**
    * Implements hook_civicrm_upgrade_N().
-   *
-   * Migrate existing ECK entities to new prefix format ("Eck" -> "Eck_") and
-   * add managed entity records for previously unmanaged entities (OptionValues
-   * in "cg_extend_objects" OptionGroup and "eck_sub_types" OptionGroup).
    */
   public function upgrade_0010() {
-    $this->ctx->log->info('Update ECK entity type name prefix and update managed entities.');
+    $this->ctx->log->info('Update ECK entity type name prefix.');
 
     $oldEntityNames = \Civi\Api4\EckEntityType::get(FALSE)
       ->addSelect('CONCAT("Eck", name) AS old_name')
       ->execute()
       ->column('old_name');
 
-    // Create managed entity records for previously unmanaged OptionValues.
-    foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
-      $option_value = \Civi\Api4\OptionValue::update(FALSE)
-        ->addWhere('option_group_id.name', '=', 'cg_extend_objects')
-        ->addWhere('value', '=', 'Eck' . $type['name'])
-        ->addValue('value', 'Eck_' . $type['name'])
-        ->execute()
-        ->single();
-      \Civi\Api4\Managed::create(FALSE)
-        ->setValues([
-                      'module' => E::LONG_NAME,
-                      'name' => 'cg_extends:' . $type['name'],
-                      'entity_type' => 'OptionValue',
-                      'cleanup' => 'always',
-                      'update' => 'always',
-                      'entity_id' => $option_value['id'],
-                    ])
-        ->execute();
-    }
+    // Delete old option values: they will be replaced by managed entities
+    \Civi\Api4\OptionValue::delete(FALSE)
+      ->addWhere('option_group_id:name', '=', 'cg_extend_objects')
+      ->addWhere('name', 'IN', $oldEntityNames)
+      ->execute();
 
     // Update Custom Groups.
     $custom_groups = \Civi\Api4\CustomGroup::get(FALSE)
@@ -75,21 +57,6 @@ class CRM_Eck_Upgrader extends CRM_Eck_Upgrader_Base {
         ->setValues($custom_group)
         ->execute();
     }
-
-    // Create managed entity for previously unmanaged eck_sub_types OptionGroup.
-    \Civi\Api4\Managed::create(FALSE)
-      ->setValues([
-                    'module' => E::LONG_NAME,
-                    'name' => 'OptionGroup_eck_sub_types',
-                    'cleanup' => 'always',
-                    'entity_type' => 'OptionGroup',
-                    'entity_id' => \Civi\Api4\OptionGroup::get(FALSE)
-                      ->addSelect('id')
-                      ->addWhere('name', '=', 'eck_sub_types')
-                      ->execute()
-                      ->single()['id'],
-                  ])
-      ->execute();
 
     return TRUE;
   }
