@@ -24,8 +24,6 @@ class CRM_Eck_Upgrader extends CRM_Eck_Upgrader_Base {
    * Performs installation tasks.
    */
   public function install() {
-    $customData = new CRM_Eck_CustomData(E::LONG_NAME);
-    $customData->syncOptionGroup(E::path('resources/eck_sub_types.json'));
   }
 
   /**
