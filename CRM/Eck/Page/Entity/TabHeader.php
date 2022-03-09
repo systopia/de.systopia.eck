@@ -96,6 +96,14 @@ class CRM_Eck_Page_Entity_TabHeader {
       ] + $default;
     Civi::service('angularjs.loader')->addModules($module);
 
+    $tabs['tags'] = [
+        'title' => ts('Tags'),
+        'link' => CRM_Utils_System::url(
+          'civicrm/eck/entity/tag',
+          "reset=1&type={$entityType['name']}&id={$entityID}"
+        ),
+      ] + $default;
+
     // see if any other modules want to add any tabs
     // note: status of 'valid' flag of any injected tab, needs to be taken care in the hook implementation.
     CRM_Utils_Hook::tabset(
