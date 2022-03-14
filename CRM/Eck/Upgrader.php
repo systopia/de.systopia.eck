@@ -61,4 +61,28 @@ class CRM_Eck_Upgrader extends CRM_Eck_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Implements hook_civicrm_upgrade_N().
+   */
+  public function upgrade_0011() {
+    $entityTypes = CRM_Core_DAO::executeQuery(
+      'SELECT *, CONCAT("Eck_", name) AS entity_name, CONCAT("civicrm_eck_", LOWER(name)) AS table_name FROM `civicrm_eck_entity_type`;'
+    )->fetchAll();
+
+    foreach ($entityTypes as $tableName => $entityType) {
+      $tableName = $entityType['table_name'];
+      $this->ctx->log->info('Add date/contact columns to ' . $entityType['entity_name']);
+      CRM_Core_DAO::executeQuery("ALTER TABLE `$tableName`
+        ADD COLUMN `created_id` int(10) unsigned DEFAULT NULL COMMENT 'FK to contact table.'");
+      CRM_Core_DAO::executeQuery("ALTER TABLE `$tableName`
+        ADD COLUMN `modified_id` int(10) unsigned DEFAULT NULL COMMENT 'FK to contact table.'");
+      CRM_Core_DAO::executeQuery("ALTER TABLE `$tableName`
+        ADD COLUMN `created_date` timestamp NULL  DEFAULT CURRENT_TIMESTAMP COMMENT 'When the record was created.'");
+      CRM_Core_DAO::executeQuery("ALTER TABLE `$tableName`
+        ADD COLUMN `modified_date` timestamp NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'When the record was last modified.'");
+    }
+
+    return TRUE;
+  }
+
 }

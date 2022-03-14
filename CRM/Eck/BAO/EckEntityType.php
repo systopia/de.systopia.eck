@@ -53,6 +53,10 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
           `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Eck_{$entity_type['name']} ID',
           `title` text NOT NULL   COMMENT 'The entity title.',
           `subtype` text NOT NULL   COMMENT 'The entity subtype.',
+          `created_id` int(10) unsigned DEFAULT NULL COMMENT 'FK to contact table.',
+          `modified_id` int(10) unsigned DEFAULT NULL COMMENT 'FK to contact table.',
+          `created_date` timestamp NULL  DEFAULT CURRENT_TIMESTAMP COMMENT 'When the record was created.',
+          `modified_date` timestamp NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'When the record was last modified.',
           PRIMARY KEY (`id`)
       )
       ENGINE=InnoDB

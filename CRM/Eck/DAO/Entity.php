@@ -174,6 +174,62 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
             'type' => 'Text',
           ],
         ],
+        'created_id' => [
+          'name' => 'created_id',
+          'type' => CRM_Utils_Type::T_INT,
+          'title' => E::ts('Created By Contact ID'),
+          'description' => E::ts('FK to contact table.'),
+          'where' => 'civicrm_saved_search.created_id',
+          'table_name' => static::getTableName(),
+          'entity' => self::$_entityType,
+          'bao' => 'CRM_Eck_DAO_Entity',
+          'localizable' => 0,
+          'FKClassName' => 'CRM_Contact_DAO_Contact',
+          'html' => [
+            'label' => E::ts("Created By"),
+          ],
+        ],
+        'modified_id' => [
+          'name' => 'modified_id',
+          'type' => CRM_Utils_Type::T_INT,
+          'title' => E::ts('Modified By Contact ID'),
+          'description' => E::ts('FK to contact table.'),
+          'where' => 'civicrm_saved_search.modified_id',
+          'table_name' => static::getTableName(),
+          'entity' => self::$_entityType,
+          'bao' => 'CRM_Eck_DAO_Entity',
+          'localizable' => 0,
+          'FKClassName' => 'CRM_Contact_DAO_Contact',
+          'html' => [
+            'label' => E::ts("Modified By"),
+          ],
+        ],
+        'created_date' => [
+          'name' => 'created_date',
+          'type' => CRM_Utils_Type::T_TIMESTAMP,
+          'title' => E::ts('Created Date'),
+          'description' => E::ts('When the record was created.'),
+          'required' => TRUE,
+          'where' => 'civicrm_saved_search.created_date',
+          'default' => 'CURRENT_TIMESTAMP',
+          'table_name' => static::getTableName(),
+          'entity' => self::$_entityType,
+          'bao' => 'CRM_Eck_DAO_Entity',
+          'localizable' => 0,
+        ],
+        'modified_date' => [
+          'name' => 'modified_date',
+          'type' => CRM_Utils_Type::T_TIMESTAMP,
+          'title' => E::ts('Modified Date'),
+          'description' => E::ts('When the record was last modified.'),
+          'required' => TRUE,
+          'where' => 'civicrm_saved_search.modified_date',
+          'default' => 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+          'table_name' => static::getTableName(),
+          'entity' => self::$_entityType,
+          'bao' => 'CRM_Eck_DAO_Entity',
+          'localizable' => 0,
+        ],
       ];
 
       CRM_Core_DAO_AllCoreTables::invoke(
@@ -220,6 +276,14 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public static function writeRecord(array $record): CRM_Core_DAO {
+    $loggedInContactID = CRM_Core_Session::getLoggedInContactID();
+    if ($loggedInContactID) {
+      if (empty($record['id'])) {
+        $record['created_id'] = $loggedInContactID;
+      }
+      $record['modified_id'] = $loggedInContactID;
+    }
+
     $hook = empty($record['id']) ? 'create' : 'edit';
 
     \CRM_Utils_Hook::pre($hook, 'Eck_' . $record['entity_type'], $record['id'] ?? NULL, $record);
