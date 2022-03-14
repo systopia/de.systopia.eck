@@ -36,60 +36,6 @@ function eck_civicrm_xmlMenu(&$files) {
 }
 
 /**
- * Implements hook_civicrm_install().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_install
- */
-function eck_civicrm_install() {
-  _eck_civix_civicrm_install();
-}
-
-/**
- * Implements hook_civicrm_postInstall().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postInstall
- */
-function eck_civicrm_postInstall() {
-  _eck_civix_civicrm_postInstall();
-}
-
-/**
- * Implements hook_civicrm_uninstall().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_uninstall
- */
-function eck_civicrm_uninstall() {
-  _eck_civix_civicrm_uninstall();
-}
-
-/**
- * Implements hook_civicrm_enable().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_enable
- */
-function eck_civicrm_enable() {
-  _eck_civix_civicrm_enable();
-}
-
-/**
- * Implements hook_civicrm_disable().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_disable
- */
-function eck_civicrm_disable() {
-  _eck_civix_civicrm_disable();
-}
-
-/**
- * Implements hook_civicrm_upgrade().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_upgrade
- */
-function eck_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  return _eck_civix_civicrm_upgrade($op, $queue);
-}
-
-/**
  * Implements hook_civicrm_managed().
  *
  * Autogenerates entities related to EckEntityTypes
@@ -125,19 +71,6 @@ function eck_civicrm_managed(&$entities) {
       ],
     ];
   }
-}
-
-/**
- * Implements hook_civicrm_caseTypes().
- *
- * Generate a list of case-types.
- *
- * Note: This hook only runs in CiviCRM 4.4+.
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_caseTypes
- */
-function eck_civicrm_caseTypes(&$caseTypes) {
-  _eck_civix_civicrm_caseTypes($caseTypes);
 }
 
 /**

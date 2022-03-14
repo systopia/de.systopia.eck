@@ -18,7 +18,7 @@ use CRM_Eck_ExtensionUtil as E;
 /**
  * Collection of upgrade steps.
  */
-class CRM_Eck_Upgrader extends CRM_Eck_Upgrader_Base {
+class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
 
   /**
    * Performs installation tasks.
