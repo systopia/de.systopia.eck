@@ -24,7 +24,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
     if (!isset(Civi::$statics['EckEntityTypes'])) {
       Civi::$statics['EckEntityTypes'] = CRM_Core_DAO::executeQuery(
         'SELECT *, CONCAT("Eck_", name) AS entity_name, CONCAT("civicrm_eck_", LOWER(name)) AS table_name FROM `civicrm_eck_entity_type`;'
-      )->fetchAll('entity_name');
+      )->fetchAll();
     }
     return Civi::$statics['EckEntityTypes'];
   }
