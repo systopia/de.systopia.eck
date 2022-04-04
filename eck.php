@@ -249,6 +249,7 @@ function eck_civicrm_navigationMenu(&$menu) {
       'permission' => 'access CiviCRM',
       'operator' => 'OR',
       'separator' => 0,
+      'icon' => $entity_type['icon'] ? 'fa ' . $entity_type['icon'] : NULL,
     ));
   }
   _eck_civix_navigationMenu($menu);

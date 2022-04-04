@@ -27,7 +27,10 @@
       {foreach from=$entity_types item=entity_type key=entity_type_id}
           {capture assign="entity_type_name"}{$entity_type.name}{/capture}
         <tr>
-          <td>{$entity_type.label}</td>
+          <td>
+              {if $entity_type.icon}<i class="fa {$entity_type.icon}"></i>{/if}
+              {$entity_type.label}
+          </td>
           <td>{$entity_type.name}</td>
           <td>
               {if !empty($entity_type.sub_types)}
