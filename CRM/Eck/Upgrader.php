@@ -85,4 +85,15 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Implements hook_civicrm_upgrade_N().
+   */
+  public function upgrade_0012() {
+    $this->ctx->log->info('Add icon column to civicrm_eck_entity_type');
+    CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_eck_entity_type`
+      ADD COLUMN `icon` varchar(255) DEFAULT NULL COMMENT 'crm-i icon class'");
+
+    return TRUE;
+  }
+
 }

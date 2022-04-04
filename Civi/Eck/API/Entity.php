@@ -75,6 +75,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'searchable' => 'secondary',
         'paths' => [],
         'class' => 'Civi\Api4\EckEntity',
+        'icon' => $entity_type['icon'] ?? 'fa-cubes',
       ];
     }
   }

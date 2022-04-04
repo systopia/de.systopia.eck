@@ -21,6 +21,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
   public function testCreateEntityType():void {
     $entityType = EckEntityType::create(FALSE)
       ->addValue('label', 'Test One Type')
+      ->addValue('icon', 'fa-random')
       ->execute()->first();
 
     // Name should have been auto-derived from label
@@ -33,6 +34,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     $this->assertEquals('Test One Type', $newEntity['title']);
     $this->assertEquals('secondary', $newEntity['searchable']);
     $this->assertEquals('title', $newEntity['label_field']);
+    $this->assertEquals('fa-random', $newEntity['icon']);
     $this->assertContains('EckEntity', $newEntity['type']);
 
     // Table should have been created

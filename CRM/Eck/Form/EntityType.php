@@ -35,6 +35,8 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
    * {@inheritDoc}
    */
   public function preProcess() {
+    Civi::resources()->addScriptFile('civicrm', 'js/jquery/jquery.crmIconPicker.js');
+
     $this->setAction(CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? 'add');
 
     if ($this->_action == CRM_Core_Action::ADD) {
@@ -95,12 +97,13 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
                 'entity' => 'EckEntityType',
                 'name' => $field['name'],
                 'action' => 'create',
+                'class' => $field['name'] === 'icon' ? 'crm-icon-picker' : '',
                 'context' => array_search(
                   $this->_action,
                   CRM_Core_Action::$_names
                 ),
               ],
-              $field['required']
+              !empty($field['required'])
             );
           }
         }
