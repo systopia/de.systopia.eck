@@ -28,7 +28,7 @@
           {capture assign="entity_type_name"}{$entity_type.name}{/capture}
         <tr>
           <td>
-              {if $entity_type.icon}<i class="fa {$entity_type.icon}"></i>{/if}
+              {if $entity_type.icon}<i class="crm-i {$entity_type.icon}"></i>{/if}
               {$entity_type.label}
           </td>
           <td>{$entity_type.name}</td>

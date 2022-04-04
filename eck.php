@@ -231,7 +231,7 @@ function eck_civicrm_navigationMenu(&$menu) {
     'permission' => 'administer CiviCRM',
     'operator' => 'OR',
     'separator' => 0,
-    'icon' => 'fa fa-cubes',
+    'icon' => 'crm-i fa-cubes',
   ));
 
   _eck_civix_insert_navigation_menu($menu, NULL, array(
@@ -239,7 +239,7 @@ function eck_civicrm_navigationMenu(&$menu) {
     'name' => 'eck_entities',
     'operator' => 'OR',
     'separator' => 0,
-    'icon' => 'fa fa-cubes',
+    'icon' => 'crm-i fa-cubes',
   ));
   foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
     _eck_civix_insert_navigation_menu($menu, 'eck_entities', array(
@@ -249,7 +249,7 @@ function eck_civicrm_navigationMenu(&$menu) {
       'permission' => 'access CiviCRM',
       'operator' => 'OR',
       'separator' => 0,
-      'icon' => $entity_type['icon'] ? 'fa ' . $entity_type['icon'] : NULL,
+      'icon' => $entity_type['icon'] ? 'crm-i ' . $entity_type['icon'] : NULL,
     ));
   }
   _eck_civix_navigationMenu($menu);
