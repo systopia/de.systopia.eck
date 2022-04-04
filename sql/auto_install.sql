@@ -37,6 +37,7 @@ CREATE TABLE `civicrm_eck_entity_type` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique EckEntityType ID',
   `name` varchar(255) NOT NULL COMMENT 'The entity type\'s name',
   `label` text NOT NULL COMMENT 'The entity type\'s human-readable name',
+  `icon` varchar(255) DEFAULT NULL COMMENT 'crm-i icon class',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `UI_name`(name)
 )

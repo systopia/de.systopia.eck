@@ -49,4 +49,16 @@
     </html>
   </field>
 
+  <field>
+    <name>icon</name>
+    <title>Icon</title>
+    <type>varchar</type>
+    <length>255</length>
+    <default>NULL</default>
+    <html>
+      <type>Text</type>
+    </html>
+    <comment>crm-i icon class</comment>
+  </field>
+
 </table>
