@@ -17,7 +17,6 @@ namespace Civi\Eck\API;
 
 use CRM_Eck_ExtensionUtil as E;
 use Civi\API\Events;
-use Civi\Api4\Event\CreateApi4RequestEvent;
 use Civi\Core\Event\GenericHookEvent;
 use Civi\API\Provider\ProviderInterface as API_ProviderInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -83,9 +82,10 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
   /**
    * Callback for `civi.api4.createRequest` event.
    *
-   * @param CreateApi4RequestEvent $event
+   * Note: this can be removed when dropping support for Civi < 5.50 (see https://github.com/civicrm/civicrm-core/pull/23311)
+   * @param \Civi\Api4\Event\CreateApi4RequestEvent $event
    */
-  public function onApi4CreateRequest(CreateApi4RequestEvent $event) {
+  public function onApi4CreateRequest($event) {
     if (strpos($event->entityName, 'Eck_') === 0) {
       $entity_type = substr($event->entityName, strlen('Eck_'));
       if (
