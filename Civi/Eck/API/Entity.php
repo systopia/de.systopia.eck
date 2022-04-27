@@ -29,6 +29,10 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
    */
   public static function getSubscribedEvents():array {
     return [
+      // TODO: "civi.api4.createRequest" will be removed in CiviCRM Core, see
+      //       https://github.com/civicrm/civicrm-core/pull/23311.
+      //       The "civi.api4.entityTypes" event provides all necessary
+      //       information.
       'civi.api4.createRequest' => [['onApi4CreateRequest', Events::W_EARLY]],
       'civi.api4.entityTypes' => [['onApi4EntityTypes', Events::W_EARLY]],
     ];
@@ -84,6 +88,11 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
    * Callback for `civi.api4.createRequest` event.
    *
    * @param CreateApi4RequestEvent $event
+   *
+   * @deprecated
+   *   The "civi.api4.createRequest" event will be removed in CiviCRM Core, see
+   *   https://github.com/civicrm/civicrm-core/pull/23311.
+   *   The "civi.api4.entityTypes" event provides all necessary information.
    */
   public function onApi4CreateRequest(CreateApi4RequestEvent $event) {
     if (strpos($event->entityName, 'Eck_') === 0) {
