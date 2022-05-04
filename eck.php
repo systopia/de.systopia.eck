@@ -65,11 +65,9 @@ function eck_civicrm_managed(&$entities, $modules = NULL) {
           'label' => $type['label'],
           'value' => $type['entity_name'],
           'name' => $type['table_name'],
-          // @see CRM_Eck_Utils_EckEntityType::__callStatic()
-          'description' => "CRM_Eck_Utils_EckEntityType::{$type['name']}.getSubTypes;",
           'is_reserved' => TRUE,
           'is_active' => TRUE,
-          'grouping' => NULL,
+          'grouping' => 'subtype',
         ],
       ],
     ];
