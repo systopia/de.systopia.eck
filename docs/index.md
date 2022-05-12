@@ -23,6 +23,6 @@ supported by CiviCRM Core, custom entities created by ECK might not work as
 expected everywhere. The technical reason for this is that traditionally every
 CiviCRM entity (type) needs a dedicated BAO class, present as a physical PHP
 file, which does not apply for ECK entities, that share a single controller
-class. This is still being worked on in CiviCRM Core.
+class. This has been worked on in CiviCRM Core.
 See [this Pull Request](https://github.com/civicrm/civicrm-core/pull/21853)
 for more information.
