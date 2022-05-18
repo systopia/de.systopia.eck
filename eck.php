@@ -173,3 +173,23 @@ function eck_civicrm_navigationMenu(&$menu) {
   }
   _eck_civix_navigationMenu($menu);
 }
+
+function eck_civicrm_permission(&$permissions) {
+  // Permissions for ECK entity types.
+  $permissions['create ECK entity types'] = [
+    E::ts('Create ECK Entity Types'),
+    E::ts('Allows creating new Entity Construction Kit Entity Types.'),
+  ];
+  $permissions['retrieve ECK entity types'] = [
+    E::ts('Retrieve ECK Entity Types'),
+    E::ts('Allows retrieving Entity Construction Kit Entity Types.'),
+  ];
+  $permissions['edit ECK entity types'] = [
+    E::ts('Edit ECK Entity Types'),
+    E::ts('Allows editing Entity Construction Kit Entity Types.'),
+  ];
+  $permissions['delete ECK entity types'] = [
+    E::ts('Delete ECK Entity Types'),
+    E::ts('Allows deleting Entity Construction Kit Entity Types.'),
+  ];
+}
