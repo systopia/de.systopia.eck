@@ -131,7 +131,15 @@ class EckEntity {
    * @return array
    */
   public static function permissions() {
-    return []; // FIXME: Add per-entity-type permissions
+    // TODO: OR-combined permissions for either any ECK entity type or type-specific.
+    return [
+      'meta' => ['access CiviCRM'],
+      'default' => ['administer CiviCRM'],
+      'create' => ['create any ECK entity'],
+      'get' => ['retrieve any ECK entity'],
+      'update' => ['edit any ECK entity'],
+      'delete' => ['delete any ECK entity'],
+    ];
   }
 
 }
