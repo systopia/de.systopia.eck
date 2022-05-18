@@ -192,4 +192,22 @@ function eck_civicrm_permission(&$permissions) {
     E::ts('Delete ECK Entity Types'),
     E::ts('Allows deleting Entity Construction Kit Entity Types.'),
   ];
+
+  // Permissions for ECK entities.
+  $permissions['create any ECK entity'] = [
+    E::ts('Create any ECK Entity'),
+    E::ts('Allows creating new Entity Construction Kit Entities of any type.'),
+  ];
+  $permissions['retrieve any ECK entity'] = [
+    E::ts('Retrieve any ECK Entity'),
+    E::ts('Allows retrieving Entity Construction Kit Entities of any type.'),
+  ];
+  $permissions['edit any ECK entity'] = [
+    E::ts('Edit any ECK Entity'),
+    E::ts('Allows editing Entity Construction Kit Entities of any type.'),
+  ];
+  $permissions['delete any ECK entity'] = [
+    E::ts('Delete any ECK Entity'),
+    E::ts('Allows deleting Entity Construction Kit Entities of any type.'),
+  ];
 }
