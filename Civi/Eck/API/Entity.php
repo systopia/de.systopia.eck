@@ -28,8 +28,9 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
    */
   public static function getSubscribedEvents():array {
     return [
-      'civi.api4.createRequest' => [['onApi4CreateRequest', Events::W_EARLY]],
-      'civi.api4.entityTypes' => [['onApi4EntityTypes', Events::W_EARLY]],
+      'civi.api4.createRequest' => ['onApi4CreateRequest', Events::W_EARLY],
+      'civi.api4.entityTypes' => ['onApi4EntityTypes', Events::W_EARLY],
+      'civi.afform_admin.metadata' => 'afformEntityTypes',
     ];
   }
 
@@ -94,6 +95,23 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         $event->className = 'Civi\Api4\EckEntity';
         $event->args = [$entity_type];
       }
+    }
+  }
+
+  /**
+   * Make ECK entities available to Form Builder
+   *
+   * @param GenericHookEvent $e
+   */
+  public static function afformEntityTypes(GenericHookEvent $e) {
+    foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
+      $e->entities[$entityType['entity_name']] = [
+        'entity' => $entityType['entity_name'],
+        'label' => $entityType['label'],
+        'icon' => $entityType['icon'],
+        'type' => 'primary',
+        'defaults' => '{}',
+      ];
     }
   }
 
