@@ -30,6 +30,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
     return [
       'civi.api4.entityTypes' => ['onApi4EntityTypes', Events::W_EARLY],
       'civi.afform_admin.metadata' => 'afformEntityTypes',
+      'civi.afform.get' => 'getEckAfforms',
     ];
   }
 
@@ -72,7 +73,11 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'class_args' => [$entity_type['name']],
         'label_field' => 'title',
         'searchable' => 'secondary',
-        'paths' => [],
+        'paths' => [
+          'browse' => "civicrm/eck/entity/list?reset=1&type={$entity_type['name']}&id=[id]",
+          'view' => "civicrm/eck/entity?reset=1&action=view&type={$entity_type['name']}&id=[id]",
+          'update' => "civicrm/eck/edit/{$entity_type['name']}/[subtype:name]#?{$entity_type['entity_name']}=[id]",
+        ],
         'class' => 'Civi\Api4\EckEntity',
         'icon' => $entity_type['icon'] ?? 'fa-cubes',
       ];
@@ -93,6 +98,70 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'type' => 'primary',
         'defaults' => '{}',
       ];
+    }
+  }
+
+  /**
+   * Generates afforms for each ECK entity type and sub-type.
+   *
+   * @param \Civi\Core\Event\GenericHookEvent $event
+   * @throws \API_Exception
+   */
+  public static function getEckAfforms($event) {
+    // Early return if forms are not requested
+    if ($event->getTypes && !in_array('form', $event->getTypes, TRUE)) {
+      return;
+    }
+
+    $afforms =& $event->afforms;
+    $getNames = $event->getNames;
+
+    // Early return if this api call is fetching afforms by name and those names are not eck-related
+    if (
+      (!empty($getNames['name']) && !strstr(implode(' ', $getNames['name']), 'afformEck_'))
+      || (!empty($getNames['module_name']) && !strstr(implode(' ', $getNames['module_name']), 'afformEck'))
+      || (!empty($getNames['directive_name']) && !strstr(implode(' ', $getNames['directive_name']), 'afform-eck'))
+    ) {
+      return;
+    }
+
+    foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
+      foreach (\CRM_Eck_BAO_EckEntityType::getSubTypes($entityType['name'], FALSE) as $subType) {
+        $name = 'afform' . $entityType['entity_name'] . '_' . $subType['name'];
+        $item = [
+          'name' => $name,
+          'type' => 'form',
+          'title' => $entityType['label'] . ' (' . $subType['label'] . ')',
+          'description' => '',
+          'is_dashlet' => FALSE,
+          'is_public' => FALSE,
+          'is_token' => FALSE,
+          'permission' => 'access CiviCRM',
+          'server_route' => "civicrm/eck/edit/{$entityType['name']}/{$subType['name']}",
+        ];
+        if ($event->getLayout) {
+          $fields = \civicrm_api4($entityType['entity_name'], 'getFields', [
+            'values' => ['subtype' => $subType['value']],
+            'select' => ['name'],
+            'where' => [
+              ['readonly', 'IS EMPTY'],
+              ['input_type', 'IS NOT EMPTY'],
+              // Don't allow subtype to be changed on the form, since this form is specific to subtype
+              ['name', '!=', 'subtype'],
+            ],
+          ]);
+          $item['layout'] = "<af-form ctrl=\"afform\">\n";
+          $item['layout'] .= '  <af-entity type="' . $entityType['entity_name'] . '" name="' . $entityType['entity_name'] . '" label="' . $subType['label'] . '" actions="{create: true, update: true}" security="RBAC" url-autofill="1" data="{subtype: \'' . $subType['value'] . '\'}" />' . "\n";
+          $item['layout'] .= '  <fieldset af-fieldset="' . $entityType['entity_name'] . '" class="af-container" af-title="' . $subType['label'] . '">' . "\n";
+          foreach ($fields as $field) {
+            $item['layout'] .= "    <af-field name=\"{$field['name']}\" />\n";
+          }
+          $item['layout'] .= "  </fieldset>\n";
+          $item['layout'] .= '  <button class="af-button btn btn-primary" crm-icon="fa-check" ng-click="afform.submit()">' . E::ts('Submit') . '</button>' . "\n";
+          $item['layout'] .= '</af-form>';
+        }
+        $afforms[$name] = $item;
+      }
     }
   }
 

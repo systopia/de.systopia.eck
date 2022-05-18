@@ -135,7 +135,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
-          'add' => '4.3',
+          'readonly' => TRUE,
           'html' => [
             'type' => 'Number',
           ],
@@ -152,7 +152,6 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 1,
-          'add' => '4.3',
           'html' => [
             'type' => 'Text',
           ],
@@ -169,7 +168,6 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
-          'add' => '4.3',
           'html' => [
             'type' => 'Text',
           ],
@@ -184,6 +182,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
+          'readonly' => TRUE,
           'FKClassName' => 'CRM_Contact_DAO_Contact',
           'html' => [
             'label' => E::ts("Created By"),
@@ -199,6 +198,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
+          'readonly' => TRUE,
           'FKClassName' => 'CRM_Contact_DAO_Contact',
           'html' => [
             'label' => E::ts("Modified By"),
@@ -216,6 +216,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
+          'readonly' => TRUE,
         ],
         'modified_date' => [
           'name' => 'modified_date',
@@ -229,6 +230,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
+          'readonly' => TRUE,
         ],
       ];
 
