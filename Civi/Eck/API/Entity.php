@@ -28,7 +28,6 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
    */
   public static function getSubscribedEvents():array {
     return [
-      'civi.api4.createRequest' => ['onApi4CreateRequest', Events::W_EARLY],
       'civi.api4.entityTypes' => ['onApi4EntityTypes', Events::W_EARLY],
       'civi.afform_admin.metadata' => 'afformEntityTypes',
     ];
@@ -77,24 +76,6 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'class' => 'Civi\Api4\EckEntity',
         'icon' => $entity_type['icon'] ?? 'fa-cubes',
       ];
-    }
-  }
-
-  /**
-   * Callback for `civi.api4.createRequest` event.
-   *
-   * Note: this can be removed when dropping support for Civi < 5.50 (see https://github.com/civicrm/civicrm-core/pull/23311)
-   * @param \Civi\Api4\Event\CreateApi4RequestEvent $event
-   */
-  public function onApi4CreateRequest($event) {
-    if (strpos($event->entityName, 'Eck_') === 0) {
-      $entity_type = substr($event->entityName, strlen('Eck_'));
-      if (
-        in_array($entity_type, \CRM_Eck_BAO_EckEntityType::getEntityTypeNames())
-      ) {
-        $event->className = 'Civi\Api4\EckEntity';
-        $event->args = [$entity_type];
-      }
     }
   }
 
