@@ -73,15 +73,28 @@ class CRM_Eck_Page_Entity_TabHeader {
 
     $entityID = $page->getVar('_id');
     $entityType = $page->getVar('_entityType');
+    $subtype = $page->getVar('_subtype');
 
     $tabs = [];
     $tabs['view'] = [
-        'title' => ts('View'),
+        'title' => E::ts('View'),
         'link' => CRM_Utils_System::url(
           'civicrm/eck/entity/view',
           "reset=1&type={$entityType['name']}&id={$entityID}"
         ),
       ] + $default;
+
+    // TODO: Since the edit form is an Angular form generated using Afform, it
+    //       won't load inside the tabset.
+//    $tabs['edit'] = [
+//        'title' => E::ts('Edit'),
+//        'link' => CRM_Utils_System::url(
+//          "civicrm/eck/entity/edit/{$entityType['name']}/{$subtype}",
+//          NULL,
+//          FALSE,
+//          "?Eck_{$entityType['name']}={$entityID}"
+//        ),
+//      ] + $default;
 
     // see if any other modules want to add any tabs
     // note: status of 'valid' flag of any injected tab, needs to be taken care in the hook implementation.

@@ -76,7 +76,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'paths' => [
           'browse' => "civicrm/eck/entity/list?reset=1&type={$entity_type['name']}&id=[id]",
           'view' => "civicrm/eck/entity?reset=1&action=view&type={$entity_type['name']}&id=[id]",
-          'update' => "civicrm/eck/edit/{$entity_type['name']}/[subtype:name]#?{$entity_type['entity_name']}=[id]",
+          'update' => "civicrm/eck/entity/edit/{$entity_type['name']}/[subtype:name]#?{$entity_type['entity_name']}=[id]",
         ],
         'class' => 'Civi\Api4\EckEntity',
         'icon' => $entity_type['icon'] ?? 'fa-cubes',
@@ -137,7 +137,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
           'is_public' => FALSE,
           'is_token' => FALSE,
           'permission' => 'access CiviCRM',
-          'server_route' => "civicrm/eck/edit/{$entityType['name']}/{$subType['name']}",
+          'server_route' => "civicrm/eck/entity/edit/{$entityType['name']}/{$subType['name']}",
         ];
         if ($event->getLayout) {
           $fields = \civicrm_api4($entityType['entity_name'], 'getFields', [

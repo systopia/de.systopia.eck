@@ -31,6 +31,12 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
    * @var int
    */
   public $_entityType;
+  /**
+   * The entity subtype of the entity we are processing.
+   *
+   * @var int
+   */
+  public $_subtype;
 
   /**
    * {@inheritDoc}
@@ -58,6 +64,16 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
     $entity = civicrm_api4('Eck_' . $entity_type_name, 'get', [
       'where' => [['id', '=', $entity_id]],
     ])->single();
+
+
+    // Retrieve ECK entity subtype.
+    if (!$subtype_name = CRM_Utils_Request::retrieve('subtype', 'String', $this)) {
+      $subtypes = \CRM_Eck_BAO_EckEntityType::getSubTypes($entity_type_name, FALSE);
+      $subtype = $subtypes[array_search($entity['subtype'], array_column($subtypes, 'value'))];
+      $subtype_name = $subtype['name'];
+    }
+    $this->assign('subtype', $subtype_name);
+    $this->_subtype = $subtype_name;
 
     // Set page title.
     CRM_Utils_System::setTitle($entity['title']);
