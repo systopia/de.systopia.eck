@@ -172,7 +172,6 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
         $values = $this->exportValues(NULL, TRUE);
         // Update OptionValue name and label.
         civicrm_api3('OptionValue', 'create', array_merge($this->_subType, [
-          'name' => $values['label'],
           'label' => $values['label'],
         ]));
         break;
