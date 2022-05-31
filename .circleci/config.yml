@@ -98,7 +98,7 @@ jobs:
     steps:
       - setup
       - checkout
-      #- run_all
+      - run_all
       - run_all:
           build_name: civi-5.51
           version: "5.51"
