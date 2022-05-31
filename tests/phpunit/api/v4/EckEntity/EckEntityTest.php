@@ -208,9 +208,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       'checkPermissions' => FALSE,
       'values' => ['subtype' => $subTypeKeys['two']],
     ], 'name');
-    // FIXME: This is actually a bug in CiviCRM-core.
-    // @see https://github.com/civicrm/civicrm-core/pull/22827
-    // $this->assertArrayNotHasKey('One_Subtype_Fields.MyField2', $subTypeTwoFields);
+    $this->assertArrayNotHasKey('One_Subtype_Fields.MyField2', $subTypeTwoFields);
   }
 
   private function createEntity(array $subTypes) {
