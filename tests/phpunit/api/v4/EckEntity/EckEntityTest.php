@@ -203,11 +203,13 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       'values' => ['subtype' => $subTypeKeys['one']],
     ], 'name');
     $this->assertArrayHasKey('One_Subtype_Fields.MyField2', $subTypeOneFields);
+    $this->assertArrayHasKey('My_Entity_Fields.MyField1', $subTypeOneFields);
 
     $subTypeTwoFields = civicrm_api4($entityName, 'getFields', [
       'checkPermissions' => FALSE,
       'values' => ['subtype' => $subTypeKeys['two']],
     ], 'name');
+    $this->assertArrayHasKey('My_Entity_Fields.MyField1', $subTypeTwoFields);
     $this->assertArrayNotHasKey('One_Subtype_Fields.MyField2', $subTypeTwoFields);
   }
 
