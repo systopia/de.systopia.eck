@@ -31,7 +31,7 @@
               {foreach from=$fields item=field key=field_name}
                 <td>
                     {if $field_name == 'title'}
-                      <a href="{crmURL p="civicrm/eck/entity" q="reset=1&action=view&type=$entity_type_name&id=$entity_id"}">
+                      <a href="{crmURL p="civicrm/eck/entity" q="reset=1&type=$entity_type_name&id=$entity_id"}">
                           {$entity.$field_name}
                       </a>
                     {else}
@@ -41,9 +41,9 @@
               {/foreach}
               <td>
                   {capture assign=subtypeValue}{$entity.subtype}{/capture}
-                  {capture assign=buttonPath}civicrm/eck/entity/edit/{$entity_type.name}/{$subtypes.$subtypeValue.name}{/capture}
-                  {capture assign=buttonFragment}?Eck_{$entity_type.name}={$entity.id}{/capture}
-                  {crmButton p=$buttonPath f=$buttonFragment}{ts}Edit{/ts}{/crmButton}
+                  {capture assign=editButtonPath}civicrm/eck/entity/edit/{$entity_type.name}/{$subtypes.$subtypeValue.name}{/capture}
+                  {capture assign=editButtonFragment}?Eck_{$entity_type.name}={$entity.id}{/capture}
+                  {crmButton p=$editButtonPath f=$editButtonFragment}{ts}Edit{/ts}{/crmButton}
               </td>
             </tr>
           {/foreach}
