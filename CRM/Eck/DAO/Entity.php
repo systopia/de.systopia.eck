@@ -35,9 +35,9 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    */
   protected static $_paths = [
     'browse' => 'civicrm/eck/entity/list?reset=1&type=[eck_type]&id=[id]',
-    'view' => 'civicrm/eck/entity?reset=1&action=view&type=[eck_type]&id=[id]',
-    'add' => '', // TODO: Add path when UI is ready.
-    'update' => '', // TODO: Add path when UI is ready.
+    'view' => 'civicrm/eck/entity?reset=1&type=[eck_type]&id=[id]&selectedChild=view',
+//    'add' => 'civicrm/eck/entity/edit/[eck_type]/[eck_subtype]', // TODO: Is "eck_subtype" resolved correctly?
+    'update' => 'civicrm/eck/entity?reset=1&type=[eck_type]&id=[id]&selectedChild=edit',
     'delete' => '', // TODO: Add path when UI is ready.
   ];
 
@@ -135,7 +135,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
-          'add' => '4.3',
+          'readonly' => TRUE,
           'html' => [
             'type' => 'Number',
           ],
@@ -152,7 +152,6 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 1,
-          'add' => '4.3',
           'html' => [
             'type' => 'Text',
           ],
@@ -169,7 +168,6 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
-          'add' => '4.3',
           'html' => [
             'type' => 'Text',
           ],
@@ -184,6 +182,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
+          'readonly' => TRUE,
           'FKClassName' => 'CRM_Contact_DAO_Contact',
           'html' => [
             'label' => E::ts("Created By"),
@@ -199,6 +198,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
+          'readonly' => TRUE,
           'FKClassName' => 'CRM_Contact_DAO_Contact',
           'html' => [
             'label' => E::ts("Modified By"),
@@ -216,6 +216,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
+          'readonly' => TRUE,
         ],
         'modified_date' => [
           'name' => 'modified_date',
@@ -229,6 +230,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           'entity' => self::$_entityType,
           'bao' => 'CRM_Eck_DAO_Entity',
           'localizable' => 0,
+          'readonly' => TRUE,
         ],
       ];
 

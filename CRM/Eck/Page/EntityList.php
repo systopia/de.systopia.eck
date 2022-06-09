@@ -16,6 +16,9 @@
 use CRM_Eck_ExtensionUtil as E;
 use Civi\Api4\EckEntityType;
 
+/**
+ * TODO: Replace this with a SearchKit display.
+ */
 class CRM_Eck_Page_EntityList extends CRM_Core_Page {
 
   public function run() {
@@ -26,6 +29,8 @@ class CRM_Eck_Page_EntityList extends CRM_Core_Page {
     try {
       $entity_type = EckEntityType::get(FALSE)->addWhere('name', '=', $entity_type_name)->execute()->single();
       $this->assign('entity_type', $entity_type);
+      $subtypes = \CRM_Eck_BAO_EckEntityType::getSubTypes($entity_type_name, FALSE);
+      $this->assign('subtypes', $subtypes);
     }
     catch (Exception $exception) {
       throw new Exception(E::ts('Invalid ECK entity type.'));

@@ -14,4 +14,5 @@
 
 {crmScope extensionKey='de.systopia.eck'}
     {include file="CRM/common/TabHeader.tpl"}
+    {* script to refresh & switch to view tab after submitting edit form *}
 {/crmScope}

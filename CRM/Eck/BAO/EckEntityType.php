@@ -98,9 +98,9 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
         ['option_group_id:name', '=', 'eck_sub_types'],
         ['grouping', '=', $entity_type_name],
       ],
-    ]);
+    ])->indexBy('value');
     return $as_mapping ?
-      $result->indexBy('value')->column('label') :
+      $result->column('label') :
       (array) $result;
   }
 

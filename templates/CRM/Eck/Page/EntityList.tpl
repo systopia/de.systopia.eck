@@ -31,7 +31,7 @@
               {foreach from=$fields item=field key=field_name}
                 <td>
                     {if $field_name == 'title'}
-                      <a href="{crmURL p="civicrm/eck/entity" q="reset=1&action=view&type=$entity_type_name&id=$entity_id"}">
+                      <a href="{crmURL p="civicrm/eck/entity" q="reset=1&type=$entity_type_name&id=$entity_id"}">
                           {$entity.$field_name}
                       </a>
                     {else}
@@ -39,7 +39,12 @@
                     {/if}
                 </td>
               {/foreach}
-              <td></td>
+              <td>
+                  {capture assign=subtypeValue}{$entity.subtype}{/capture}
+                  {capture assign=editButtonPath}civicrm/eck/entity{/capture}
+                  {capture assign=editButtonQuery}reset=1&type={$entity_type.name}&id={$entity.id}&selectedChild=edit{/capture}
+                  {crmButton p=$editButtonPath q=$editButtonQuery}{ts}Edit{/ts}{/crmButton}
+              </td>
             </tr>
           {/foreach}
       {else}
@@ -53,6 +58,12 @@
 
   <div class="action-link">
       {capture assign=entity_type_name}{$entity_type.name}{/capture}
-      {crmButton p='civicrm/eck/entity' q="reset=1&action=add&type=$entity_type_name" id="newEckEntity"  icon="plus-circle"}{ts 1=$entity_type.label}Add %1{/ts}{/crmButton}
+      {foreach from=$subtypes item=subtype}
+          {capture assign=buttonId}newEck{$entityType.name}{$subtype.name}Entity{/capture}
+          {capture assign=buttonPath}civicrm/eck/entity/edit/{$entity_type.name}/{$subtype.name}{/capture}
+          {crmButton p=$buttonPath id=$buttonId  icon="plus-circle"}
+          {ts 1=$subtype.label}Add %1{/ts}
+          {/crmButton}
+      {/foreach}
   </div>
 {/crmScope}
