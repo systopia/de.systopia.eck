@@ -14,4 +14,15 @@
 
 {crmScope extensionKey='de.systopia.eck'}
     {include file="CRM/common/TabHeader.tpl"}
+    {* script to refresh & switch to view tab after submitting edit form *}
+    {literal}
+    <script type="text/javascript">
+      CRM.$(function($) {
+        $('#panel_edit').on('crmFormSuccess', function() {
+          CRM.tabHeader.resetTab('#tab_view');
+          CRM.tabHeader.focus('#tab_view');
+        });
+      });
+    </script>
+    {/literal}
 {/crmScope}
