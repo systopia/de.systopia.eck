@@ -41,9 +41,9 @@
               {/foreach}
               <td>
                   {capture assign=subtypeValue}{$entity.subtype}{/capture}
-                  {capture assign=editButtonPath}civicrm/eck/entity/edit/{$entity_type.name}/{$subtypes.$subtypeValue.name}{/capture}
-                  {capture assign=editButtonFragment}?Eck_{$entity_type.name}={$entity.id}{/capture}
-                  {crmButton p=$editButtonPath f=$editButtonFragment}{ts}Edit{/ts}{/crmButton}
+                  {capture assign=editButtonPath}civicrm/eck/entity{/capture}
+                  {capture assign=editButtonQuery}reset=1&type={$entity_type.name}&id={$entity.id}&selectedChild=edit{/capture}
+                  {crmButton p=$editButtonPath q=$editButtonQuery}{ts}Edit{/ts}{/crmButton}
               </td>
             </tr>
           {/foreach}
