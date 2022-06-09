@@ -107,19 +107,24 @@ function eck_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 function eck_civicrm_entityTypes(&$entityTypes) {
   _eck_civix_civicrm_entityTypes($entityTypes);
 
-  $eck_entity_types = CRM_Core_DAO::executeQuery(
-    'SELECT * FROM `civicrm_eck_entity_type`;'
-  )->fetchAll('id');
+  // check if the table exists. During the installation process, this might not be the case (yet)
+  $eck_table_exists = (bool) CRM_Core_DAO::singleValueQuery("show tables like 'civicrm_eck_entity_type'");
 
-  foreach ($eck_entity_types as $entity_type) {
-    // "CRM_Eck_DAO_*" is a virtual class name, the corresponding class does not
-    // exist. "CRM_Eck_DAO_Entity" is therefore defined as the controller
-    // class.
-    $entityTypes['CRM_Eck_DAO_' . $entity_type['name']] = [
-      'name' => 'Eck_' . $entity_type['name'],
-      'class' => 'CRM_Eck_DAO_Entity',
-      'table' => 'civicrm_eck_' . strtolower($entity_type['name']),
-    ];
+  if ($eck_table_exists) {
+    $eck_entity_types = CRM_Core_DAO::executeQuery(
+        'SELECT * FROM `civicrm_eck_entity_type`;'
+    )->fetchAll('id');
+
+    foreach ($eck_entity_types as $entity_type) {
+      // "CRM_Eck_DAO_*" is a virtual class name, the corresponding class does not
+      // exist. "CRM_Eck_DAO_Entity" is therefore defined as the controller
+      // class.
+      $entityTypes['CRM_Eck_DAO_' . $entity_type['name']] = [
+          'name' => 'Eck_' . $entity_type['name'],
+          'class' => 'CRM_Eck_DAO_Entity',
+          'table' => 'civicrm_eck_' . strtolower($entity_type['name']),
+      ];
+    }
   }
 }
 

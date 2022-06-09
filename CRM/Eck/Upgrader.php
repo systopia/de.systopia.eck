@@ -24,6 +24,7 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
    * Performs installation tasks.
    */
   public function install() {
+    $this->executeSqlFile('sql/auto_install.sql');
   }
 
   /**
