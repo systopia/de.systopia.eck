@@ -82,6 +82,8 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
 
     CRM_Eck_Page_Entity_TabHeader::build($this);
 
+    Civi::resources()->addScriptFile(E::LONG_NAME, 'js/entityTabs.js');
+
     parent::run();
   }
 
