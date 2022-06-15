@@ -15,7 +15,9 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
    * @param \Civi\Api4\Service\Spec\RequestSpec $spec
    */
   public function modifySpec(RequestSpec $spec) {
-    $spec->getFieldByName('subtype')->setOptionsCallback([$this, 'getSubTypes']);
+    $spec->getFieldByName('subtype')
+      ->setSuffixes(['name', 'label', 'description'])
+      ->setOptionsCallback([$this, 'getSubTypes']);
   }
 
   /**
