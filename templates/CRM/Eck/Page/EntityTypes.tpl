@@ -44,7 +44,7 @@
           <td>
             <ul>
               <li>
-                <a href="{crmURL p='civicrm/eck/entity/list' q="reset=1&type=$entity_type_name"}">{ts}List entities{/ts}</a>
+                <a href="{crmURL p="civicrm/eck/entity/list/$entity_type_name"}">{ts}List entities{/ts}</a>
               </li>
               <li>
                 <a href="{crmURL p='civicrm/admin/eck/entity-type' q="reset=1&action=update&type=$entity_type_name"}">{ts}Edit{/ts}</a>
