@@ -20,12 +20,21 @@
   <compatibility>
     <ver>5.51</ver>
   </compatibility>
+  <requires>
+    <ext>org.civicrm.afform</ext>
+    <ext>org.civicrm.search_kit</ext>
+  </requires>
   <upgrader>CRM_Eck_Upgrader</upgrader>
   <classloader>
-    <psr0 prefix="CRM_" path="" />
+    <psr0 prefix="CRM_" path=""/>
     <psr4 prefix="Civi\" path="Civi"/>
   </classloader>
   <civix>
     <namespace>CRM/Eck</namespace>
+    <format>22.05.2</format>
   </civix>
+  <mixins>
+    <mixin>menu-xml@1.0.0</mixin>
+    <mixin>mgd-php@1.1.0</mixin>
+  </mixins>
 </extension>

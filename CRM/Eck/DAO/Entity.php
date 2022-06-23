@@ -34,7 +34,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    * @var string[]
    */
   protected static $_paths = [
-    'browse' => 'civicrm/eck/entity/list?reset=1&type=[eck_type]&id=[id]',
+    'browse' => 'civicrm/eck/entity/list/[eck_type]',
     'view' => 'civicrm/eck/entity?reset=1&type=[eck_type]&id=[id]&selectedChild=view',
 //    'add' => 'civicrm/eck/entity/edit/[eck_type]/[eck_subtype]', // TODO: Is "eck_subtype" resolved correctly?
     'update' => 'civicrm/eck/entity?reset=1&type=[eck_type]&id=[id]&selectedChild=edit',
