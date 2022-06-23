@@ -38,7 +38,7 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
     ],
   ];
   $searches[] = [
-    'name' => 'SavedSearch_listing_display:' . $type,
+    'name' => 'SavedSearch_listing_display:' . $type['name'],
     'entity' => 'SearchDisplay',
     'cleanup' => 'always',
     'update' => 'unmodified',
