@@ -26,4 +26,15 @@ use CRM_Eck_ExtensionUtil as E;
  */
 class EckEntityType extends Generic\DAOEntity {
 
+  public static function permissions() {
+    return [
+      'meta' => ['access CiviCRM'],
+      'default' => ['administer CiviCRM'],
+      'create' => ['create ECK entity types'],
+      'get' => ['retrieve ECK entity types'],
+      'update' => ['edit ECK entity types'],
+      'delete' => ['delete ECK entity types'],
+    ];
+  }
+
 }
