@@ -28,7 +28,7 @@ models the people you as an organization are involved with. Other important
 entity types in CiviCRM Core are *Activity*, *Event*, *Contribution*, and
 *Membership*, but there are more entity types you might not notice being
 technically the same-level data structure, such as *Address*, *Recurring
-Cotribution*, *Custom Field*, or *Group*, or an a more internal level
+Contribution*, *Custom Field*, or *Group*, or an a more internal level
 *OptionGroup*, *MembershipType*, or *PaymentProcessor*.
 
 Entity types can also be brought by extensions, which provide additional

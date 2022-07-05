@@ -1,14 +1,16 @@
 ## Creating entities
 
 !!!Note
-    In a later version, adding new entities will be possible via the *List
-    Entities* page. At the moment we use the API Explorer v4 for this.
+    ECK comes with a SearchKit- and Afform-based user interface, which has not
+    yet been documented here.
+
+### With the API Explorer
 
 In API Explorer v4 we can create a new entity by selecting the API entity
 *EckOfficeEquipment* and the API action *create*. Should the entity be of a
 specific subtype (e.g. *Computer Screens*), add the *subtype* parameter and
-enter the corresponding ID (see [Configuration](configuration.md#adding-subtypes) how to find it). Hit *Execute* for
-creating the entity.
+select the appropriate subtype. Also, add any custom field attached to the
+entity type for entering data for them. Hit *Execute* for creating the entity.
 
 ![create new entity](img/createNewEntityApiv4.png "create new entity")
 
