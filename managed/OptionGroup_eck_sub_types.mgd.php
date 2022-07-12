@@ -17,5 +17,6 @@ return [
         'is_locked' => TRUE,
       ],
     ],
+    'match' => ['name'],
   ],
 ];
