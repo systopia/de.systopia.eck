@@ -75,7 +75,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'searchable' => 'secondary',
         'paths' => [
           'browse' => "civicrm/eck/entity/list/{$entity_type['name']}",
-          'view' => "civicrm/eck/entity/view?reset=1&action=view&type={$entity_type['name']}&id=[id]",
+          'view' => "civicrm/eck/entity?reset=1&action=view&type={$entity_type['name']}&id=[id]",
           'update' => "civicrm/eck/entity/edit/{$entity_type['name']}/[subtype:name]#?{$entity_type['entity_name']}=[id]",
           'add' => "civicrm/eck/entity/edit/{$entity_type['name']}/[subtype:name]",
         ],

@@ -103,7 +103,6 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
                   'entity' => $type['entity_name'],
                   'action' => 'view',
                   'join' => '',
-                  'target' => 'crm-popup',
                   'icon' => 'fa-external-link',
                   'text' => E::ts('View'),
                   'style' => 'default',
