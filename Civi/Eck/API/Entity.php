@@ -154,15 +154,11 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
               ['name', '!=', 'subtype'],
             ],
           ]);
-          $item['layout'] = "<af-form ctrl=\"afform\">\n";
-          $item['layout'] .= '  <af-entity type="' . $entityType['entity_name'] . '" name="' . $entityType['entity_name'] . '" label="' . $subType['label'] . '" actions="{create: true, update: true}" security="RBAC" url-autofill="1" data="{subtype: \'' . $subType['value'] . '\'}" />' . "\n";
-          $item['layout'] .= '  <fieldset af-fieldset="' . $entityType['entity_name'] . '" class="af-container" af-title="' . $subType['label'] . '">' . "\n";
-          foreach ($fields as $field) {
-            $item['layout'] .= "    <af-field name=\"{$field['name']}\" />\n";
-          }
-          $item['layout'] .= "  </fieldset>\n";
-          $item['layout'] .= '  <button class="af-button btn btn-primary" crm-icon="fa-check" ng-click="afform.submit()">' . E::ts('Submit') . '</button>' . "\n";
-          $item['layout'] .= '</af-form>';
+          $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afformEck.tpl', [
+            'entityType' => $entityType,
+            'subType' => $subType,
+            'fields' => $fields,
+          ]);
         }
         $afforms[$name] = $item;
       }
@@ -181,25 +177,10 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'server_route' => "civicrm/eck/entity/list/{$entityType['name']}",
         'requires' => ['crmSearchDisplayTable'],
       ];
-      $item['layout'] = "<div af-fieldset=\"\">\n";
-      $item['layout'] .= "  <div class=\"pull-right btn-group\">\n";
-      $item['layout'] .= "    <button type=\"button\" class=\"btn dropdown-toggle btn-primary\" crm-icon=\"fa-plus\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n";
-      $item['layout'] .= "      " . E::ts('Add %1', [1 => $entityType['label']]) . " <span class=\"caret\"></span>\n";
-      $item['layout'] .= "    </button>\n";
-      $item['layout'] .= "    <ul class=\"dropdown-menu\">\n";
-      foreach ($subTypes as $subType) {
-        $item['layout'] .= "      <li>\n";
-        $item['layout'] .= "        <a href=\"{{:: crmUrl('civicrm/eck/entity/edit/{$entityType['name']}/{$subType['name']}') }}\">{$subType['label']}</a>\n";
-        $item['layout'] .= "      </li>\n";
-      }
-      $item['layout'] .= "    </ul>\n";
-      $item['layout'] .= "  </div>\n";
-      $item['layout'] .= "  <div class=\"af-container af-layout-inline\">\n";
-      $item['layout'] .= "    <af-field name=\"title\" defn=\"{required: false, input_attrs: {placeholder: '" . E::ts('Filter by Title') . "'}, label: false}\" />\n";
-      $item['layout'] .= "    <af-field name=\"subtype\" defn=\"{input_type: 'Select', input_attrs: {multiple: true, placeholder: '" . E::ts('Filter by Type') . "'}, required: false, label: false}\" />\n";
-      $item['layout'] .= "  </div>\n";
-      $item['layout'] .= "  <crm-search-display-table search-name=\"ECK_Listing_" . $entityType['name'] . "\" display-name=\"ECK_Listing_Display" . $entityType['name'] . "\"></crm-search-display-table>\n";
-      $item['layout'] .= "</div>\n";
+      $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afsearch_eck_listing.tpl', [
+        'entityType' => $entityType,
+        'subTypes' => $subTypes,
+      ]);
       $afforms[$name] = $item;
     }
   }
