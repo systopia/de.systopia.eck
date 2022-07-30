@@ -8,7 +8,8 @@
         <li>
           {literal}
             <a class="crm-popup" href="{{:: crmUrl('civicrm/eck/entity/edit/{/literal}{$entityType.name}/{$subType.name}'){literal} }}">
-              {/literal}{$subType.label}{literal}
+                <i class="fa-fw{/literal}{if $subType.icon} crm-i {$subType.icon}{/if}{literal}"></i>
+                {/literal}{$subType.label}{literal}
             </a>
           {/literal}
         </li>
