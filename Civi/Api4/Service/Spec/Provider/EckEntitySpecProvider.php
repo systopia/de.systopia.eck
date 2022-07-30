@@ -16,7 +16,7 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
    */
   public function modifySpec(RequestSpec $spec) {
     $spec->getFieldByName('subtype')
-      ->setSuffixes(['name', 'label', 'description'])
+      ->setSuffixes(['name', 'label', 'description', 'icon'])
       ->setOptionsCallback([$this, 'getSubTypes']);
   }
 

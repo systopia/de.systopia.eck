@@ -33,6 +33,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
    */
   public function preProcess() {
     $this->setAction(CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? 'add');
+    Civi::resources()->addScriptFile('civicrm', 'js/jquery/jquery.crmIconPicker.js');
 
     if ($this->_action == CRM_Core_Action::ADD) {
       if (!($this->_entityType = CRM_Utils_Request::retrieve('type', 'String', $this))) {
@@ -93,6 +94,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
       'civicrm/admin/eck/entity-type',
       'reset=1&action=update&type=' . $this->_subType['grouping']
     );
+
   }
 
   public function buildQuickForm() {
@@ -107,6 +109,12 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
           E::ts('Subtype name'),
           NULL,
           TRUE
+        );
+        $this->add(
+          'text',
+          'icon',
+          E::ts('Icon'),
+          ['class' => 'crm-icon-picker']
         );
 
         // Add links to custom groups.
@@ -173,6 +181,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
         // Update OptionValue name and label.
         civicrm_api3('OptionValue', 'create', array_merge($this->_subType, [
           'label' => $values['label'],
+          'icon' => $values['icon'],
         ]));
         break;
       case CRM_Core_Action::DELETE:
