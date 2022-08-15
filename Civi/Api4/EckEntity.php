@@ -130,7 +130,7 @@ class EckEntity {
   /**
    * @return array
    */
-  public static function permissions() {
+  public static function permissions():array {
     return []; // FIXME: Add per-entity-type permissions
   }
 
