@@ -15,6 +15,7 @@ return [
         'is_reserved' => TRUE,
         'is_active' => TRUE,
         'is_locked' => TRUE,
+        'option_value_fields' => ['name', 'label', 'description', 'icon'],
       ],
     ],
     'match' => ['name'],

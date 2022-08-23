@@ -72,6 +72,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'table_name' => $entity_type['table_name'],
         'class_args' => [$entity_type['name']],
         'label_field' => 'title',
+        'icon_field' => ['subtype:icon'],
         'searchable' => 'secondary',
         'paths' => [
           'browse' => "civicrm/eck/entity/list/{$entity_type['name']}",

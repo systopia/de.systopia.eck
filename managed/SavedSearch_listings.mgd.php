@@ -77,6 +77,12 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
               'dataType' => 'String',
               'label' => E::ts('Type'),
               'sortable' => TRUE,
+              'icons' => [
+                [
+                  'field' => 'subtype:icon',
+                  'side' => 'left',
+                ],
+              ],
             ],
             [
               'type' => 'field',
