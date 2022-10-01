@@ -135,6 +135,13 @@ function eck_civicrm_post($action, $entity, $id, $object) {
     // Flush navigation cache.
     CRM_Core_BAO_Navigation::resetNavigation();
   }
+  elseif (strpos($entity, 'Eck_') === 0 && in_array($action, ['create', 'edit'], TRUE)) {
+    // add the recently created Entity
+    \Civi\Api4\RecentItem::create()
+      ->addValue('entity_type', $entity)
+      ->addValue('entity_id', $id)
+      ->execute();
+  }
 }
 
 /**
