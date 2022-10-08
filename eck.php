@@ -135,7 +135,11 @@ function eck_civicrm_post($action, $entity, $id, $object) {
     // Flush navigation cache.
     CRM_Core_BAO_Navigation::resetNavigation();
   }
-  elseif (strpos($entity, 'Eck_') === 0 && in_array($action, ['create', 'edit'], TRUE)) {
+  elseif (
+    strpos($entity, 'Eck_') === 0 &&
+    in_array($action, ['create', 'edit'], TRUE) &&
+    (CRM_Eck_BAO_EckEntityType::getEntityType(substr($entity, 4))['in_recent'] ?? FALSE)
+  ) {
     // add the recently created Entity
     \Civi\Api4\RecentItem::create()
       ->addValue('entity_type', $entity)

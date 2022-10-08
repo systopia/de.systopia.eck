@@ -108,6 +108,103 @@ function _eck_civix_civicrm_config(&$config = NULL) {
 }
 
 /**
+ * Implements hook_civicrm_install().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_install
+ */
+function _eck_civix_civicrm_install() {
+  _eck_civix_civicrm_config();
+  if ($upgrader = _eck_civix_upgrader()) {
+    $upgrader->onInstall();
+  }
+}
+
+/**
+ * Implements hook_civicrm_postInstall().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postInstall
+ */
+function _eck_civix_civicrm_postInstall() {
+  _eck_civix_civicrm_config();
+  if ($upgrader = _eck_civix_upgrader()) {
+    if (is_callable([$upgrader, 'onPostInstall'])) {
+      $upgrader->onPostInstall();
+    }
+  }
+}
+
+/**
+ * Implements hook_civicrm_uninstall().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_uninstall
+ */
+function _eck_civix_civicrm_uninstall() {
+  _eck_civix_civicrm_config();
+  if ($upgrader = _eck_civix_upgrader()) {
+    $upgrader->onUninstall();
+  }
+}
+
+/**
+ * (Delegated) Implements hook_civicrm_enable().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_enable
+ */
+function _eck_civix_civicrm_enable() {
+  _eck_civix_civicrm_config();
+  if ($upgrader = _eck_civix_upgrader()) {
+    if (is_callable([$upgrader, 'onEnable'])) {
+      $upgrader->onEnable();
+    }
+  }
+}
+
+/**
+ * (Delegated) Implements hook_civicrm_disable().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_disable
+ * @return mixed
+ */
+function _eck_civix_civicrm_disable() {
+  _eck_civix_civicrm_config();
+  if ($upgrader = _eck_civix_upgrader()) {
+    if (is_callable([$upgrader, 'onDisable'])) {
+      $upgrader->onDisable();
+    }
+  }
+}
+
+/**
+ * (Delegated) Implements hook_civicrm_upgrade().
+ *
+ * @param $op string, the type of operation being performed; 'check' or 'enqueue'
+ * @param $queue CRM_Queue_Queue, (for 'enqueue') the modifiable list of pending up upgrade tasks
+ *
+ * @return mixed
+ *   based on op. for 'check', returns array(boolean) (TRUE if upgrades are pending)
+ *   for 'enqueue', returns void
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_upgrade
+ */
+function _eck_civix_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
+  if ($upgrader = _eck_civix_upgrader()) {
+    return $upgrader->onUpgrade($op, $queue);
+  }
+}
+
+/**
+ * @return CRM_Eck_Upgrader
+ */
+function _eck_civix_upgrader() {
+  if (!file_exists(__DIR__ . '/CRM/Eck/Upgrader.php')) {
+    return NULL;
+  }
+  else {
+    return CRM_Eck_Upgrader_Base::instance();
+  }
+}
+
+/**
  * Inserts a navigation menu item at a given place in the hierarchy.
  *
  * @param array $menu - menu hierarchy

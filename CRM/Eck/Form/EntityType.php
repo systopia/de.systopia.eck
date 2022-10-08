@@ -207,6 +207,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
    */
   public function postProcess() {
     $values = $this->exportValues(NULL, TRUE);
+    $values['in_recent'] = ($values['in_recent'] ?? FALSE) === '1';
     switch ($this->getAction()) {
       case CRM_Core_Action::ADD:
         \Civi\Api4\EckEntityType::create()

@@ -32,6 +32,19 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
   }
 
   /**
+   * @param $name
+   * @return array|null
+   */
+  public static function getEntityType($name):? array {
+    foreach (self::getEntityTypes() as $type) {
+      if ($type['name'] === $name) {
+        return $type;
+      }
+    }
+    return NULL;
+  }
+
+  /**
    * @return string[]
    */
   public static function getEntityTypeNames(): array {
