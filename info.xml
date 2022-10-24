@@ -18,7 +18,7 @@
   <version>1.0-dev</version>
   <develStage>dev</develStage>
   <compatibility>
-    <ver>5.51</ver>
+    <ver>5.53</ver>
   </compatibility>
   <requires>
     <ext>org.civicrm.afform</ext>

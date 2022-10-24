@@ -96,4 +96,15 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Implements hook_civicrm_upgrade_N().
+   */
+  public function upgrade_0013() {
+    $this->ctx->log->info('Add in_recent column to civicrm_eck_entity_type');
+    CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_eck_entity_type`
+      ADD COLUMN `in_recent` tinyint NOT NULL DEFAULT 1 COMMENT 'Does this entity type get added to the recent items list'");
+
+    return TRUE;
+  }
+
 }

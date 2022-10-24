@@ -21,4 +21,24 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity {
     return strpos($entityName, 'Eck_') === 0 ? substr($entityName, strlen('Eck_')) : NULL;
   }
 
+  /**
+   * @param string $entityName
+   * @param int $entityId
+   * @return string
+   */
+  public static function getEntityIcon(string $entityName, int $entityId):?string {
+    $default = self::$_icon;
+    foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
+      if ($entity_type['entity_name'] === $entityName) {
+        $default = $entity_type['icon'] ?? $default;
+      }
+    }
+    $record = civicrm_api4($entityName, 'get', [
+      'checkPermissions' => FALSE,
+      'select' => ['subtype:icon'],
+      'where' => [['id', '=', $entityId]],
+    ], 0);
+    return $record['subtype:icon'] ?? $default;
+  }
+
 }

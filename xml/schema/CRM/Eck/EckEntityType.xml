@@ -61,4 +61,16 @@
     <comment>crm-i icon class</comment>
   </field>
 
+  <field>
+    <name>in_recent</name>
+    <type>boolean</type>
+    <title>In Recent Items</title>
+    <comment>Does this entity type get added to the recent items list</comment>
+    <default>1</default>
+    <required>true</required>
+    <html>
+      <type>CheckBox</type>
+    </html>
+  </field>
+
 </table>

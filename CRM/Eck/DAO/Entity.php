@@ -19,6 +19,7 @@ use CRM_Eck_ExtensionUtil as E;
  *
  */
 class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
+  const EXT = E::LONG_NAME;
 
   private static $_entityType;
 
@@ -27,6 +28,13 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   private static $_tableName;
 
   public static $_log = TRUE;
+
+  /**
+   * Icon associated with this entity.
+   *
+   * @var string
+   */
+  public static $_icon = 'fa-cubes';
 
   /**
    * Paths for accessing this entity in the UI.

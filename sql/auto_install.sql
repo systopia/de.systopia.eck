@@ -38,6 +38,7 @@ CREATE TABLE `civicrm_eck_entity_type` (
   `name` varchar(255) NOT NULL COMMENT 'The entity type\'s name',
   `label` text NOT NULL COMMENT 'The entity type\'s human-readable name',
   `icon` varchar(255) DEFAULT NULL COMMENT 'crm-i icon class',
+  `in_recent` tinyint NOT NULL DEFAULT 1 COMMENT 'Does this entity type get added to the recent items list',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `UI_name`(name)
 )
