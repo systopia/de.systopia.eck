@@ -82,6 +82,14 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
                   'field' => 'subtype:icon',
                   'side' => 'left',
                 ],
+                [
+                  'icon' => $type['icon'],
+                  'side' => 'left',
+                  'if' => [
+                    'subtype:icon',
+                    'IS EMPTY',
+                  ],
+                ],
               ],
             ],
             [
