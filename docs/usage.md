@@ -27,7 +27,8 @@ Something like the following should now be issued as a response:
 
 We now find our created entity back in the GUI on the *List entities* page which
 can be accessed either via the corresponding link on the administration page for
-the entity type, or in the CiviCRM navigation menu in the *Custom Entities* section.
+the entity type, or in the CiviCRM navigation menu in the *Custom Entities*
+section.
 
 ## Viewing entities
 
