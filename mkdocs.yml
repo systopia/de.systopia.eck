@@ -1,6 +1,6 @@
-site_name: Entity Construction Kit
+site_name: Entity Construction Kit (ECK)
 repo_url: https://github.com/systopia/de.systopia.eck
-site_description: 'A guide for the EntityConstructionKit (eck).'
+site_description: 'A guide for the Entity Construction Kit (ECK) CiviCRM extension.'
 site_author: 'systopia'
 theme:
   name: material
