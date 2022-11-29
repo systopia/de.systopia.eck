@@ -2,7 +2,7 @@
 <extension key="de.systopia.eck" type="module">
   <file>eck</file>
   <name>Entity Construction Kit</name>
-  <description>Provides the ability to create and manage CiviCRM entities.</description>
+  <description>Provides the ability to create and manage custom CiviCRM entities.</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>Jens Schuppe</author>
