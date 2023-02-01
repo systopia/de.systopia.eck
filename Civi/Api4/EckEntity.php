@@ -56,6 +56,17 @@ class EckEntity {
   /**
    * @param string $entity_type
    * @param bool $checkPermissions
+   * @return \Civi\Api4\Generic\AutocompleteAction
+   * @throws \API_Exception
+   */
+  public static function autocomplete(string $entity_type, $checkPermissions = TRUE) {
+    return (new \Civi\Api4\Generic\AutocompleteAction('Eck_' . $entity_type, __FUNCTION__))
+      ->setCheckPermissions($checkPermissions);
+  }
+
+  /**
+   * @param string $entity_type
+   * @param bool $checkPermissions
    * @return EckDAOSaveAction
    * @throws \API_Exception
    */
