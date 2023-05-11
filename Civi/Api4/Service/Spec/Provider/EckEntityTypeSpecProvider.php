@@ -5,7 +5,7 @@ namespace Civi\Api4\Service\Spec\Provider;
 use Civi\Api4\Service\Spec\RequestSpec;
 
 /**
- * Class ContactTypeCreationSpecProvider
+ * Class EckEntityTypeSpecProvider
  *
  * @package Civi\Api4\Service\Spec\Provider
  */
