@@ -99,7 +99,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   public function initialize() {
     if (self::$_entityType) {
       self::$_className = 'CRM_Eck_DAO_' . self::$_entityType;
-      self::$_tableName = 'civicrm_eck_' . strtolower(self::$_entityType);
+      self::$_tableName = _eck_get_table_name(self::$_entityType);
     }
 
     parent::initialize();
