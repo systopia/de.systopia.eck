@@ -40,6 +40,7 @@ class EckEntityTypeSpecProvider implements Generic\SpecProviderInterface {
         ->setDescription(ts('All subtypes of this entity.'))
         ->setOptionsCallback([__CLASS__, 'getSubtypeOptions'])
         ->setInputType('Select')
+        ->setSuffixes(['name', 'label', 'description', 'icon'])
         ->setInputAttrs(['multiple' => TRUE])
         ->setSerialize(\CRM_Core_DAO::SERIALIZE_COMMA)
         ->setSqlRenderer([__CLASS__, 'renderSqlForEckSubtypes']);
