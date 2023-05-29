@@ -14,7 +14,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
 
   public function setUpHeadless() {
     return \Civi\Test::headless()
-      ->installMe(__DIR__)
+      ->install(['de.systopia.eck', 'org.civicrm.search_kit'])
       ->apply();
   }
 
@@ -49,7 +49,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
 
     // Delete the entity type
     $deleted = EckEntityType::delete(FALSE)
-      ->addWhere('name', '=', 'Test_One_Type')
+      ->addWhere('api_name', '=', 'Eck_Test_One_Type')
       ->execute();
     $this->assertCount(1, $deleted);
 
@@ -100,6 +100,16 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
   public function testTwoEntityTypes() {
     $firstEntity = $this->createEntity(['one' => 'One', 'two' => 'Two']);
     $secondEntity = $this->createEntity(['one' => 'One', 'three' => 'Three']);
+
+    // Ensure api_name and sub_types are correctly returned from the API
+    $entityTypes = \Civi\Api4\EckEntityType::get(FALSE)
+      ->addSelect('api_name', 'sub_types:label', 'sub_types:name')
+      ->execute()
+      ->indexBy('api_name');
+    $this->assertEquals(['One', 'Two'], $entityTypes[$firstEntity]['sub_types:label']);
+    $this->assertEquals(['one', 'two'], $entityTypes[$firstEntity]['sub_types:name']);
+    $this->assertEquals(['One', 'Three'], $entityTypes[$secondEntity]['sub_types:label']);
+    $this->assertEquals(['one', 'three'], $entityTypes[$secondEntity]['sub_types:name']);
 
     $saved = civicrm_api4($firstEntity, 'save', [
       'checkPermissions' => FALSE,
