@@ -34,7 +34,6 @@ function eck_civicrm_config(&$config) {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
  */
 function eck_civicrm_entityTypes(&$entityTypes) {
-  _eck_civix_civicrm_entityTypes($entityTypes);
 
   $eck_entity_types = CRM_Core_DAO::executeQuery(
     'SELECT * FROM `civicrm_eck_entity_type`;'
