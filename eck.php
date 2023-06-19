@@ -45,7 +45,6 @@ function _eck_get_table_name(string $entityTypeName): string {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
  */
 function eck_civicrm_entityTypes(&$entityTypes) {
-  _eck_civix_civicrm_entityTypes($entityTypes);
 
   $eck_entity_types = CRM_Core_DAO::executeQuery(
     'SELECT * FROM `civicrm_eck_entity_type`;'
@@ -166,16 +165,6 @@ function eck_civicrm_post($action, $entity, $id, $object) {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu
  */
 function eck_civicrm_navigationMenu(&$menu) {
-  _eck_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
-    'label' => E::ts('ECK Entity Types'),
-    'name' => 'eck_entity_types',
-    'url' => 'civicrm/admin/eck/entity-types',
-    'permission' => 'administer CiviCRM',
-    'operator' => 'OR',
-    'separator' => 0,
-    'icon' => 'crm-i fa-cubes',
-  ));
-
   _eck_civix_insert_navigation_menu($menu, NULL, array(
     'label' => E::ts('Custom Entities'),
     'name' => 'eck_entities',

@@ -8,6 +8,11 @@
   <log>true</log>
   <title>ECK Entity Type</title>
 
+  <paths>
+    <add>civicrm/admin/eck/entity-type?reset=1&amp;action=add</add>
+    <update>civicrm/admin/eck/entity-type?reset=1&amp;action=update&amp;type=[name]</update>
+    <delete>civicrm/admin/eck/entity-type?reset=1&amp;action=delete&amp;type=[name]</delete>
+  </paths>
   <field>
     <name>id</name>
     <type>int unsigned</type>
