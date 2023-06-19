@@ -27,6 +27,17 @@ function eck_civicrm_config(&$config) {
 }
 
 /**
+ * Convert ECK EntityType name to sql table name.
+ *
+ * @param string $entityTypeName
+ * @return string
+ */
+function _eck_get_table_name(string $entityTypeName): string {
+  // SQL table names must be alphanumeric and no longer than 64 characters
+  return CRM_Utils_String::munge('civicrm_eck_' . strtolower($entityTypeName), '_', 64);
+}
+
+/**
  * Implements hook_civicrm_entityTypes().
  *
  * Declare entity types provided by this module.
@@ -47,7 +58,7 @@ function eck_civicrm_entityTypes(&$entityTypes) {
     $entityTypes['CRM_Eck_DAO_' . $entity_type['name']] = [
       'name' => 'Eck_' . $entity_type['name'],
       'class' => 'CRM_Eck_DAO_Entity',
-      'table' => 'civicrm_eck_' . strtolower($entity_type['name']),
+      'table' => _eck_get_table_name($entity_type['name']),
     ];
   }
 }
@@ -97,7 +108,7 @@ function eck_civicrm_pre($action, $entity, $id, &$params) {
         ]);
 
         // Drop table.
-        $table_name = 'civicrm_eck_' . strtolower($eckTypeName);
+        $table_name = _eck_get_table_name($eckTypeName);
         CRM_Core_DAO::executeQuery("DROP TABLE IF EXISTS `{$table_name}`");
 
         // Delete subtypes.

@@ -23,9 +23,12 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
   public static function getEntityTypes(): array {
     $entityTypes = Civi::cache('metadata')->get('EckEntityTypes');
     if (!is_array($entityTypes)) {
-      $entityTypes = CRM_Core_DAO::executeQuery(
-        'SELECT *, CONCAT("Eck_", name) AS entity_name, CONCAT("civicrm_eck_", LOWER(name)) AS table_name FROM `civicrm_eck_entity_type`;'
-      )->fetchAll();
+      $entityTypes = CRM_Core_DAO::executeQuery('SELECT * FROM `civicrm_eck_entity_type`')
+        ->fetchAll();
+      foreach ($entityTypes as &$entityType) {
+        $entityType['entity_name'] = 'Eck_' . $entityType['name'];
+        $entityType['table_name'] = _eck_get_table_name($entityType['name']);
+      }
       Civi::cache('metadata')->set('EckEntityTypes', $entityTypes);
     }
     return $entityTypes;
@@ -60,7 +63,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
    * @throws \API_Exception
    */
   public static function ensureEntityType($entity_type) {
-    $table_name = 'civicrm_eck_' . strtolower($entity_type['name']);
+    $table_name = _eck_get_table_name($entity_type['name']);
 
     // Ensure table exists.
     CRM_Core_DAO::executeQuery("
