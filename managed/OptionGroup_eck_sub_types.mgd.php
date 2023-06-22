@@ -17,7 +17,7 @@ return [
         'is_locked' => TRUE,
         'option_value_fields' => ['name', 'label', 'description', 'icon'],
       ],
+      'match' => ['name'],
     ],
-    'match' => ['name'],
   ],
 ];

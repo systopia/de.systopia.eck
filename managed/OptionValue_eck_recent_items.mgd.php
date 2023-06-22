@@ -17,6 +17,10 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
         'is_reserved' => TRUE,
         'is_active' => TRUE,
       ],
+      'match' => [
+        'name',
+        'option_group_id',
+      ],
     ],
   ];
 }
