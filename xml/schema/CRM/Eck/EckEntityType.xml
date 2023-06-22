@@ -30,9 +30,10 @@
   <field>
     <name>name</name>
     <type>varchar</type>
-    <length>255</length>
+    <!-- Table name `'civicrm_eck_' . $name` cannot exceed mysql max of 64 chars  -->
+    <length>58</length>
     <required>true</required>
-    <comment>The entity type's name</comment>
+    <comment>The entity type name, also used in the sql table name</comment>
     <html>
       <type>Text</type>
     </html>
