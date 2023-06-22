@@ -54,7 +54,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       }
       switch ($this->_action) {
         case CRM_Core_Action::UPDATE:
-          $this->setTitle(E::ts('Edit Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
+          $this->setTitle(E::ts('Edit Entity Type %1', [1 => $this->_entityType['label']]));
 
           // Retrieve custom groups for this entity type.
           $this->_subTypes = CRM_Eck_BAO_EckEntityType::getSubTypes($this->_entityTypeName);
@@ -66,7 +66,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           );
           break;
         case CRM_Core_Action::DELETE:
-          $this->setTitle(E::ts('Delete Entity Type <em>%1</em>', [1 => $this->_entityType['label']]));
+          $this->setTitle(E::ts('Delete Entity Type %1', [1 => $this->_entityType['label']]));
           break;
       }
     }
