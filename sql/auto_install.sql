@@ -35,7 +35,7 @@ SET FOREIGN_KEY_CHECKS=1;
 -- *******************************************************/
 CREATE TABLE `civicrm_eck_entity_type` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique EckEntityType ID',
-  `name` varchar(255) NOT NULL COMMENT 'The entity type\'s name',
+  `name` varchar(58) NOT NULL COMMENT 'The entity type name, also used in the sql table name',
   `label` text NOT NULL COMMENT 'The entity type\'s human-readable name',
   `icon` varchar(255) DEFAULT NULL COMMENT 'crm-i icon class',
   `in_recent` tinyint NOT NULL DEFAULT 1 COMMENT 'Does this entity type get added to the recent items list',
