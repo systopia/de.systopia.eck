@@ -19,6 +19,10 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
         'is_active' => TRUE,
         'grouping' => 'subtype',
       ],
+      'match' => [
+        'name',
+        'option_group_id',
+      ],
     ],
   ];
 }

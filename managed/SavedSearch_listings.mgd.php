@@ -35,6 +35,9 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
         'description' => NULL,
         'mapping_id' => NULL,
       ],
+      'match' => [
+        'name',
+      ],
     ],
   ];
   $searches[] = [
@@ -139,6 +142,10 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
           ],
         ],
         'acl_bypass' => FALSE,
+      ],
+      'match' => [
+        'name',
+        'saved_search_id',
       ],
     ],
   ];
