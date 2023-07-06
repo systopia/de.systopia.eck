@@ -15,6 +15,8 @@
 
 namespace Civi\Api4;
 
+use Civi\Api4\Generic\DAOEntity;
+use Civi\Api4\Generic\Traits\ManagedEntity;
 use CRM_Eck_ExtensionUtil as E;
 
 /**
@@ -24,6 +26,6 @@ use CRM_Eck_ExtensionUtil as E;
  *
  * @package Civi\Api4
  */
-class EckEntityType extends Generic\DAOEntity {
-
+class EckEntityType extends DAOEntity {
+  use ManagedEntity;
 }
