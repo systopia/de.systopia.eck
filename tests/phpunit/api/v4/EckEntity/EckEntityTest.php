@@ -34,6 +34,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     $this->assertEquals('Test One Type', $newEntity['title']);
     $this->assertEquals('secondary', $newEntity['searchable']);
     $this->assertEquals('title', $newEntity['label_field']);
+    $this->assertEquals('civicrm_eck_test_one_type', $newEntity['table_name']);
     $this->assertEquals('fa-random', $newEntity['icon']);
     $this->assertContains('EckEntity', $newEntity['type']);
 
