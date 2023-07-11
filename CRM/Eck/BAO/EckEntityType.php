@@ -133,16 +133,14 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType {
    * @throws \Exception
    */
   public static function deleteSubType($sub_type_value) {
-    $sub_type = civicrm_api4('OptionValue', 'get', [
-      'checkPermissions' => FALSE,
-      'where' => [
-        ['option_group_id:name', '=', 'eck_sub_types'],
-        ['value', '=', $sub_type_value],
-      ],
-    ]);
+    $sub_type = \Civi\Api4\OptionValue::get(FALSE)
+      ->addWhere('option_group_id:name', '=', 'eck_sub_types')
+      ->addWhere('value', '=', $sub_type_value)
+      ->execute()
+      ->single();
 
     // Delete entities of subtype.
-    civicrm_api4($sub_type['grouping'], 'delete', [
+    civicrm_api4('Eck_' . $sub_type['grouping'], 'delete', [
       'checkPermissions' => FALSE,
       'where' => [['id', 'IS NOT NULL']],
     ]);
