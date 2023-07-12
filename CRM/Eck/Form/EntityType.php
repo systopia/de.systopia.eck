@@ -89,8 +89,9 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       case CRM_Core_Action::ADD:
         $submit_button_caption = E::ts('Save');
 
-        foreach (CRM_Eck_DAO_EckEntityType::fields() as $field) {
-          if ($field['name'] != 'id') {
+        foreach (['label', 'name', 'icon', 'in_recent'] as $fieldName) {
+          $field = CRM_Eck_DAO_EckEntityType::getSupportedFields()[$fieldName] ?? NULL;
+          if ($field) {
             $this->addField(
               $field['name'],
               [
