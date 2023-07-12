@@ -54,9 +54,9 @@ class EckEntityTypeSpecProvider implements Generic\SpecProviderInterface {
 
   public static function renderSqlForEckSubtypes(array $field, Api4SelectQuery $query): string {
     $optionGroupId = \CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'eck_sub_types', 'id', 'name');
-    return "(SELECT GROUP_CONCAT(`civicrm_option_value`.`value`) 
-      FROM `civicrm_option_value` 
-      WHERE `civicrm_option_value`.`option_group_id` = $optionGroupId 
+    return "(SELECT GROUP_CONCAT(`civicrm_option_value`.`value`)
+      FROM `civicrm_option_value`
+      WHERE `civicrm_option_value`.`option_group_id` = $optionGroupId
       AND `civicrm_option_value`.`grouping` = {$field['sql_name']})";
   }
 

@@ -7,7 +7,7 @@
       {foreach item="subType" from=$subTypes}
         <li>
           {literal}
-            <a class="crm-popup" href="{{:: crmUrl('civicrm/eck/entity/edit/{/literal}{$entityType.name}/{$subType.name}'){literal} }}">
+            <a class="crm-popup" href="{{:: crmUrl('civicrm/eck/entity/edit/{/literal}{$entityType.name}/{$subType.value}'){literal} }}">
                 <i class="fa-fw{/literal}{if $subType.icon} crm-i {$subType.icon}{/if}{literal}"></i>
                 {/literal}{$subType.label}{literal}
             </a>
