@@ -85,7 +85,7 @@ function eck_civicrm_pre($action, $entity, $id, &$params) {
       case 'create':
         // Replace special characters in the name
         if (!empty($params['name'])) {
-          $params['name'] = CRM_Utils_String::munge($params['name'], '_', 58);
+          $params['name'] = CRM_Utils_String::munge($params['name'], '_', 52);
         }
         break;
 

@@ -109,11 +109,23 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
 
   /**
    * Implements hook_civicrm_upgrade_N().
-   */
+   *
   public function upgrade_0014() {
     $this->ctx->log->info('Update name column in civicrm_eck_entity_type');
     CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_eck_entity_type`
       MODIFY COLUMN `name` varchar(58) NOT NULL COMMENT 'The entity type name, also used in the sql table name'");
+
+    return TRUE;
+  }
+   */
+
+  /**
+   * Implements hook_civicrm_upgrade_N().
+   */
+  public function upgrade_0015() {
+    $this->ctx->log->info('Update name column in civicrm_eck_entity_type');
+    CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_eck_entity_type`
+      MODIFY COLUMN `name` varchar(52) NOT NULL COMMENT 'The entity type name, also used in the sql table name'");
 
     return TRUE;
   }
