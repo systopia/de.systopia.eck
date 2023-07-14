@@ -82,6 +82,13 @@ function eck_civicrm_pre($action, $entity, $id, &$params) {
     $eckTypeName = $id ? CRM_Core_DAO::getFieldValue('CRM_Eck_DAO_EckEntityType', $id) : NULL;
 
     switch ($action) {
+      case 'create':
+        // Replace special characters in the name
+        if (!empty($params['name'])) {
+          $params['name'] = CRM_Utils_String::munge($params['name'], '_', 58);
+        }
+        break;
+
       case 'edit':
         // Do not allow entity type to be renamed, as the table name depends on it
         if (isset($params['name']) && $params['name'] !== $eckTypeName) {

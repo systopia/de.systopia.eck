@@ -25,7 +25,7 @@
             <div class="crm-section">
               <div class="label">{$form.$elementName.label}</div>
               <div class="content">
-                  {if $elementName == 'name'}<span>Eck</span>{/if}
+                  {if $elementName == 'name'}<span>Eck_</span>{/if}
                   {$form.$elementName.html}
               </div>
               <div class="clear"></div>
@@ -68,7 +68,6 @@
                   {/if}
               </table>
             </div>
-
               {if $action == 2}
                 <div class="action-link">
                     {capture assign=entityTypeName}{$entityType.name}{/capture}

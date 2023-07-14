@@ -74,16 +74,20 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
   public function testRenameEntityType():void {
     $entityType = EckEntityType::create(FALSE)
       ->addValue('label', 'Test Two Type')
+      ->addValue('name', 'Test Two')
       ->execute()->single();
+
+    // Name should have been munged
+    $this->assertEquals('Test_Two', $entityType['name']);
 
     $edited = EckEntityType::update(FALSE)
       ->addValue('id', $entityType['id'])
       // Setting the same name as before is allowed
-      ->addValue('name', 'Test_Two_Type')
+      ->addValue('name', 'Test_Two')
       ->addValue('label', 'Different label')
       ->execute()->single();
     $this->assertEquals('Different label', $edited['label']);
-    $this->assertEquals('Test_Two_Type', $edited['name']);
+    $this->assertEquals('Test_Two', $edited['name']);
 
     try {
       EckEntityType::update(FALSE)
