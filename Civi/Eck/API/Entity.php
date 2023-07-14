@@ -78,8 +78,8 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'paths' => [
           'browse' => "civicrm/eck/entity/list/{$entity_type['name']}",
           'view' => "civicrm/eck/entity?reset=1&action=view&type={$entity_type['name']}&id=[id]",
-          'update' => "civicrm/eck/entity/edit/{$entity_type['name']}/[subtype:name]#?{$entity_type['entity_name']}=[id]",
-          'add' => "civicrm/eck/entity/edit/{$entity_type['name']}/[subtype:name]",
+          'update' => "civicrm/eck/entity/edit/{$entity_type['name']}/[subtype]#?{$entity_type['entity_name']}=[id]",
+          'add' => "civicrm/eck/entity/edit/{$entity_type['name']}/[subtype]",
         ],
         'class' => 'Civi\Api4\EckEntity',
         'icon' => $entity_type['icon'] ?? 'fa-cubes',
@@ -133,7 +133,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
 
       // Submission form to create/edit each sub-type
       foreach ($subTypes as $subType) {
-        $name = 'afform' . $entityType['entity_name'] . '_' . $subType['name'];
+        $name = 'afform' . $entityType['entity_name'] . '_' . $subType['value'];
         $item = [
           'name' => $name,
           'type' => 'form',
@@ -144,7 +144,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
           'is_public' => FALSE,
           'is_token' => FALSE,
           'permission' => 'access CiviCRM',
-          'server_route' => "civicrm/eck/entity/edit/{$entityType['name']}/{$subType['name']}",
+          'server_route' => "civicrm/eck/entity/edit/{$entityType['name']}/{$subType['value']}",
         ];
         if ($event->getLayout) {
           $fields = \civicrm_api4($entityType['entity_name'], 'getFields', [

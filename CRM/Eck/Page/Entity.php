@@ -67,13 +67,13 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
 
 
     // Retrieve ECK entity subtype.
-    if (!$subtype_name = CRM_Utils_Request::retrieve('subtype', 'String', $this)) {
+    if (!$subtype_value = CRM_Utils_Request::retrieve('subtype', 'String', $this)) {
       $subtypes = \CRM_Eck_BAO_EckEntityType::getSubTypes($entity_type_name, FALSE);
       $subtype = $subtypes[$entity['subtype']];
-      $subtype_name = $subtype['name'];
+      $subtype_value = $subtype['value'];
     }
-    $this->assign('subtype', $subtype_name);
-    $this->_subtype = $subtype_name;
+    $this->assign('subtype', $subtype_value);
+    $this->_subtype = $subtype_value;
 
     // Set page title.
     CRM_Utils_System::setTitle($entity['title']);
