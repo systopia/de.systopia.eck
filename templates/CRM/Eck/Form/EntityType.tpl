@@ -68,29 +68,6 @@
                   {/if}
               </table>
             </div>
-              {if $action == 1}
-                {literal}
-                <script type="text/javascript">
-                  (function($, _) {
-                    var $form = $('form.{/literal}{$form.formClass}{literal}');
-                    $(function() {
-                      // Auto-generate name from label
-                      $('#label', $form).on('keyup', function() {
-                          $('#name', $form).val($(this).val()).trigger('blur');
-                      });
-                      // Replace special characters in name
-                      $('#name', $form).on('keyup blur', function(e) {
-                         $(this).val(_.trimLeft(_.deburr($(this).val()).replace(/[^a-z0-9]+/gi, '_'), ' _'));
-                         // On blur remove trailing underscore
-                         if (e.type === 'blur') {
-                           $(this).val(_.trim($(this).val(), ' _'));
-                         }
-                      });
-                    });
-                  })(CRM.$, CRM._);
-                </script>
-                {/literal}
-              {/if}
               {if $action == 2}
                 <div class="action-link">
                     {capture assign=entityTypeName}{$entityType.name}{/capture}

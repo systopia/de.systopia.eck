@@ -36,6 +36,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
    */
   public function preProcess() {
     Civi::resources()->addScriptFile('civicrm', 'js/jquery/jquery.crmIconPicker.js');
+    Civi::resources()->addScriptFile(E::LONG_NAME, 'js/entityTypeForm.js');
 
     $this->setAction(CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? 'add');
 
