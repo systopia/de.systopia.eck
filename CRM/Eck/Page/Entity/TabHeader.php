@@ -84,8 +84,6 @@ class CRM_Eck_Page_Entity_TabHeader {
         ),
       ] + $default;
 
-    // TODO: Since the edit form is an Angular form generated using Afform, it
-    //       won't load inside the tabset.
     $afform_name = 'afform' . 'Eck_' . $entityType['name'] . '_' . $subtype;
     $module = _afform_angular_module_name($afform_name);
     $tabs['edit'] = [
