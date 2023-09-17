@@ -254,32 +254,9 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   /**
    * {@inheritDoc}
    */
-  public static function getSelectWhereClause($tableAlias = NULL, $entity_type = NULL) {
-    if (!isset($entity_type)) {
-      // TODO: We can't just throw an exception as this leads to errors
-      //       everywhere, e.g. for get API actions on entities that reference
-      //       at least one ECK entity.
-//      throw new Exception(E::ts('No ECK entity type given.'));
-    }
-
-    /**
-     * Copied and adapted from CRM_Core_DAO::getSelectWhereClause().
-     * We need to always pass the ECK entity type into the DAO constructor and
-     * static methods where objects are being instantiated.
-     * @see \CRM_Core_DAO::getSelectWhereClause()
-     */
-    $bao = new static($entity_type);
-    if ($tableAlias === NULL) {
-      $tableAlias = $bao->tableName();
-    }
-    $clauses = [];
-    foreach ((array) $bao->addSelectWhereClause() as $field => $vals) {
-      $clauses[$field] = NULL;
-      if ($vals) {
-        $clauses[$field] = "(`$tableAlias`.`$field` IS NULL OR (`$tableAlias`.`$field` " . implode(" AND `$tableAlias`.`$field` ", (array) $vals) . '))';
-      }
-    }
-    return $clauses;
+  public static function getSelectWhereClause($tableAlias = NULL, $entityName = NULL, $conditions = []): array {
+    // TODO: ECK entities do not implement ACLs
+    return [];
   }
 
   /**
