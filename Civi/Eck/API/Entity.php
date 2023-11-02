@@ -73,6 +73,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'table_name' => $entity_type['table_name'],
         'class_args' => [$entity_type['name']],
         'label_field' => 'title',
+        'search_fields' => ['title'],
         'icon_field' => ['subtype:icon'],
         'searchable' => 'secondary',
         'paths' => [
