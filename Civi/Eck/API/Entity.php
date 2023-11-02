@@ -66,7 +66,7 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
         'name' => $entity_type['entity_name'],
         'title' => $entity_type['label'],
         'title_plural' => $entity_type['label'],
-        'description' => ts('Entity Construction Kit entity type %1', [1 => $entity_type['label']]),
+        'description' => E::ts('Entity Construction Kit entity type %1', [1 => $entity_type['label']]),
         'primary_key' => ['id'],
         'type' => ['DAOEntity', 'EckEntity'],
         'dao' => 'CRM_Eck_DAO_Entity',
