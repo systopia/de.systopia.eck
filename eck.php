@@ -15,7 +15,6 @@
 
 require_once 'eck.civix.php';
 use CRM_Eck_ExtensionUtil as E;
-use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Implements hook_civicrm_config().
@@ -60,16 +59,6 @@ function eck_civicrm_entityTypes(&$entityTypes) {
       'table' => _eck_get_table_name($entity_type['name']),
     ];
   }
-}
-
-/**
- * Implements hook_civicrm_container().
- */
-function eck_civicrm_container(\Symfony\Component\DependencyInjection\ContainerBuilder $container) {
-  // Register API Provider.
-  $apiKernelDefinition = $container->getDefinition('civi_api_kernel');
-  $apiProviderDefinition = new Definition('Civi\Eck\API\Entity');
-  $apiKernelDefinition->addMethodCall('registerApiProvider', array($apiProviderDefinition));
 }
 
 /**

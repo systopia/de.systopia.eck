@@ -15,13 +15,12 @@
 
 namespace Civi\Eck\API;
 
+use Civi\Core\Service\AutoSubscriber;
 use CRM_Eck_ExtensionUtil as E;
 use Civi\API\Events;
 use Civi\Core\Event\GenericHookEvent;
-use Civi\API\Provider\ProviderInterface as API_ProviderInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class Entity implements API_ProviderInterface, EventSubscriberInterface {
+class Entity extends AutoSubscriber {
 
   /**
    * @return callable[]
@@ -32,25 +31,6 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
       'civi.afform_admin.metadata' => 'afformEntityTypes',
       'civi.afform.get' => 'getEckAfforms',
     ];
-  }
-
-  /**
-   * Not needed for APIv4
-   * @param int $version
-   * @return array
-   */
-  public function getEntityNames($version) {
-    return [];
-  }
-
-  /**
-   * Not needed for APIv4
-   * @param int $version
-   * @param string $entity
-   * @return array
-   */
-  public function getActionNames($version, $entity) {
-    return [];
   }
 
   /**
@@ -188,12 +168,6 @@ class Entity implements API_ProviderInterface, EventSubscriberInterface {
       ]);
       $afforms[$name] = $item;
     }
-  }
-
-  /**
-   * Not needed for APIv4
-   */
-  public function invoke($apiRequest) {
   }
 
 }
