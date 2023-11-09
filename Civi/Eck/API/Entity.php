@@ -126,6 +126,7 @@ class Entity extends AutoSubscriber {
           'is_token' => FALSE,
           'permission' => 'access CiviCRM',
           'server_route' => "civicrm/eck/entity/edit/{$entityType['name']}/{$subType['value']}",
+          'redirect' => "civicrm/eck/entity/list/{$entityType['name']}#?subtype={$subType['value']}",
         ];
         if ($event->getLayout) {
           $fields = \civicrm_api4($entityType['entity_name'], 'getFields', [
