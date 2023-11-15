@@ -13,8 +13,9 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-use CRM_Eck_ExtensionUtil as E;
 use Civi\Api4\EckEntityType;
+use Civi\Api4\OptionValue;
+use CRM_Eck_ExtensionUtil as E;
 
 class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
 
@@ -77,6 +78,16 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
       FALSE,
       CRM_Core_Permission::VIEW
     );
+
+    /*
+     * $custom_group_tree contains the option IDs for option fields. Though
+     * CRM_Core_BAO_CustomGroup::buildCustomDataView() needs the values, not the
+     * IDs. Thus, we have to convert them otherwise no value is displayed for
+     * the field.
+     * @todo: Migrate to SearchKit.
+     */
+    $custom_group_tree = $this->convertOptionIdsToValues($custom_group_tree);
+
     CRM_Core_BAO_CustomGroup::buildCustomDataView(
       $this,
       $custom_group_tree,
@@ -102,6 +113,42 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
     }
 
     parent::run();
+  }
+
+  private function convertOptionIdsToValues(array $custom_group_tree): array {
+    foreach ($custom_group_tree as $key => &$group) {
+      if ('info' === $key) {
+        continue;
+      }
+
+      foreach ($group['fields'] as &$field) {
+        if (!isset($field['option_group_id'])) {
+          continue;
+        }
+
+        foreach ($field['customValue'] as &$custom_value) {
+          $option_ids = empty($field['serialize']) ? (array) $custom_value['data']
+            : CRM_Utils_Array::explodePadded($custom_value['data']);
+
+          if ([] !== $option_ids) {
+            $option_values = OptionValue::get(FALSE)
+              ->addSelect('value')
+              ->addWhere('id', 'IN', $option_ids)
+              ->execute()
+              ->column('value');
+
+            if (empty($field['serialize'])) {
+              $custom_value['data'] = reset($option_values);
+            }
+            else {
+              $custom_value['data'] = CRM_Utils_Array::implodePadded($option_values);
+            }
+          }
+        }
+      }
+    }
+
+    return $custom_group_tree;
   }
 
 }
