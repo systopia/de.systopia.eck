@@ -26,7 +26,6 @@ $items = [
     'params' => [
       'version' => 4,
       'values' => [
-        'domain_id' => 'current_domain',
         'label' => E::ts('Custom Entities'),
         'name' => 'eck_entities',
         'url' => NULL,
@@ -39,7 +38,7 @@ $items = [
         'is_active' => TRUE,
         'has_separator' => 0,
       ],
-      'match' => ['name', 'parent_id'],
+      'match' => ['name', 'parent_id', 'domain_id'],
     ],
   ],
 ];
@@ -53,7 +52,6 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
     'params' =>  [
       'version' => 4,
       'values' => [
-        'domain_id' => 'current_domain',
         'label' => $entity_type['label'],
         'name' => 'eck_' . $entity_type['name'],
         'url' => 'civicrm/eck/entity/list/' . $entity_type['name'],
@@ -64,7 +62,7 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
         'is_active' => TRUE,
         'parent_id.name' => 'eck_entities',
       ],
-      'match' => ['name', 'parent_id'],
+      'match' => ['name', 'parent_id', 'domain_id'],
     ],
   ];
 }
