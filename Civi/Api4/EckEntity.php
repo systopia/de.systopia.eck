@@ -21,6 +21,7 @@ use Civi\Api4\Generic\CheckAccessAction;
 use Civi\Api4\Generic\DAOGetAction;
 use Civi\Api4\Generic\DAOGetFieldsAction;
 use Civi\Api4\Action\GetActions;
+use Civi\Eck\Permissions;
 
 /**
  * Virtual ECK Entity.
@@ -141,8 +142,52 @@ class EckEntity {
   /**
    * @return array
    */
-  public static function permissions():array {
-    return []; // FIXME: Add per-entity-type permissions
+  public static function permissions(string $entityName):array {
+    $type = \CRM_Eck_BAO_Entity::getEntityType($entityName);
+    return [
+      'meta' => [
+        Permissions::ACCESS_CIVICRM,
+      ],
+      'default' => [
+        Permissions::ACCESS_CIVICRM,
+        [
+          Permissions::ADMINISTER_CIVICRM,
+          Permissions::ADMINISTER_ECK_ENTITIES,
+        ]
+      ],
+      'get' => [
+        Permissions::ACCESS_CIVICRM,
+        [
+          Permissions::ADMINISTER_ECK_ENTITIES,
+          Permissions::VIEW_ANY_ECK_ENTITY,
+          Permissions::getTypePermissionName(Permissions::ACTION_VIEW, $type),
+        ]
+      ],
+      'create' => [
+        Permissions::ACCESS_CIVICRM,
+        [
+          Permissions::ADMINISTER_ECK_ENTITIES,
+          Permissions::EDIT_ANY_ECK_ENTITY,
+          Permissions::getTypePermissionName(Permissions::ACTION_EDIT, $type),
+        ]
+      ],
+      'update' => [
+        Permissions::ACCESS_CIVICRM,
+        [
+          Permissions::ADMINISTER_ECK_ENTITIES,
+          Permissions::EDIT_ANY_ECK_ENTITY,
+          Permissions::getTypePermissionName(Permissions::ACTION_EDIT, $type),
+        ]
+      ],
+      'delete' => [
+        Permissions::ACCESS_CIVICRM,
+        [
+          Permissions::ADMINISTER_ECK_ENTITIES,
+          Permissions::DELETE_ANY_ECK_ENTITY,
+          Permissions::getTypePermissionName(Permissions::ACTION_DELETE, $type),
+        ]
+      ],
+    ];
   }
 
 }

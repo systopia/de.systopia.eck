@@ -16,6 +16,7 @@
 declare(strict_types=1);
 
 use CRM_Eck_ExtensionUtil as E;
+use Civi\Eck\Permissions;
 
 $items = [
   [
@@ -30,9 +31,7 @@ $items = [
         'name' => 'eck_entities',
         'url' => NULL,
         'icon' => 'crm-i fa-cubes',
-        'permission' => [
-          'access CiviCRM',
-        ],
+        'permission' => [Permissions::ADMINISTER_ECK_ENTITIES],
         'permission_operator' => 'OR',
         'parent_id' => NULL,
         'is_active' => TRUE,
@@ -55,7 +54,10 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
         'label' => $entity_type['label'],
         'name' => 'eck_' . $entity_type['name'],
         'url' => 'civicrm/eck/entity/list/' . $entity_type['name'],
-        'permission' => ['access CiviCRM'],
+        'permission' => [
+          Permissions::ADMINISTER_ECK_ENTITIES,
+          Permissions::getTypePermissionName(Permissions::ACTION_VIEW, $entity_type['name']),
+        ],
         'permission_operator' => 'OR',
         'has_separator' => 0,
         'icon' => $entity_type['icon'] ? 'crm-i ' . $entity_type['icon'] : NULL,

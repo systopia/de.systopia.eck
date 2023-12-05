@@ -16,6 +16,7 @@
 namespace Civi\Eck\API;
 
 use Civi\Core\Service\AutoSubscriber;
+use Civi\Eck\Permissions;
 use CRM_Eck_ExtensionUtil as E;
 use Civi\API\Events;
 use Civi\Core\Event\GenericHookEvent;
@@ -112,7 +113,7 @@ class Entity extends AutoSubscriber {
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
       $subTypes = \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType['name'], FALSE);
 
-      // Submission form to create/edit each sub-type
+      // Submission form to create/edit entities of each sub-type.
       foreach ($subTypes as $subType) {
         $name = 'afform' . $entityType['entity_name'] . '_' . $subType['value'];
         $item = [
@@ -124,7 +125,12 @@ class Entity extends AutoSubscriber {
           'is_dashlet' => FALSE,
           'is_public' => FALSE,
           'is_token' => FALSE,
-          'permission' => 'access CiviCRM',
+          'permission' => [
+            Permissions::ADMINISTER_ECK_ENTITIES,
+            Permissions::EDIT_ANY_ECK_ENTITY,
+            Permissions::getTypePermissionName(Permissions::ACTION_EDIT, $entityType['name']),
+          ],
+          'permission_operator' => 'OR',
           'server_route' => "civicrm/eck/entity/edit/{$entityType['name']}/{$subType['value']}",
           'redirect' => "civicrm/eck/entity/list/{$entityType['name']}#?subtype={$subType['value']}",
         ];
@@ -148,7 +154,7 @@ class Entity extends AutoSubscriber {
         $afforms[$name] = $item;
       }
 
-      // Search listing for for each type
+      // Search listing for for each type.
       $name = 'afsearch' . $entityType['entity_name'] . '_listing';
       $item = [
         'name' => $name,
@@ -159,7 +165,12 @@ class Entity extends AutoSubscriber {
         'is_dashlet' => FALSE,
         'is_public' => FALSE,
         'is_token' => FALSE,
-        'permission' => 'access CiviCRM',
+        'permission' => [
+          Permissions::ADMINISTER_ECK_ENTITIES,
+          Permissions::VIEW_ANY_ECK_ENTITY,
+          Permissions::getTypePermissionName(Permissions::ACTION_VIEW, $entityType['name']),
+        ],
+        'permission_operator' => 'OR',
         'server_route' => "civicrm/eck/entity/list/{$entityType['name']}",
         'requires' => ['crmSearchDisplayTable'],
       ];
