@@ -17,11 +17,13 @@
     <page_callback>CRM_Eck_Page_Entity</page_callback>
     <title>Entity</title>
     <access_callback>CRM_Eck_BAO_Entity::checkMenuAccess</access_callback>
+    <access_arguments>checkMenuAccess</access_arguments>
   </item>
   <item>
     <path>civicrm/eck/entity/view</path>
     <page_callback>CRM_Eck_Page_Entity_View</page_callback>
     <title>Entity</title>
     <access_callback>CRM_Eck_BAO_Entity::checkMenuAccess</access_callback>
+    <access_arguments>checkMenuAccess</access_arguments>
   </item>
 </menu>

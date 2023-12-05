@@ -85,14 +85,17 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
    * @return bool
    */
   public static function checkMenuAccess($args, ?string $op = 'and'): bool {
-    $type = CRM_Utils_Request::retrieve('type', 'String', NULL, TRUE);
-    $eckPermissions = [
-      Permissions::ADMINISTER_ECK_ENTITIES,
-      Permissions::VIEW_ANY_ECK_ENTITY,
-      Permissions::getTypePermissionName(Permissions::ACTION_VIEW, $type),
-    ];
-    return CRM_Core_Permission::checkMenu($args, $op)
-      && CRM_Core_Permission::checkMenu($eckPermissions, 'or');
+    if (in_array('checkMenuAccess', $args)) {
+      $type = CRM_Utils_Request::retrieve('type', 'String', NULL, TRUE);
+      $eckPermissions = [
+        Permissions::ADMINISTER_ECK_ENTITIES,
+        Permissions::VIEW_ANY_ECK_ENTITY,
+        Permissions::getTypePermissionName(Permissions::ACTION_VIEW, $type),
+      ];
+      return CRM_Core_Permission::checkMenu($args, $op)
+        && CRM_Core_Permission::checkMenu($eckPermissions, 'or');
+    }
+    return TRUE;
   }
 
 }
