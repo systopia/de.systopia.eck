@@ -85,6 +85,9 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
    * @return bool
    */
   public static function checkMenuAccess($args, ?string $op = 'and'): bool {
+    // In order to not check nested paths (which are Afforms), we pass an access
+    // argument of "checkMenuAccess" in the menu XML and check it here, as this
+    // callback feels responsible only for the exact routes, not nested ones.
     if (in_array('checkMenuAccess', $args)) {
       $type = CRM_Utils_Request::retrieve('type', 'String', NULL, TRUE);
       $eckPermissions = [
