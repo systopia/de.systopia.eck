@@ -1,0 +1,45 @@
+name: PHPStan
+
+on:
+  push: ~
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['7.4', '8.0', '8.1', '8.2'']
+        prefer: ['prefer-stable', 'prefer-lowest']
+    name: PHPStan with PHP ${{ matrix.php-versions }} ${{ matrix.prefer }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        coverage: none
+      env:
+        fail-fast: true
+
+    - name: Get composer cache directory
+      id: composer-cache
+      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ matrix.prefer }}-${{ hashFiles('**/composer.json') }}
+        restore-keys: ${{ runner.os }}-composer-${{ matrix.prefer }}-
+
+    - name: Install dependencies
+      run: |
+        composer update --no-progress --prefer-dist --${{ matrix.prefer }} &&
+        composer composer-phpunit -- update --no-progress --prefer-dist &&
+        composer composer-phpstan -- update --no-progress --prefer-dist --optimize-autoloader &&
+        composer --working-dir=ci update --no-progress --prefer-dist --${{ matrix.prefer }} --optimize-autoloader --ignore-platform-req=ext-gd
+
+    - name: Run PHPStan
+      run: composer phpstan -- analyse -c phpstan.ci.neon

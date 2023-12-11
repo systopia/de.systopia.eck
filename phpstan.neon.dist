@@ -1,0 +1,41 @@
+parameters:
+	paths:
+		- api
+		- Civi
+		- CRM
+		- tests
+	excludePaths:
+		analyse:
+			- CRM/*/DAO/*
+			- CRM/*/Upgrader/Base.php
+			- tests/phpunit/bootstrap.php
+	scanFiles:
+		- eck.civix.php
+		- tools/phpunit/vendor/bin/.phpunit/phpunit/src/Framework/TestCase.php
+	scanDirectories:
+		- tools/phpunit/vendor/bin/.phpunit/phpunit/src/Framework
+	bootstrapFiles:
+		- tools/phpunit/vendor/bin/.phpunit/phpunit/vendor/autoload.php
+		- vendor/autoload.php
+		- phpstanBootstrap.php
+	level: 9
+	checkTooWideReturnTypesInProtectedAndPublicMethods: true
+	checkUninitializedProperties: true
+	checkMissingCallableSignature: true
+	treatPhpDocTypesAsCertain: false
+	exceptions:
+		check:
+			missingCheckedExceptionInThrows: true
+			tooWideThrowType: true
+		checkedExceptionClasses:
+			- \Webmozart\Assert\InvalidArgumentException
+		implicitThrows: false
+	ignoreErrors:
+		# Note paths are prefixed with ""*/" to wirk with inspections in PHPStorm because of:
+		# https://youtrack.jetbrains.com/issue/WI-63891/PHPStan-ignoreErrors-configuration-isnt-working-with-inspections
+
+		# Example
+		#- # Accessing results of API requests
+			#message: "#^Offset '[^']+' does not exist on array[^\\|]+\\|null.$#"
+			#path: */tests/phpunit/**/*Test.php
+	tmpDir: .phpstan
