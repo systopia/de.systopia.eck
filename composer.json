@@ -2,12 +2,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
-        "sort-packages": true,
-            "allow-plugins": {
-                "cweagans/composer-patches": false,
-                "civicrm/composer-downloads-plugin": false,
-                "civicrm/composer-compile-plugin": false
-            }
+	"sort-packages": true
     },
     "scripts": {
         "composer-phpcs": [
