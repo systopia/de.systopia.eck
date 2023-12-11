@@ -14,8 +14,11 @@
 +--------------------------------------------------------*/
 
 use CRM_Eck_ExtensionUtil as E;
+use Civi\Core\HookInterface;
+use Civi\Core\Event\PostEvent;
+use Civi\Api4\RecentItem;
 
-class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity {
+class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
 
   public static function getEntityType($entityName) {
     return strpos($entityName, 'Eck_') === 0 ? substr($entityName, strlen('Eck_')) : NULL;
@@ -39,6 +42,26 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity {
       'where' => [['id', '=', $entityId]],
     ], 0);
     return $record['subtype:icon'] ?? $default;
+  }
+
+  /**
+   * Implements hook_civicrm_post().
+   *
+   * @see CRM_Utils_Hook::post()
+   * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_post
+   */
+  public static function on_hook_civicrm_post(PostEvent $event): void {
+    // Add the recently created Entity to the list of recently viewed items.
+    if (
+      strpos($event->entity, 'Eck_') === 0
+      && in_array($event->action, ['create', 'edit'], TRUE)
+      && (CRM_Eck_BAO_EckEntityType::getEntityType(substr($event->entity, 4))['in_recent'] ?? FALSE)
+    ) {
+      RecentItem::create()
+        ->addValue('entity_type', $event->entity)
+        ->addValue('entity_id', $event->id)
+        ->execute();
+    }
   }
 
 }
