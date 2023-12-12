@@ -17,6 +17,7 @@ use CRM_Eck_ExtensionUtil as E;
 use Civi\Core\HookInterface;
 use Civi\Core\Event\PostEvent;
 use Civi\Api4\RecentItem;
+use Civi\Eck\Permissions;
 
 class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
 
@@ -62,6 +63,42 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
         ->addValue('entity_id', $event->id)
         ->execute();
     }
+  }
+
+  /**
+   * Implements hook_civicrm_permission().
+   *
+   * @see CRM_Utils_Hook::permission
+   * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_permission/
+   */
+  public static function on_hook_civicrm_permission(GenericHookEvent $event): void {
+    $event->permissions += Permissions::getPermissions();
+  }
+
+  /**
+   * Access callback for /civicrm/eck/entity and /civicrm/eck/entity/view
+   * routes.
+   *
+   * @param array|int $args
+   * @param string|null $op
+   *
+   * @return bool
+   */
+  public static function checkMenuAccess($args, ?string $op = 'and'): bool {
+    // In order to not check nested paths (which are Afforms), we pass an access
+    // argument of "checkMenuAccess" in the menu XML and check it here, as this
+    // callback feels responsible only for the exact routes, not nested ones.
+    if (in_array('checkMenuAccess', $args)) {
+      $type = CRM_Utils_Request::retrieve('type', 'String', NULL, TRUE);
+      $eckPermissions = [
+        Permissions::ADMINISTER_ECK_ENTITIES,
+        Permissions::VIEW_ANY_ECK_ENTITY,
+        Permissions::getTypePermissionName(Permissions::ACTION_VIEW, $type),
+      ];
+      return CRM_Core_Permission::checkMenu($args, $op)
+        && CRM_Core_Permission::checkMenu($eckPermissions, 'or');
+    }
+    return TRUE;
   }
 
 }

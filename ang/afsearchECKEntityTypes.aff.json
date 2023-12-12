@@ -3,7 +3,7 @@
     "title": "ECK Entity Types",
     "icon": "fa-cubes",
     "server_route": "civicrm/admin/eck/entity-types",
-    "permission": "administer CiviCRM",
+    "permission": "administer eck entity types",
     "navigation": {
         "parent": "Customize Data and Screens",
         "label": "ECK Entity Types",
