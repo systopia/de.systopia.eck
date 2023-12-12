@@ -12,9 +12,6 @@ return [
       'values' => [
         'name' => 'ECK_Entity_Types',
         'label' => E::ts('ECK Entity Types'),
-        'form_values' => NULL,
-        'mapping_id' => NULL,
-        'search_custom_id' => NULL,
         'api_entity' => 'EckEntityType',
         'api_params' => [
           'version' => 4,
@@ -29,8 +26,6 @@ return [
           'join' => [],
           'having' => [],
         ],
-        'expires_date' => NULL,
-        'description' => NULL,
       ],
       'match' => [
         'name',
@@ -135,13 +130,18 @@ return [
             'table',
             'table-striped',
           ],
-          'addButton' => [
-            'path' => 'civicrm/admin/eck/entity-type?reset=1&action=add',
-            'text' => E::ts('Add ECK Entity Type'),
-            'icon' => 'fa-plus',
+          'toolbar' => [
+            [
+              'text' => E::ts('Add ECK Entity Type'),
+              'icon' => 'fa-plus',
+              'style' => 'primary',
+              'entity' => 'EckEntityType',
+              'action' => 'add',
+              'target' => 'crm-popup',
+              'condition' => [],
+            ],
           ],
         ],
-        'acl_bypass' => FALSE,
       ],
       'match' => [
         'name',
