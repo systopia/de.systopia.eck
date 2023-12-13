@@ -66,6 +66,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
             }
           );
           break;
+
         case CRM_Core_Action::DELETE:
           $this->setTitle(E::ts('Delete Entity Type %1', [1 => $this->_entityType['label']]));
           break;
@@ -127,9 +128,11 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
         $this->assign('customGroups', $this->_customGroups);
         $this->assign('subTypes', $this->_subTypes);
         break;
+
       case CRM_Core_Action::DELETE:
         $submit_button_caption = E::ts('Delete');
         break;
+
       default:
         throw new Exception(E::ts('Invalid operation.'));
     }
@@ -244,7 +247,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
     // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
     // items don't have labels.  We'll identify renderable by filtering on
     // the 'label'.
-    $elementNames = array();
+    $elementNames = [];
     foreach ($this->_elements as $element) {
       /** @var HTML_QuickForm_Element $element */
       $label = $element->getLabel();

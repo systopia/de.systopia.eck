@@ -27,5 +27,7 @@ use CRM_Eck_ExtensionUtil as E;
  * @package Civi\Api4
  */
 class EckEntityType extends DAOEntity {
+
   use ManagedEntity;
+
 }

@@ -41,10 +41,10 @@ class CRM_Eck_Page_Entity_TabHeader {
         'html-header'
       )
       ->addSetting([
-                     'tabSettings' => [
-                       'active' => self::getCurrentTab($tabs),
-                     ],
-                   ]);
+        'tabSettings' => [
+          'active' => self::getCurrentTab($tabs),
+        ],
+      ]);
     return $tabs;
   }
 
@@ -77,21 +77,21 @@ class CRM_Eck_Page_Entity_TabHeader {
 
     $tabs = [];
     $tabs['view'] = [
-        'title' => E::ts('View'),
-        'link' => CRM_Utils_System::url(
+      'title' => E::ts('View'),
+      'link' => CRM_Utils_System::url(
           'civicrm/eck/entity/view',
           "reset=1&type={$entityType['name']}&id={$entityID}"
-        ),
-      ] + $default;
+      ),
+    ] + $default;
 
     $afform_name = 'afform' . 'Eck_' . $entityType['name'] . '_' . $subtype;
     $module = _afform_angular_module_name($afform_name);
     $tabs['edit'] = [
-        'title' => E::ts('Edit'),
-        'template' => 'CRM/Eck/Page/Entity/Edit.tpl',
-        'module' => $module,
-        'directive' => _afform_angular_module_name($afform_name, 'dash'),
-      ] + $default;
+      'title' => E::ts('Edit'),
+      'template' => 'CRM/Eck/Page/Entity/Edit.tpl',
+      'module' => $module,
+      'directive' => _afform_angular_module_name($afform_name, 'dash'),
+    ] + $default;
     Civi::service('angularjs.loader')->addModules($module);
 
     // see if any other modules want to add any tabs

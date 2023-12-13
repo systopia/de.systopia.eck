@@ -158,8 +158,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
     $custom_groups = array_filter(
       CRM_Eck_BAO_EckEntityType::getCustomGroups($sub_type['grouping']),
       function ($custom_group) use ($sub_type_value) {
-        return
-          isset($custom_group['extends_entity_column_value'])
+        return isset($custom_group['extends_entity_column_value'])
           && is_array($custom_group['extends_entity_column_value'])
           && in_array(
             $sub_type_value,

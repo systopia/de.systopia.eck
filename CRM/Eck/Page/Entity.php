@@ -65,7 +65,6 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
       'where' => [['id', '=', $entity_id]],
     ])->single();
 
-
     // Retrieve ECK entity subtype.
     if (!$subtype_value = CRM_Utils_Request::retrieve('subtype', 'String', $this)) {
       $subtypes = \CRM_Eck_BAO_EckEntityType::getSubTypes($entity_type_name, FALSE);

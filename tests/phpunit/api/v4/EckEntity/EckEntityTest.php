@@ -1,4 +1,5 @@
 <?php
+
 namespace api\v4\EckEntity;
 
 use Civi\Api4\CustomField;

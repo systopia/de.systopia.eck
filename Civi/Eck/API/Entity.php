@@ -50,7 +50,7 @@ class Entity extends AutoSubscriber {
    *
    * Callback for `civi.api4.entityTypes` event.
    *
-   * @param GenericHookEvent $event
+   * @param Civi\Core\Event\GenericHookEvent $event
    */
   public function onApi4EntityTypes(GenericHookEvent $event) {
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
@@ -83,7 +83,7 @@ class Entity extends AutoSubscriber {
   /**
    * Make ECK entities available to Form Builder
    *
-   * @param GenericHookEvent $e
+   * @param Civi\Core\Event\GenericHookEvent $e
    */
   public static function afformEntityTypes(GenericHookEvent $e) {
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
