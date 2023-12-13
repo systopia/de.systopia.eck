@@ -9,10 +9,13 @@ parameters:
 			- CRM/*/Upgrader/Base.php
 			- tests/phpunit/bootstrap.php
 	scanFiles:
+		- eck.php
 		- eck.civix.php
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/src/Framework/TestCase.php
 	scanDirectories:
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/src/Framework
+		- vendor/civicrm/civicrm-core/
+		- vendor/civicrm/civicrm-packages/
 	bootstrapFiles:
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/vendor/autoload.php
 		- vendor/autoload.php

@@ -10,7 +10,8 @@
             }
     },
     "require-dev": {
-        "civicrm/civicrm-core": "^5.65"
+        "civicrm/civicrm-core": "^5.65",
+        "civicrm/civicrm-packages": "^5.65"
     },
     "scripts": {
         "composer-phpcs": [
