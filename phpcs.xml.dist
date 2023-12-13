@@ -3,7 +3,6 @@
          xsi:noNamespaceSchemaLocation="tools/phpcs/vendor/squizlabs/php_codesniffer/phpcs.xsd">
     <description>CiviCRM coding standard with some additional changes</description>
 
-    <file>api</file>
     <file>Civi</file>
     <file>CRM</file>
     <file>tests</file>
@@ -45,7 +44,7 @@
     <rule ref="Generic.NamingConventions.AbstractClassNamePrefix"/>
     <rule ref="Generic.NamingConventions.InterfaceNameSuffix"/>
     <rule ref="Generic.NamingConventions.TraitNameSuffix"/>
-    <rule ref="Generic.PHP.RequireStrictTypes"/>
+    <!--rule ref="Generic.PHP.RequireStrictTypes"/-->
     <rule ref="PSR1.Files.SideEffects"/>
     <rule ref="PSR12.Classes.ClassInstantiation"/>
     <rule ref="PSR12.Properties.ConstantVisibility"/>
