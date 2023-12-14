@@ -28,10 +28,21 @@ class Entity extends AutoSubscriber {
    */
   public static function getSubscribedEvents():array {
     return [
+      '&hook_civicrm_permission' => 'on_hook_civicrm_permission',
       'civi.api4.entityTypes' => ['onApi4EntityTypes', Events::W_EARLY],
       'civi.afform_admin.metadata' => 'afformEntityTypes',
       'civi.afform.get' => 'getEckAfforms',
     ];
+  }
+
+  /**
+   * Implements hook_civicrm_permission().
+   *
+   * @see CRM_Utils_Hook::permission
+   * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_permission/
+   */
+  public static function on_hook_civicrm_permission(array &$permissions): void {
+    $permissions += Permissions::getPermissions();
   }
 
   /**

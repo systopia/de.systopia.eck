@@ -66,16 +66,6 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
   }
 
   /**
-   * Implements hook_civicrm_permission().
-   *
-   * @see CRM_Utils_Hook::permission
-   * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_permission/
-   */
-  public static function on_hook_civicrm_permission(GenericHookEvent $event): void {
-    $event->permissions += Permissions::getPermissions();
-  }
-
-  /**
    * Access callback for /civicrm/eck/entity and /civicrm/eck/entity/view
    * routes.
    *

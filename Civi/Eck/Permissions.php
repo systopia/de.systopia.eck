@@ -42,38 +42,38 @@ class Permissions {
   public static function getPermissions(): array {
     $permissions = [];
 
-    $permission[self::ADMINISTER_ECK_ENTITY_TYPES] = [
+    $permissions[self::ADMINISTER_ECK_ENTITY_TYPES] = [
       E::ts('Administer Entity Construction Kit (ECK)'),
       E::ts('Allows creating, editing and deleting custom entity types.')
     ];
 
-    $permission[self::ADMINISTER_ECK_ENTITIES] = [
+    $permissions[self::ADMINISTER_ECK_ENTITIES] = [
       E::ts('Administer custom entities'),
       E::ts('Allows creating, viewing, editing and deleting custom entities of any type.'),
     ];
-    $permission[self::VIEW_ANY_ECK_ENTITY] = [
+    $permissions[self::VIEW_ANY_ECK_ENTITY] = [
       E::ts('View any custom entity'),
       E::ts('Allows viewing custom entities of any type.'),
     ];
-    $permission[self::EDIT_ANY_ECK_ENTITY] = [
+    $permissions[self::EDIT_ANY_ECK_ENTITY] = [
       E::ts('Create or edit any custom entity'),
       E::ts('Allows creating and editing custom entities of any type.'),
     ];
-    $permission[self::DELETE_ANY_ECK_ENTITY] = [
+    $permissions[self::DELETE_ANY_ECK_ENTITY] = [
       E::ts('Delete any custom entity'),
       E::ts('Allows deleting custom entities of any type.'),
     ];
 
-    foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
-      $permission[self::getTypePermissionName(self::ACTION_VIEW, $entityType['name'])] = [
+    foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
+      $permissions[self::getTypePermissionName(self::ACTION_VIEW, $entityType['name'])] = [
         E::ts('View custom entities of type %1', [1 => $entityType['label']]),
         E::ts('Allows viewing custom entities of type %1.', [1 => $entityType['label']]),
       ];
-      $permission[self::getTypePermissionName(self::ACTION_EDIT, $entityType['name'])] = [
+      $permissions[self::getTypePermissionName(self::ACTION_EDIT, $entityType['name'])] = [
         E::ts('Create or edit custom entities of type %1', [1 => $entityType['label']]),
         E::ts('Allows creating and editing custom entities of type %1.', [1 => $entityType['label']]),
       ];
-      $permission[self::getTypePermissionName(self::ACTION_DELETE, $entityType['name'])] = [
+      $permissions[self::getTypePermissionName(self::ACTION_DELETE, $entityType['name'])] = [
         E::ts('Delete custom entities of type %1', [1 => $entityType['label']]),
         E::ts('Allows deleting custom entities of type %1.', [1 => $entityType['label']]),
       ];
