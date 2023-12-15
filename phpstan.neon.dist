@@ -20,6 +20,8 @@ parameters:
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/vendor/autoload.php
 		- vendor/autoload.php
 		- phpstanBootstrap.php
+	universalObjectCratesClasses:
+		- Civi\Core\Event\GenericHookEvent
 	level: 9
 	checkTooWideReturnTypesInProtectedAndPublicMethods: true
 	checkUninitializedProperties: true
