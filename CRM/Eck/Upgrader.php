@@ -65,9 +65,13 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
    * Implements hook_civicrm_upgrade_N().
    */
   public function upgrade_0011() {
-    $entityTypes = CRM_Core_DAO::executeQuery(
-      'SELECT *, CONCAT("Eck_", name) AS entity_name, CONCAT("civicrm_eck_", LOWER(name)) AS table_name FROM `civicrm_eck_entity_type`;'
-    )->fetchAll();
+    $entityTypes = CRM_Core_DAO::executeQuery('
+        SELECT
+            *,
+            CONCAT("Eck_", name) AS entity_name,
+            CONCAT("civicrm_eck_", LOWER(name)) AS table_name
+        FROM `civicrm_eck_entity_type`;
+    ')->fetchAll();
 
     foreach ($entityTypes as $tableName => $entityType) {
       $tableName = $entityType['table_name'];

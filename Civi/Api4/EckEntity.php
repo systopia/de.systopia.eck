@@ -169,7 +169,7 @@ class EckEntity {
         [
           Permissions::ADMINISTER_CIVICRM,
           Permissions::ADMINISTER_ECK_ENTITIES,
-        ]
+        ],
       ],
       'get' => [
         Permissions::ACCESS_CIVICRM,
@@ -177,7 +177,7 @@ class EckEntity {
           Permissions::ADMINISTER_ECK_ENTITIES,
           Permissions::VIEW_ANY_ECK_ENTITY,
           Permissions::getTypePermissionName(Permissions::ACTION_VIEW, $type),
-        ]
+        ],
       ],
       'create' => [
         Permissions::ACCESS_CIVICRM,
@@ -185,7 +185,7 @@ class EckEntity {
           Permissions::ADMINISTER_ECK_ENTITIES,
           Permissions::EDIT_ANY_ECK_ENTITY,
           Permissions::getTypePermissionName(Permissions::ACTION_EDIT, $type),
-        ]
+        ],
       ],
       'update' => [
         Permissions::ACCESS_CIVICRM,
@@ -193,7 +193,7 @@ class EckEntity {
           Permissions::ADMINISTER_ECK_ENTITIES,
           Permissions::EDIT_ANY_ECK_ENTITY,
           Permissions::getTypePermissionName(Permissions::ACTION_EDIT, $type),
-        ]
+        ],
       ],
       'delete' => [
         Permissions::ACCESS_CIVICRM,
@@ -201,7 +201,7 @@ class EckEntity {
           Permissions::ADMINISTER_ECK_ENTITIES,
           Permissions::DELETE_ANY_ECK_ENTITY,
           Permissions::getTypePermissionName(Permissions::ACTION_DELETE, $type),
-        ]
+        ],
       ],
     ];
   }

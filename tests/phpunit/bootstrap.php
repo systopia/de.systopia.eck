@@ -5,6 +5,9 @@ ini_set('memory_limit', '2G');
 // phpcs:disable
 eval(cv('php:boot --level=classloader', 'phpcode'));
 // phpcs:enable
+
+// phpcs:disable PSR1.Files.SideEffects
+
 // Allow autoloading of PHPUnit helper classes in this extension.
 $loader = new \Composer\Autoload\ClassLoader();
 $loader->add('CRM_', __DIR__);

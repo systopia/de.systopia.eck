@@ -19,6 +19,8 @@ use Civi\Api4\EckEntityType;
 class CRM_Eck_Page_Entity extends CRM_Core_Page {
 
   /**
+   * @var int
+   *
    * The id of the entity we are processing.
    *
    * @var int
@@ -26,6 +28,8 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
   public $_id;
 
   /**
+   * @var arraystringmixed
+   *
    * The entity type of the entity we are processing.
    *
    * @var int

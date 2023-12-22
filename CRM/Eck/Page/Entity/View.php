@@ -20,6 +20,8 @@ use CRM_Eck_ExtensionUtil as E;
 class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
 
   /**
+   * @var int
+   *
    * The id of the entity we are processing.
    *
    * @var int
@@ -27,6 +29,8 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
   public $_id;
 
   /**
+   * @var array
+   *
    * The entity type of the entity we are processing.
    *
    * @var int

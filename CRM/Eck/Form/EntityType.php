@@ -48,7 +48,10 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
         throw new Exception(E::ts('No ECK entity type given.'));
       }
       try {
-        $this->_entityType = EckEntityType::get(FALSE)->addWhere('name', '=', $this->_entityTypeName)->execute()->single();
+        $this->_entityType = EckEntityType::get(FALSE)
+          ->addWhere('name', '=', $this->_entityTypeName)
+          ->execute()
+          ->single();
       }
       catch (Exception $exception) {
         throw new Exception(E::ts('Invalid ECK entity type.'));
