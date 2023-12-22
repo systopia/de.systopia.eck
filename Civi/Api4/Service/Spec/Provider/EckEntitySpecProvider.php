@@ -15,9 +15,11 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
    * @param \Civi\Api4\Service\Spec\RequestSpec $spec
    */
   public function modifySpec(RequestSpec $spec) {
-    $spec->getFieldByName('subtype')
-      ->setSuffixes(['name', 'label', 'description', 'icon'])
-      ->setOptionsCallback([$this, 'getSubTypes']);
+    if (NULL !== ($subTypeField = $spec->getFieldByName('subtype'))) {
+      $subTypeField
+        ->setSuffixes(['name', 'label', 'description', 'icon'])
+        ->setOptionsCallback([$this, 'getSubTypes']);
+    }
   }
 
   /**
@@ -33,9 +35,9 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
   /**
    * Callback function to get subtypes for this fields's entity type.
    *
-   * @param array $field
-   * @param array $values
-   * @param bool|array $returnFormat
+   * @param \Civi\Api4\Service\Spec\FieldSpec $spec
+   * @param array<mixed> $values
+   * @param bool|array<string> $returnFormat
    * @param bool $checkPermissions
    * @return array|false
    */

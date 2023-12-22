@@ -39,6 +39,10 @@ class Permissions {
 
   public const DELETE_ANY_ECK_ENTITY = 'delete any eck entity';
 
+  /**
+   * @return array<string,array<string>>
+   * @throws \Exception
+   */
   public static function getPermissions(): array {
     $permissions = [];
 
@@ -96,11 +100,11 @@ class Permissions {
    *   When either the operation or the entity type name is invalid.
    */
   public static function getTypePermissionName(string $op, string $type): string {
-    if (!in_array($op, [self::ACTION_VIEW, self::ACTION_EDIT, self::ACTION_DELETE])) {
-      throw new \Exception("Invalid operation for ECK entity type-specific permission: {$op}.");
+    if (!in_array($op, [self::ACTION_VIEW, self::ACTION_EDIT, self::ACTION_DELETE], TRUE)) {
+      throw new \CRM_Core_Exception("Invalid operation for ECK entity type-specific permission: {$op}.");
     }
-    if (!\CRM_Eck_BAO_EckEntityType::getEntityType($type)) {
-      throw new \Exception("Invalid ECK entity type name for type-specific permission: {$type}.");
+    if (NULL === \CRM_Eck_BAO_EckEntityType::getEntityType($type)) {
+      throw new \CRM_Core_Exception("Invalid ECK entity type name for type-specific permission: {$type}.");
     }
     return "{$op} eck entity {$type}";
   }

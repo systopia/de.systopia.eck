@@ -22,8 +22,6 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
    * @var int
    *
    * The id of the entity we are processing.
-   *
-   * @var int
    */
   public $_id;
 
@@ -31,10 +29,9 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
    * @var arraystringmixed
    *
    * The entity type of the entity we are processing.
-   *
-   * @var int
    */
   public $_entityType;
+
   /**
    * The entity subtype of the entity we are processing.
    *
@@ -45,9 +42,9 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
   /**
    * {@inheritDoc}
    */
-  public function run() {
+  public function run(): void {
     // Retrieve ECK entity type.
-    if (!$entity_type_name = CRM_Utils_Request::retrieve('type', 'String', $this)) {
+    if (!is_string($entity_type_name = CRM_Utils_Request::retrieve('type', 'String', $this))) {
       throw new CRM_Core_Exception('No ECK entity type given.');
     }
     try {
@@ -57,11 +54,11 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
       $this->_entityType = $entity_type;
     }
     catch (Exception $exception) {
-      throw new Exception(E::ts('Invalid ECK entity type.'));
+      throw new CRM_Core_Exception(E::ts('Invalid ECK entity type.'), 0, [], $exception);
     }
 
     // Retrieve ECK entity using the API.
-    if (!$entity_id = CRM_Utils_Request::retrieve('id', 'Integer', $this)) {
+    if (!is_int($entity_id = CRM_Utils_Request::retrieve('id', 'Integer', $this))) {
       throw new CRM_Core_Exception('No entity ID given.');
     }
     $this->_id = $entity_id;
@@ -70,7 +67,7 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
     ])->single();
 
     // Retrieve ECK entity subtype.
-    if (!$subtype_value = CRM_Utils_Request::retrieve('subtype', 'String', $this)) {
+    if (!is_string($subtype_value = CRM_Utils_Request::retrieve('subtype', 'String', $this))) {
       $subtypes = \CRM_Eck_BAO_EckEntityType::getSubTypes($entity_type_name, FALSE);
       $subtype = $subtypes[$entity['subtype']];
       $subtype_value = $subtype['value'];

@@ -6,6 +6,7 @@ use Civi\Api4\CustomField;
 use Civi\Api4\CustomGroup;
 use Civi\Api4\EckEntityType;
 use Civi\Api4\OptionValue;
+use Civi\Test\CiviEnvBuilder;
 use Civi\Test\HeadlessInterface;
 
 /**
@@ -13,7 +14,7 @@ use Civi\Test\HeadlessInterface;
  */
 class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInterface {
 
-  public function setUpHeadless() {
+  public function setUpHeadless(): CiviEnvBuilder {
     return \Civi\Test::headless()
       ->install(['de.systopia.eck', 'org.civicrm.search_kit'])
       ->apply();
@@ -25,51 +26,54 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       ->addValue('icon', 'fa-random')
       ->execute()->first();
 
-    // Name should have been auto-derived from label
-    $this->assertEquals('Test_One_Type', $entityType['name']);
+    /**
+     * Name should have been auto-derived from label
+     * @var array{name: string} $entityType
+     */
+    self::assertEquals('Test_One_Type', $entityType['name']);
 
     // APIv4 entity should now exist
     $newEntity = \Civi\Api4\Entity::get(FALSE)
       ->addWhere('name', '=', 'Eck_Test_One_Type')
       ->execute()->single();
-    $this->assertEquals('Test One Type', $newEntity['title']);
-    $this->assertEquals('secondary', $newEntity['searchable']);
-    $this->assertEquals('title', $newEntity['label_field']);
-    $this->assertEquals('civicrm_eck_test_one_type', $newEntity['table_name']);
-    $this->assertEquals('fa-random', $newEntity['icon']);
-    $this->assertContains('EckEntity', $newEntity['type']);
+    self::assertEquals('Test One Type', $newEntity['title']);
+    self::assertEquals('secondary', $newEntity['searchable']);
+    self::assertEquals('title', $newEntity['label_field']);
+    self::assertEquals('civicrm_eck_test_one_type', $newEntity['table_name']);
+    self::assertEquals('fa-random', $newEntity['icon']);
+    self::assertContains('EckEntity', $newEntity['type']);
 
     // Table should have been created
-    $this->assertTrue(\CRM_Core_DAO::checkTableExists('civicrm_eck_test_one_type'));
+    self::assertTrue(\CRM_Core_DAO::checkTableExists('civicrm_eck_test_one_type'));
 
     // CustomGroup.extends should contain new entity
     $extends = CustomGroup::getFields(FALSE)
       ->setLoadOptions(TRUE)
       ->addWhere('name', '=', 'extends')
       ->execute()->single();
-    $this->assertArrayHasKey('Eck_Test_One_Type', $extends['options']);
+    self::assertArrayHasKey('Eck_Test_One_Type', $extends['options']);
 
     // Delete the entity type
     $deleted = EckEntityType::delete(FALSE)
       ->addWhere('api_name', '=', 'Eck_Test_One_Type')
       ->execute();
-    $this->assertCount(1, $deleted);
+    self::assertCount(1, $deleted);
 
     // APIv4 entity should no longer exist
     $entities = \Civi\Api4\Entity::get(FALSE)
       ->addWhere('name', '=', 'Eck_Test_One_Type')
       ->execute();
-    $this->assertCount(0, $entities);
+    self::assertCount(0, $entities);
 
     // Table should have been dropped
-    $this->assertFalse(\CRM_Core_DAO::checkTableExists('civicrm_eck_test_one_type'));
+    self::assertFalse(\CRM_Core_DAO::checkTableExists('civicrm_eck_test_one_type'));
 
     // CustomGroup.extends should not contain deleted entity
     $extends = CustomGroup::getFields(FALSE)
       ->setLoadOptions(TRUE)
       ->addWhere('name', '=', 'extends')
       ->execute()->single();
-    $this->assertArrayNotHasKey('Eck_Test_One_Type', $extends['options']);
+    self::assertArrayNotHasKey('Eck_Test_One_Type', $extends['options']);
   }
 
   public function testRenameEntityType():void {
@@ -79,7 +83,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       ->execute()->single();
 
     // Name should have been munged
-    $this->assertEquals('Test_Two', $entityType['name']);
+    self::assertEquals('Test_Two', $entityType['name']);
 
     $edited = EckEntityType::update(FALSE)
       ->addValue('id', $entityType['id'])
@@ -87,8 +91,8 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       ->addValue('name', 'Test_Two')
       ->addValue('label', 'Different label')
       ->execute()->single();
-    $this->assertEquals('Different label', $edited['label']);
-    $this->assertEquals('Test_Two', $edited['name']);
+    self::assertEquals('Different label', $edited['label']);
+    self::assertEquals('Test_Two', $edited['name']);
 
     try {
       EckEntityType::update(FALSE)
@@ -96,14 +100,15 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
         // Changing name is not allowed
         ->addValue('name', 'Something_else')
         ->execute();
-      $this->fail();
+      self::fail();
     }
     catch (\Exception $e) {
+      // @ignoreException
     }
-    $this->assertStringContainsString('not allowed', $e->getMessage());
+    self::assertStringContainsString('not allowed', $e->getMessage());
   }
 
-  public function testTwoEntityTypes() {
+  public function testTwoEntityTypes(): void {
     $firstEntity = $this->createEntity(['one' => 'One', 'two' => 'Two']);
     $secondEntity = $this->createEntity(['one' => 'One', 'three' => 'Three']);
 
@@ -112,10 +117,10 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       ->addSelect('api_name', 'sub_types:label', 'sub_types:name')
       ->execute()
       ->indexBy('api_name');
-    $this->assertEquals(['One', 'Two'], $entityTypes[$firstEntity]['sub_types:label']);
-    $this->assertEquals(['one', 'two'], $entityTypes[$firstEntity]['sub_types:name']);
-    $this->assertEquals(['One', 'Three'], $entityTypes[$secondEntity]['sub_types:label']);
-    $this->assertEquals(['one', 'three'], $entityTypes[$secondEntity]['sub_types:name']);
+    self::assertEquals(['One', 'Two'], $entityTypes[$firstEntity]['sub_types:label']);
+    self::assertEquals(['one', 'two'], $entityTypes[$firstEntity]['sub_types:name']);
+    self::assertEquals(['One', 'Three'], $entityTypes[$secondEntity]['sub_types:label']);
+    self::assertEquals(['one', 'three'], $entityTypes[$secondEntity]['sub_types:name']);
 
     $saved = civicrm_api4($firstEntity, 'save', [
       'checkPermissions' => FALSE,
@@ -124,7 +129,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
         ['title' => 'Def', 'subtype:name' => 'two'],
       ],
     ]);
-    $this->assertCount(2, $saved);
+    self::assertCount(2, $saved);
 
     $saved = civicrm_api4($secondEntity, 'save', [
       'checkPermissions' => FALSE,
@@ -133,7 +138,7 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
         ['title' => 'Def', 'subtype:name' => 'three'],
       ],
     ]);
-    $this->assertCount(2, $saved);
+    self::assertCount(2, $saved);
 
     civicrm_api4($secondEntity, 'update', [
       'checkPermissions' => FALSE,
@@ -146,49 +151,49 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       'checkPermissions' => FALSE,
       'orderBy' => ['subtype' => 'ASC'],
     ]);
-    $this->assertCount(2, $firstRecords);
-    $this->assertEquals('Abc', $firstRecords[0]['title']);
-    $this->assertEquals('one', $firstRecords[0]['subtype:name']);
-    $this->assertEquals('Def', $firstRecords[1]['title']);
-    $this->assertEquals('two', $firstRecords[1]['subtype:name']);
+    self::assertCount(2, $firstRecords);
+    self::assertEquals('Abc', $firstRecords[0]['title']);
+    self::assertEquals('one', $firstRecords[0]['subtype:name']);
+    self::assertEquals('Def', $firstRecords[1]['title']);
+    self::assertEquals('two', $firstRecords[1]['subtype:name']);
 
     $deleted = civicrm_api4($firstEntity, 'delete', [
       'checkPermissions' => FALSE,
       'where' => [['subtype:name', '=', 'one']],
     ]);
-    $this->assertCount(1, $deleted);
+    self::assertCount(1, $deleted);
 
     $firstRecordCount = civicrm_api4($firstEntity, 'get', [
       'checkPermissions' => FALSE,
       'select' => ['row_count'],
     ]);
-    $this->assertCount(1, $firstRecordCount);
+    self::assertCount(1, $firstRecordCount);
 
     $secondRecords = civicrm_api4($secondEntity, 'get', [
       'select' => ['title', 'subtype:name'],
       'checkPermissions' => FALSE,
       'orderBy' => ['subtype' => 'ASC'],
     ]);
-    $this->assertCount(2, $secondRecords);
-    $this->assertEquals('New', $secondRecords[0]['title']);
-    $this->assertEquals('one', $secondRecords[0]['subtype:name']);
-    $this->assertEquals('Def', $secondRecords[1]['title']);
-    $this->assertEquals('three', $secondRecords[1]['subtype:name']);
+    self::assertCount(2, $secondRecords);
+    self::assertEquals('New', $secondRecords[0]['title']);
+    self::assertEquals('one', $secondRecords[0]['subtype:name']);
+    self::assertEquals('Def', $secondRecords[1]['title']);
+    self::assertEquals('three', $secondRecords[1]['subtype:name']);
   }
 
-  public function testEntityCustomFields() {
+  public function testEntityCustomFields(): void {
     $entityName = $this->createEntity(['one' => 'One', 'two' => 'Two']);
 
     $fields = (array) civicrm_api4($entityName, 'getFields', [
       'checkPermissions' => FALSE,
       'loadOptions' => ['id', 'name'],
     ], 'name');
-    $this->assertEquals($entityName, $fields['title']['entity']);
-    $this->assertEquals('civicrm_' . strtolower($entityName), $fields['id']['table_name']);
+    self::assertEquals($entityName, $fields['title']['entity']);
+    self::assertEquals('civicrm_' . strtolower($entityName), $fields['id']['table_name']);
 
     $subTypeKeys = array_column($fields['subtype']['options'], 'id', 'name');
 
-    $this->assertEquals(['one', 'two'], array_keys($subTypeKeys));
+    self::assertEquals(['one', 'two'], array_keys($subTypeKeys));
 
     CustomGroup::create(FALSE)
       ->addValue('title', 'My Entity Fields')
@@ -211,25 +216,32 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     $fields = (array) civicrm_api4($entityName, 'getFields', [
       'checkPermissions' => FALSE,
     ], 'name');
-    $this->assertEquals('Custom', $fields['My_Entity_Fields.MyField1']['type']);
-    $this->assertArrayHasKey('One_Subtype_Fields.MyField2', $fields);
+    self::assertEquals('Custom', $fields['My_Entity_Fields.MyField1']['type']);
+    self::assertArrayHasKey('One_Subtype_Fields.MyField2', $fields);
 
     $subTypeOneFields = civicrm_api4($entityName, 'getFields', [
       'checkPermissions' => FALSE,
       'values' => ['subtype' => $subTypeKeys['one']],
     ], 'name');
-    $this->assertArrayHasKey('One_Subtype_Fields.MyField2', $subTypeOneFields);
-    $this->assertArrayHasKey('My_Entity_Fields.MyField1', $subTypeOneFields);
+    self::assertArrayHasKey('One_Subtype_Fields.MyField2', $subTypeOneFields);
+    self::assertArrayHasKey('My_Entity_Fields.MyField1', $subTypeOneFields);
 
     $subTypeTwoFields = civicrm_api4($entityName, 'getFields', [
       'checkPermissions' => FALSE,
       'values' => ['subtype' => $subTypeKeys['two']],
     ], 'name');
-    $this->assertArrayHasKey('My_Entity_Fields.MyField1', $subTypeTwoFields);
-    $this->assertArrayNotHasKey('One_Subtype_Fields.MyField2', $subTypeTwoFields);
+    self::assertArrayHasKey('My_Entity_Fields.MyField1', $subTypeTwoFields);
+    self::assertArrayNotHasKey('One_Subtype_Fields.MyField2', $subTypeTwoFields);
   }
 
-  private function createEntity(array $subTypes) {
+  /**
+   * @param array<string,string> $subTypes
+   *
+   * @return string
+   * @throws \CRM_Core_Exception
+   * @throws \Civi\API\Exception\UnauthorizedException
+   */
+  private function createEntity(array $subTypes): string {
     $name = uniqid();
     $entityType = EckEntityType::create(FALSE)
       ->addValue('label', $name)

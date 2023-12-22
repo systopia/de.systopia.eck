@@ -42,10 +42,10 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
   }
 
   /**
-   * @param $name
-   * @return array|null
+   * @param string $name
+   * @return array<string>|null
    */
-  public static function getEntityType($name):? array {
+  public static function getEntityType(string $name): ?array {
     foreach (self::getEntityTypes() as $type) {
       if ($type['name'] === $name) {
         return $type;
@@ -65,11 +65,11 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * Given an ECKEntityType, make sure data structures are set-up correctly:
    * - the corresponding schema table
    *
-   * @param array $entity_type
+   * @param array<string> $entity_type
    *
-   * @throws \API_Exception
+   * @throws \CRM_Core_Exception
    */
-  public static function ensureEntityType($entity_type) {
+  public static function ensureEntityType(array $entity_type): void {
     $table_name = _eck_get_table_name($entity_type['name']);
 
     // Ensure table exists.
@@ -81,7 +81,8 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
           `created_id` int(10) unsigned DEFAULT NULL COMMENT 'FK to contact table.',
           `modified_id` int(10) unsigned DEFAULT NULL COMMENT 'FK to contact table.',
           `created_date` timestamp NULL  DEFAULT CURRENT_TIMESTAMP COMMENT 'When the record was created.',
-          `modified_date` timestamp NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'When the record was last modified.',
+          `modified_date` timestamp NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+              COMMENT 'When the record was last modified.',
           PRIMARY KEY (`id`)
       )
       ENGINE=InnoDB
@@ -96,13 +97,13 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @param $entity_type_name
    *   The name of the entity type to retrieve custom groups for.
    *
-   * @return array
+   * @return array<int, array>
    */
-  public static function getCustomGroups($entity_type_name):array {
-    return (array) civicrm_api4('CustomGroup', 'get', [
-      'checkPermissions' => FALSE,
-      'where' => [['extends', '=', 'Eck_' . $entity_type_name]],
-    ]);
+  public static function getCustomGroups(string $entity_type_name): array {
+    return CustomGroup::get(FALSE)
+      ->addWhere('extends', '=', 'Eck_' . $entity_type_name)
+      ->execute()
+      ->getArrayCopy();
   }
 
   /**
@@ -111,20 +112,18 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @param string $entity_type_name
    *   The name of the entity type to retrieve a list of sub types for.
    * @param bool $as_mapping
-   * @return array
+   * @return array<int|string,array>
    *   A list of sub types for the given entity type.
    */
-  public static function getSubTypes($entity_type_name, $as_mapping = TRUE):array {
-    $result = civicrm_api4('OptionValue', 'get', [
-      'checkPermissions' => FALSE,
-      'where' => [
-        ['option_group_id:name', '=', 'eck_sub_types'],
-        ['grouping', '=', $entity_type_name],
-      ],
-    ])->indexBy('value');
+  public static function getSubTypes($entity_type_name, $as_mapping = TRUE): array {
+    $result = OptionValue::get(FALSE)
+      ->addWhere('option_group_id:name', '=', 'eck_sub_types')
+      ->addWhere('grouping', '=', $entity_type_name)
+      ->execute()
+      ->indexBy('value');
     return $as_mapping ?
       $result->column('label') :
-      (array) $result;
+      $result->getArrayCopy();
   }
 
   /**

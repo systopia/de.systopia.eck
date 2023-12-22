@@ -23,8 +23,6 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
    * @var int
    *
    * The id of the entity we are processing.
-   *
-   * @var int
    */
   public $_id;
 
@@ -32,15 +30,13 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
    * @var array
    *
    * The entity type of the entity we are processing.
-   *
-   * @var int
    */
-  public $_entityType;
+  public array $_entityType;
 
-  public function run() {
+  public function run(): void {
 
     // Retrieve ECK entity type.
-    if (!$entity_type_name = CRM_Utils_Request::retrieve('type', 'String', $this)) {
+    if (!is_string($entity_type_name = CRM_Utils_Request::retrieve('type', 'String', $this))) {
       throw new CRM_Core_Exception('No ECK entity type given.');
     }
     try {
@@ -49,11 +45,11 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
       $this->_entityType = $entity_type;
     }
     catch (Exception $exception) {
-      throw new Exception(E::ts('Invalid ECK entity type.'));
+      throw new CRM_Core_Exception(E::ts('Invalid ECK entity type.'), 0, [], $exception);
     }
 
     // Retrieve ECK entity using the API.
-    if (!$entity_id = CRM_Utils_Request::retrieve('id', 'Integer', $this)) {
+    if (!is_int($entity_id = CRM_Utils_Request::retrieve('id', 'Integer', $this))) {
       throw new CRM_Core_Exception('No entity ID given.');
     }
     $this->_id = $entity_id;
@@ -119,6 +115,13 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
     parent::run();
   }
 
+  /**
+   * @param array<string,array> $custom_group_tree
+   *
+   * @return array<string,array>
+   * @throws \CRM_Core_Exception
+   * @throws \Civi\API\Exception\UnauthorizedException
+   */
   private function convertOptionIdsToValues(array $custom_group_tree): array {
     foreach ($custom_group_tree as $key => &$group) {
       if ('info' === $key) {

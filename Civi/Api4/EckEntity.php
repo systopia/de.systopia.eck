@@ -47,7 +47,6 @@ class EckEntity {
    * @param string $entity_type
    * @param bool $checkPermissions
    * @return \Civi\Api4\Generic\DAOGetAction
-   * @throws \API_Exception
    */
   public static function get(string $entity_type, $checkPermissions = TRUE) {
     return (new DAOGetAction('Eck_' . $entity_type, __FUNCTION__))
@@ -58,7 +57,6 @@ class EckEntity {
    * @param string $entity_type
    * @param bool $checkPermissions
    * @return \Civi\Api4\Generic\AutocompleteAction
-   * @throws \API_Exception
    */
   public static function autocomplete(string $entity_type, $checkPermissions = TRUE) {
     return (new \Civi\Api4\Generic\AutocompleteAction('Eck_' . $entity_type, __FUNCTION__))
@@ -68,8 +66,7 @@ class EckEntity {
   /**
    * @param string $entity_type
    * @param bool $checkPermissions
-   * @return \CRM_Eck_ExtensionUtilckDAOSaveAction
-   * @throws \API_Exception
+   * @return \Civi\Api4\EckDAOSaveAction
    */
   public static function save(string $entity_type, $checkPermissions = TRUE) {
     return (new EckDAOSaveAction('Eck_' . $entity_type, __FUNCTION__))
@@ -79,8 +76,7 @@ class EckEntity {
   /**
    * @param string $entity_type
    * @param bool $checkPermissions
-   * @return \CRM_Eck_ExtensionUtilckDAOCreateAction
-   * @throws \API_Exception
+   * @return \Civi\Api4\EckDAOCreateAction
    */
   public static function create(string $entity_type, $checkPermissions = TRUE) {
     return (new EckDAOCreateAction('Eck_' . $entity_type, __FUNCTION__))
@@ -90,8 +86,7 @@ class EckEntity {
   /**
    * @param string $entity_type
    * @param bool $checkPermissions
-   * @return \CRM_Eck_ExtensionUtilckDAOUpdateAction
-   * @throws \API_Exception
+   * @return \Civi\Api4\EckDAOUpdateAction
    */
   public static function update(string $entity_type, $checkPermissions = TRUE) {
     return (new EckDAOUpdateAction('Eck_' . $entity_type, __FUNCTION__))
@@ -101,8 +96,7 @@ class EckEntity {
   /**
    * @param string $entity_type
    * @param bool $checkPermissions
-   * @return \CRM_Eck_ExtensionUtilckDAODeleteAction
-   * @throws \API_Exception
+   * @return \Civi\Api4\EckDAODeleteAction
    */
   public static function delete(string $entity_type, $checkPermissions = TRUE) {
     return (new EckDAODeleteAction('Eck_' . $entity_type, __FUNCTION__))
@@ -113,7 +107,6 @@ class EckEntity {
    * @param string $entity_type
    * @param bool $checkPermissions
    * @return \Civi\Api4\Generic\BasicReplaceAction
-   * @throws \API_Exception
    */
   public static function replace(string $entity_type, $checkPermissions = TRUE) {
     return (new BasicReplaceAction('Eck_' . $entity_type, __FUNCTION__))
@@ -149,16 +142,19 @@ class EckEntity {
   /**
    * @param string $entity_type
    * @return \Civi\Api4\Generic\CheckAccessAction
-   * @throws \API_Exception
    */
   public static function checkAccess(string $entity_type) {
     return new CheckAccessAction('Eck_' . $entity_type, __FUNCTION__);
   }
 
   /**
-   * @return array
+   * @return array{
+   *   meta:array<string|array<string>>, default:array<string|array<string>>,
+   *   get:array<string|array<string>>, create:array<string|array<string>>, update:array<string|array<string>>,
+   *   delete:array<string|array<string>>
+   *     }
    */
-  public static function permissions(string $entityName):array {
+  public static function permissions(string $entityName): array {
     $type = \CRM_Eck_BAO_Entity::getEntityType($entityName);
     return [
       'meta' => [

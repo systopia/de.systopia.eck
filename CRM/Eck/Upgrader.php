@@ -23,13 +23,13 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
   /**
    * Performs installation tasks.
    */
-  public function install() {
+  public function install(): void {
   }
 
   /**
    * Implements hook_civicrm_upgrade_N().
    */
-  public function upgrade_0010() {
+  public function upgrade_0010(): bool {
     $this->ctx->log->info('Update ECK entity type name prefix.');
 
     $oldEntityNames = \Civi\Api4\EckEntityType::get(FALSE)
@@ -64,7 +64,7 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
   /**
    * Implements hook_civicrm_upgrade_N().
    */
-  public function upgrade_0011() {
+  public function upgrade_0011(): bool {
     $entityTypes = CRM_Core_DAO::executeQuery('
         SELECT
             *,
@@ -83,7 +83,8 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
       CRM_Core_DAO::executeQuery("ALTER TABLE `$tableName`
         ADD COLUMN `created_date` timestamp NULL  DEFAULT CURRENT_TIMESTAMP COMMENT 'When the record was created.'");
       CRM_Core_DAO::executeQuery("ALTER TABLE `$tableName`
-        ADD COLUMN `modified_date` timestamp NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'When the record was last modified.'");
+        ADD COLUMN `modified_date` timestamp NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            COMMENT 'When the record was last modified.'");
     }
 
     return TRUE;
@@ -92,7 +93,7 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
   /**
    * Implements hook_civicrm_upgrade_N().
    */
-  public function upgrade_0012() {
+  public function upgrade_0012(): bool {
     $this->ctx->log->info('Add icon column to civicrm_eck_entity_type');
     CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_eck_entity_type`
       ADD COLUMN `icon` varchar(255) DEFAULT NULL COMMENT 'crm-i icon class'");
@@ -103,10 +104,11 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
   /**
    * Implements hook_civicrm_upgrade_N().
    */
-  public function upgrade_0013() {
+  public function upgrade_0013(): bool {
     $this->ctx->log->info('Add in_recent column to civicrm_eck_entity_type');
     CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_eck_entity_type`
-      ADD COLUMN `in_recent` tinyint NOT NULL DEFAULT 1 COMMENT 'Does this entity type get added to the recent items list'");
+      ADD COLUMN `in_recent` tinyint NOT NULL DEFAULT 1
+          COMMENT 'Does this entity type get added to the recent items list'");
 
     return TRUE;
   }
@@ -126,7 +128,7 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
   /**
    * Implements hook_civicrm_upgrade_N().
    */
-  public function upgrade_0015() {
+  public function upgrade_0015(): bool {
     $this->ctx->log->info('Update name column in civicrm_eck_entity_type');
     CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_eck_entity_type`
       MODIFY COLUMN `name` varchar(52) NOT NULL COMMENT 'The entity type name, also used in the sql table name'");

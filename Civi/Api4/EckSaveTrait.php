@@ -20,7 +20,7 @@ trait EckSaveTrait {
   /**
    * Override core function to save items using the appropriate entity type
    *
-   * @param array[] $items
+   * @param array<array<mixed>> $items
    *   Items already formatted by self::writeObjects
    * @return \CRM_Core_DAO[]
    *   Array of saved DAO records

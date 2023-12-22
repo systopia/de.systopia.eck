@@ -24,9 +24,9 @@ use Civi\Core\Event\GenericHookEvent;
 class Entity extends AutoSubscriber {
 
   /**
-   * @return callable[]
+   * {@inheritDoc}
    */
-  public static function getSubscribedEvents():array {
+  public static function getSubscribedEvents(): array {
     return [
       '&hook_civicrm_permission' => 'on_hook_civicrm_permission',
       'civi.api4.entityTypes' => ['onApi4EntityTypes', Events::W_EARLY],
@@ -50,9 +50,9 @@ class Entity extends AutoSubscriber {
    *
    * Callback for `civi.api4.entityTypes` event.
    *
-   * @param Civi\Core\Event\GenericHookEvent $event
+   * @param \Civi\Core\Event\GenericHookEvent $event
    */
-  public function onApi4EntityTypes(GenericHookEvent $event) {
+  public function onApi4EntityTypes(GenericHookEvent $event): void {
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
       $event->entities[$entity_type['entity_name']] = [
         'name' => $entity_type['entity_name'],
@@ -83,9 +83,9 @@ class Entity extends AutoSubscriber {
   /**
    * Make ECK entities available to Form Builder
    *
-   * @param Civi\Core\Event\GenericHookEvent $e
+   * @param \Civi\Core\Event\GenericHookEvent $e
    */
-  public static function afformEntityTypes(GenericHookEvent $e) {
+  public static function afformEntityTypes(GenericHookEvent $e): void {
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
       $e->entities[$entityType['entity_name']] = [
         'entity' => $entityType['entity_name'],
@@ -101,9 +101,9 @@ class Entity extends AutoSubscriber {
    * Generates afforms for each ECK entity type and sub-type.
    *
    * @param \Civi\Core\Event\GenericHookEvent $event
-   * @throws \API_Exception
+   * @throws \CRM_Core_Exception
    */
-  public static function getEckAfforms($event) {
+  public static function getEckAfforms($event): void {
     // Early return if forms are not requested
     if ($event->getTypes && !in_array('form', $event->getTypes, TRUE)) {
       return;
