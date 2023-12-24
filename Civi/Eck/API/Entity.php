@@ -187,7 +187,6 @@ class Entity extends AutoSubscriber {
       ];
       $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afsearch_eck_listing.tpl', [
         'entityType' => $entityType,
-        'subTypes' => $subTypes,
       ]);
       $afforms[$name] = $item;
     }

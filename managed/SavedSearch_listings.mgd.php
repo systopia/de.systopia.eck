@@ -151,6 +151,16 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
               ],
             ],
           ],
+          'toolbar' => [
+            [
+              'entity' => $type['entity_name'],
+              'action' => 'add',
+              'icon' => 'fa-plus',
+              'text' => E::ts('Add %1', [1 => $type['label']]),
+              'target' => 'crm-popup',
+              'style' => 'primary',
+            ],
+          ],
         ],
         'acl_bypass' => FALSE,
       ],
