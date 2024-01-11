@@ -85,10 +85,10 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
         Permissions::VIEW_ANY_ECK_ENTITY,
         Permissions::getTypePermissionName(Permissions::ACTION_VIEW, $type),
       ];
-      return CRM_Core_Permission::checkMenu($args, $op)
-        && CRM_Core_Permission::checkMenu($eckPermissions, 'or');
+      return CRM_Core_Permission::checkMenu($eckPermissions, 'or');
     }
-    return TRUE;
+
+    return CRM_Core_Permission::checkMenu($args, $op);
   }
 
 }
