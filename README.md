@@ -1,7 +1,5 @@
 # CiviCRM Entity Construction Kit
 
-[![CircleCI](https://circleci.com/gh/systopia/de.systopia.eck/tree/master.svg?style=svg)](https://circleci.com/gh/systopia/de.systopia.eck/tree/master)
-
 This extension provides a user interface and an API for creating and managing
 CiviCRM entities. In conjunction with custom fields being attached to those
 entities, things in your business logic can be modeled more clearly, when
