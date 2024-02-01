@@ -131,6 +131,14 @@ class EckEntity {
   }
 
   /**
+   * @return \Civi\Api4\Action\GetLinks
+   */
+  public static function getLinks(string $entity_type, $checkPermissions = TRUE) {
+    return (new \Civi\Api4\Action\GetLinks('Eck_' . $entity_type, __FUNCTION__))
+      ->setCheckPermissions($checkPermissions);
+  }
+
+  /**
    * @param string $entity_type
    * @return CheckAccessAction
    * @throws \API_Exception
