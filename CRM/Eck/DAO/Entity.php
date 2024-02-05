@@ -25,7 +25,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
 
   private static $_className;
 
-  private static $_tableName;
+  protected static $_tableName;
 
   public static $_log = TRUE;
 
