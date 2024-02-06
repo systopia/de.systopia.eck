@@ -155,6 +155,7 @@ class Entity extends AutoSubscriber {
               // Don't allow subtype to be changed on the form, since this form is specific to subtype
               ['name', '!=', 'subtype'],
             ],
+            'checkPermissions' => FALSE,
           ]);
           $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afformEck.tpl', [
             'entityType' => $entityType,
