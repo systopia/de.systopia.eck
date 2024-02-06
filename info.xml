@@ -20,10 +20,7 @@
   <compatibility>
     <ver>5.67</ver>
   </compatibility>
-  <requires>
-    <ext>org.civicrm.afform</ext>
-    <ext>org.civicrm.search_kit</ext>
-  </requires>
+  <requires></requires>
   <upgrader>CRM_Eck_Upgrader</upgrader>
   <classloader>
     <psr0 prefix="CRM_" path=""/>
