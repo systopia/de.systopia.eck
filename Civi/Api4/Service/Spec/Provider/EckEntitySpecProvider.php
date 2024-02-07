@@ -35,7 +35,7 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
   /**
    * Callback function to get subtypes for this fields's entity type.
    *
-   * @param \Civi\Api4\Service\Spec\FieldSpec $spec
+   * @param \Civi\Api4\Service\Spec\FieldSpec|array $field
    * @param array<mixed> $values
    * @param bool|array<string> $returnFormat
    * @param bool $checkPermissions

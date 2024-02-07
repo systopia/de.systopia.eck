@@ -74,11 +74,20 @@ class Permissions {
         'description' => E::ts('Allows viewing custom entities of type %1.', [1 => $entityType['label']]),
       ];
       $permissions[self::getTypePermissionName(self::ACTION_EDIT, $entityType['name'])] = [
-        'label' => E::ts('Entity Construction Kit (ECK): Create or edit custom entities of type %1', [1 => $entityType['label']]),
-        'description' => E::ts('Allows creating and editing custom entities of type %1.', [1 => $entityType['label']]),
+        'label' => E::ts(
+          'Entity Construction Kit (ECK): Create or edit custom entities of type %1',
+          [1 => $entityType['label']]
+        ),
+        'description' => E::ts(
+          'Allows creating and editing custom entities of type %1.',
+          [1 => $entityType['label']]
+        ),
       ];
       $permissions[self::getTypePermissionName(self::ACTION_DELETE, $entityType['name'])] = [
-        'label' => E::ts('Entity Construction Kit (ECK): Delete custom entities of type %1', [1 => $entityType['label']]),
+        'label' => E::ts(
+          'Entity Construction Kit (ECK): Delete custom entities of type %1',
+          [1 => $entityType['label']]
+        ),
         'description' => E::ts('Allows deleting custom entities of type %1.', [1 => $entityType['label']]),
       ];
     }
