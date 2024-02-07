@@ -9,8 +9,8 @@
         }
     },
     "require": {
-      "civicrm/civicrm-core": "^5.65",
-      "civicrm/civicrm-packages": "^5.65"
+      "civicrm/civicrm-core": "^5.67",
+      "civicrm/civicrm-packages": "^5.67"
     },
     "scripts": {
         "post-install-or-update": [
