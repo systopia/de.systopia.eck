@@ -1,13 +1,31 @@
 <?xml version="1.0"?>
-<phpunit backupGlobals="false" backupStaticAttributes="false" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false" stopOnFailure="false" cacheResult="false" bootstrap="tests/phpunit/bootstrap.php">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.5/phpunit.xsd"
+         colors="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         forceCoversAnnotation="true"
+         bootstrap="tests/phpunit/bootstrap.php">
+
+  <php>
+    <ini name="error_reporting" value="-1" />
+    <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0&amp;baselineFile=./tests/ignored-deprecations.json"/>
+  </php>
+
   <testsuites>
-    <testsuite name="My Test Suite">
+    <testsuite name="Extension Test Suite">
       <directory>./tests/phpunit</directory>
     </testsuite>
   </testsuites>
   <filter>
     <whitelist>
-      <directory suffix=".php">./</directory>
+      <directory suffix=".php">api</directory>
+      <directory suffix=".php">CRM</directory>
+      <directory suffix=".php">Civi</directory>
+      <exclude>
+        <directory>CRM/*/DAO</directory>
+        <directory suffix="Base.php">CRM/*/Upgrader</directory>
+      </exclude>
     </whitelist>
   </filter>
   <listeners>
