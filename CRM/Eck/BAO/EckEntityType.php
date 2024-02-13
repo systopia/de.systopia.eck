@@ -87,7 +87,8 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
       )
       ENGINE=InnoDB
       DEFAULT CHARSET=utf8
-      COLLATE=utf8_unicode_ci;
+      COLLATE=utf8_unicode_ci
+      ROW_FORMAT=DYNAMIC;
     ");
   }
 
