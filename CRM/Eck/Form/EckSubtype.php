@@ -68,8 +68,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
           $this->_customGroups = array_filter(
             CRM_Eck_BAO_EckEntityType::getCustomGroups($this->_subType['grouping']),
             function($custom_group) {
-              return
-                isset($custom_group['extends_entity_column_value'])
+              return isset($custom_group['extends_entity_column_value'])
                 && is_array($custom_group['extends_entity_column_value'])
                 && in_array(
                   $this->_subType['value'],
@@ -78,6 +77,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
             }
           );
           break;
+
         case CRM_Core_Action::DELETE:
           $this->setTitle(E::ts('Delete Subtype <em>%1</em>', [1 => $this->_subType['label']]));
           break;
@@ -105,7 +105,8 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
 
         $this->add(
           'text',
-          'label', // OptionValue.label
+          // OptionValue.label
+          'label',
           E::ts('Subtype name'),
           NULL,
           TRUE
@@ -133,6 +134,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
         }
         $this->assign('customGroups', $this->_customGroups);
         break;
+
       case CRM_Core_Action::DELETE:
         $submit_button_caption = E::ts('Delete');
         break;
@@ -184,6 +186,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
           'icon' => $values['icon'],
         ]));
         break;
+
       case CRM_Core_Action::DELETE:
         CRM_Eck_BAO_EckEntityType::deleteSubType($this->_subType['value']);
         break;
@@ -202,7 +205,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
     // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
     // items don't have labels.  We'll identify renderable by filtering on
     // the 'label'.
-    $elementNames = array();
+    $elementNames = [];
     foreach ($this->_elements as $element) {
       /** @var HTML_QuickForm_Element $element */
       $label = $element->getLabel();

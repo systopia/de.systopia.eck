@@ -19,7 +19,10 @@ use CRM_Eck_ExtensionUtil as E;
 
 class EckDAODeleteAction extends Generic\DAODeleteAction {
 
-  protected function deleteObjects($items) {
+  /**
+   * {@inheritDoc}
+   */
+  protected function deleteObjects($items): array {
     $entityType = \CRM_Eck_BAO_Entity::getEntityType($this->getEntityName());
     foreach ($items as &$item) {
       $item['entity_type'] = $entityType;

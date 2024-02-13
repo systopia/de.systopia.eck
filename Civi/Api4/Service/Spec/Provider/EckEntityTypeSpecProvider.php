@@ -19,7 +19,9 @@ class EckEntityTypeSpecProvider implements Generic\SpecProviderInterface {
   public function modifySpec(RequestSpec $spec) {
     $action = $spec->getAction();
 
-    $spec->getFieldByName('name')->setRequired(FALSE);
+    if (NULL !== ($nameField = $spec->getFieldByName('name'))) {
+      $nameField->setRequired(FALSE);
+    }
 
     if ($action === 'get') {
       $field = new FieldSpec('api_name', 'EckEntityType', 'String');
@@ -48,10 +50,23 @@ class EckEntityTypeSpecProvider implements Generic\SpecProviderInterface {
     }
   }
 
+  /**
+   * @param array<string,string> $field
+   * @param \Civi\Api4\Query\Api4SelectQuery $query
+   *
+   * @return string
+   */
   public static function renderSqlForApiName(array $field, Api4SelectQuery $query): string {
     return "CONCAT('Eck_', {$field['sql_name']})";
   }
 
+  /**
+   * @param array<string,string> $field
+   * @param \Civi\Api4\Query\Api4SelectQuery $query
+   *
+   * @return string
+   * @throws \CRM_Core_Exception
+   */
   public static function renderSqlForEckSubtypes(array $field, Api4SelectQuery $query): string {
     $optionGroupId = \CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'eck_sub_types', 'id', 'name');
     return "(SELECT GROUP_CONCAT(`civicrm_option_value`.`value`)
@@ -60,8 +75,11 @@ class EckEntityTypeSpecProvider implements Generic\SpecProviderInterface {
       AND `civicrm_option_value`.`grouping` = {$field['sql_name']})";
   }
 
-  public static function getSubtypeOptions() {
-    $options = \CRM_Core_OptionValue::getValues(['name' => 'eck_sub_types']);
+  /**
+   * @return array<string,mixed>
+   */
+  public static function getSubtypeOptions(): array {
+    $options = \CRM_Core_OptionValue::getValues(['name' => 'eck_sub_types']) ?? [];
     foreach ($options as &$option) {
       $option['id'] = $option['value'];
     }

@@ -23,10 +23,10 @@ class CRM_Eck_Page_Entity_TabHeader {
   /**
    * @param CRM_Eck_Page_Entity $page
    *
-   * @return array
+   * @return array<string,array<mixed>>|null
    * @throws \CRM_Core_Exception
    */
-  public static function build(&$page) {
+  public static function build(&$page): ?array {
     $tabs = $page->get('tabHeader');
     if (!$tabs || empty($_GET['reset'])) {
       $tabs = self::process($page);
@@ -41,20 +41,20 @@ class CRM_Eck_Page_Entity_TabHeader {
         'html-header'
       )
       ->addSetting([
-                     'tabSettings' => [
-                       'active' => self::getCurrentTab($tabs),
-                     ],
-                   ]);
+        'tabSettings' => [
+          'active' => self::getCurrentTab($tabs),
+        ],
+      ]);
     return $tabs;
   }
 
   /**
    * @param CRM_Eck_Page_Entity $page
    *
-   * @return array
+   * @return array<string,array<mixed>>|null
    * @throws Exception
    */
-  public static function process(&$page) {
+  public static function process(&$page): ?array {
     if ($page->getVar('_id') <= 0) {
       return NULL;
     }
@@ -77,21 +77,21 @@ class CRM_Eck_Page_Entity_TabHeader {
 
     $tabs = [];
     $tabs['view'] = [
-        'title' => E::ts('View'),
-        'link' => CRM_Utils_System::url(
+      'title' => E::ts('View'),
+      'link' => CRM_Utils_System::url(
           'civicrm/eck/entity/view',
           "reset=1&type={$entityType['name']}&id={$entityID}"
-        ),
-      ] + $default;
+      ),
+    ] + $default;
 
     $afform_name = 'afform' . 'Eck_' . $entityType['name'] . '_' . $subtype;
     $module = _afform_angular_module_name($afform_name);
     $tabs['edit'] = [
-        'title' => E::ts('Edit'),
-        'template' => 'CRM/Eck/Page/Entity/Edit.tpl',
-        'module' => $module,
-        'directive' => _afform_angular_module_name($afform_name, 'dash'),
-      ] + $default;
+      'title' => E::ts('Edit'),
+      'template' => 'CRM/Eck/Page/Entity/Edit.tpl',
+      'module' => $module,
+      'directive' => _afform_angular_module_name($afform_name, 'dash'),
+    ] + $default;
     Civi::service('angularjs.loader')->addModules($module);
 
     // see if any other modules want to add any tabs
@@ -132,17 +132,17 @@ class CRM_Eck_Page_Entity_TabHeader {
   /**
    * @param CRM_Eck_Page_Entity $page
    */
-  public static function reset(&$page) {
+  public static function reset(&$page): void {
     $tabs = self::process($page);
     $page->set('tabHeader', $tabs);
   }
 
   /**
-   * @param $tabs
+   * @param array<string,array<mixed>>|null $tabs
    *
-   * @return int|string
+   * @return string
    */
-  public static function getCurrentTab($tabs) {
+  public static function getCurrentTab(?array $tabs): string {
     static $current = FALSE;
 
     if ($current) {
@@ -158,7 +158,7 @@ class CRM_Eck_Page_Entity_TabHeader {
       }
     }
 
-    $current = $current ? $current : 'view';
+    $current = FALSE !== $current ? $current : 'view';
     return $current;
   }
 
