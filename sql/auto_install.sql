@@ -42,4 +42,4 @@ CREATE TABLE `civicrm_eck_entity_type` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `UI_name`(name)
 )
-ENGINE=InnoDB;
+ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;

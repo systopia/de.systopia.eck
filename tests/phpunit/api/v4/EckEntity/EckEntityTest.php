@@ -6,6 +6,7 @@ use Civi\Api4\CustomField;
 use Civi\Api4\CustomGroup;
 use Civi\Api4\EckEntityType;
 use Civi\Api4\OptionValue;
+use Civi\Core\Exception\DBQueryException;
 use Civi\Test\CiviEnvBuilder;
 use Civi\Test\HeadlessInterface;
 
@@ -113,10 +114,15 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     $secondEntity = $this->createEntity(['one' => 'One', 'three' => 'Three']);
 
     // Ensure api_name and sub_types are correctly returned from the API
-    $entityTypes = \Civi\Api4\EckEntityType::get(FALSE)
-      ->addSelect('api_name', 'sub_types:label', 'sub_types:name')
-      ->execute()
-      ->indexBy('api_name');
+    try {
+      $entityTypes = \Civi\Api4\EckEntityType::get(FALSE)
+        ->addSelect('api_name', 'sub_types:label', 'sub_types:name')
+        ->execute()
+        ->indexBy('api_name');
+    }
+    catch (DBQueryException $e) {
+      static::fail($e->getDebugInfo());
+    }
     self::assertEquals(['One', 'Two'], $entityTypes[$firstEntity]['sub_types:label']);
     self::assertEquals(['one', 'two'], $entityTypes[$firstEntity]['sub_types:name']);
     self::assertEquals(['One', 'Three'], $entityTypes[$secondEntity]['sub_types:label']);
