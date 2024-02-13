@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        civicrm-image-tags: [ '5-drupal-php8.2', '5-drupal-php8.1', '5-drupal-php7.4' ]
+        civicrm-image-tags: [ '5-drupal-php8.2', '5-drupal-php8.1', '5-drupal-php8.0', '5-drupal-php7.4' ]
+      fail-fast: false
     name: PHPUnit with Docker image michaelmcandrew/civicrm:${{ matrix.civicrm-image-tags }}
     env:
       CIVICRM_IMAGE_TAG: ${{ matrix.civicrm-image-tags }}
