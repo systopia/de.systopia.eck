@@ -40,4 +40,5 @@ parameters:
 		#- # Accessing results of API requests
 			#message: "#^Offset '[^']+' does not exist on array[^\\|]+\\|null.$#"
 			#path: */tests/phpunit/**/*Test.php
+		- '#Parameter \#2 \$searchValue of static method CRM_Core_DAO::getFieldValue\(\) expects int, string given.#'
 	tmpDir: .phpstan
