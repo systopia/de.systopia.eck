@@ -27,15 +27,19 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
 
   /**
    * @param string $entityName
-   * @param int $entityId
+   * @param int|null $entityId
    * @return string
    */
-  public static function getEntityIcon(string $entityName, int $entityId): ?string {
+  public static function getEntityIcon(string $entityName, int $entityId = NULL): ?string {
     $default = self::$_icon;
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
       if ($entity_type['entity_name'] === $entityName) {
         $default = $entity_type['icon'] ?? $default;
+        break;
       }
+    }
+    if (!$entityId) {
+      return $default;
     }
     $record = civicrm_api4($entityName, 'get', [
       'checkPermissions' => FALSE,
