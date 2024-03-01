@@ -22,11 +22,13 @@ use CRM_Eck_ExtensionUtil as E;
  */
 class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
 
-  protected $_subTypeValue;
+  protected ?string $_entityType = NULL;
 
-  protected $_subType;
+  protected ?string $_subTypeValue = NULL;
 
-  protected $_customGroups = [];
+  protected ?string $_subType = NULL;
+
+  protected array $_customGroups = [];
 
   /**
    * {@inheritDoc}

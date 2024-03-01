@@ -21,7 +21,7 @@ use Civi\Eck\Permissions;
 
 class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
 
-  public static function getEntityType($entityName): ?string {
+  public static function getEntityType(string $entityName): ?string {
     return strpos($entityName, 'Eck_') === 0 ? substr($entityName, strlen('Eck_')) : NULL;
   }
 
@@ -31,21 +31,16 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
    * @return string
    */
   public static function getEntityIcon(string $entityName, int $entityId = NULL): string {
-    $default = self::$_icon;
-    foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
-      if ($entity_type['entity_name'] === $entityName) {
-        $default = $entity_type['icon'] ?? $default;
-        break;
-      }
-    }
+    $entityTypes = \CRM_Eck_BAO_EckEntityType::getEntityTypes();
+    $default = $entityTypes[$entityName]['icon'] ?? self::$_icon;
     if (!isset($entityId)) {
       return $default;
     }
-    $record = civicrm_api4($entityName, 'get', [
-      'checkPermissions' => FALSE,
-      'select' => ['subtype:icon'],
-      'where' => [['id', '=', $entityId]],
-    ], 0);
+    $record = \Civi\Api4\EckEntity::get($entityTypes[$entityName]['name'], FALSE)
+      ->addSelect('subtype:icon')
+      ->addWhere('id', '=', $entityId)
+      ->execute()
+      ->first();
     return $record['subtype:icon'] ?? $default;
   }
 
@@ -60,7 +55,7 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
     if (
       strpos($event->entity, 'Eck_') === 0
       && in_array($event->action, ['create', 'edit'], TRUE)
-      && (CRM_Eck_BAO_EckEntityType::getEntityType(substr($event->entity, 4))['in_recent'] ?? FALSE)
+      && ((bool) (CRM_Eck_BAO_EckEntityType::getEntityType(substr($event->entity, 4))['in_recent'] ?? FALSE))
     ) {
       RecentItem::create()
         ->addValue('entity_type', $event->entity)
@@ -73,17 +68,21 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
    * Access callback for /civicrm/eck/entity and /civicrm/eck/entity/view
    * routes.
    *
-   * @param array|int $args
+   * @param array<'checkMenuAccess'> $args
    * @param string|null $op
    *
    * @return bool
    */
-  public static function checkMenuAccess($args, ?string $op = 'and'): bool {
+  public static function checkMenuAccess(array $args, ?string $op = 'and'): bool {
     // In order to not check nested paths (which are Afforms), we pass an access
     // argument of "checkMenuAccess" in the menu XML and check it here, as this
     // callback feels responsible only for the exact routes, not nested ones.
-    if (in_array('checkMenuAccess', $args)) {
-      $type = CRM_Utils_Request::retrieve('type', 'String', NULL, TRUE);
+    if (in_array('checkMenuAccess', $args, TRUE)) {
+      $null = NULL;
+      $type = CRM_Utils_Request::retrieve('type', 'String', $null, TRUE);
+      if (!is_string($type)) {
+        throw new CRM_Core_Exception(E::ts('Error retrieving ECK entity type from request.'));
+      }
       $eckPermissions = [
         Permissions::ADMINISTER_ECK_ENTITIES,
         Permissions::VIEW_ANY_ECK_ENTITY,
@@ -92,7 +91,7 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
       return CRM_Core_Permission::checkMenu($eckPermissions, 'or');
     }
 
-    return CRM_Core_Permission::checkMenu($args, $op);
+    return CRM_Core_Permission::checkMenu($args, $op ?? 'and');
   }
 
 }

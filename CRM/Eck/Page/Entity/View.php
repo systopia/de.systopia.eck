@@ -27,39 +27,57 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
   public $_id;
 
   /**
-   * @var array
+   * @var string
+   *
+   * The ECK entity type name of the entity we are processing.
+   */
+  public string $_entityTypeName;
+
+  /**
+   * @var array<string,mixed>
    *
    * The entity type of the entity we are processing.
+   *
    */
   public array $_entityType;
 
-  public function run(): void {
+  public function __construct($title = NULL, $mode = NULL) {
+    parent::__construct($title, $mode);
 
     // Retrieve ECK entity type.
-    if (!is_string($entity_type_name = CRM_Utils_Request::retrieve('type', 'String', $this))) {
+    $entity_type_name = CRM_Utils_Request::retrieve('type', 'String', $this);
+    if (!is_string($entity_type_name)) {
       throw new CRM_Core_Exception('No ECK entity type given.');
     }
+    $this->_entityTypeName = $entity_type_name;
     try {
-      $entity_type = EckEntityType::get(FALSE)->addWhere('name', '=', $entity_type_name)->execute()->single();
-      $this->assign('entity_type', $entity_type);
-      $this->_entityType = $entity_type;
+      $this->_entityType = EckEntityType::get(FALSE)->addWhere('name', '=', $entity_type_name)->execute()->single();
     }
     catch (Exception $exception) {
       throw new CRM_Core_Exception(E::ts('Invalid ECK entity type.'), 0, [], $exception);
     }
 
-    // Retrieve ECK entity using the API.
-    if (!is_int($entity_id = CRM_Utils_Request::retrieve('id', 'Integer', $this))) {
+    // Retrieve entity ID.
+    $entity_id = CRM_Utils_Request::retrieve('id', 'Integer', $this);
+    if (!is_int($entity_id)) {
       throw new CRM_Core_Exception('No entity ID given.');
     }
     $this->_id = $entity_id;
-    $entity = civicrm_api4('Eck_' . $entity_type_name, 'get', [
-      'where' => [['id', '=', $entity_id]],
-    ])->single();
+  }
+
+  public function run(): void {
+    $this->assign('entity_type', $this->_entityType);
+
+    // Retrieve ECK entity using the API.
+    $entity = \Civi\Api4\EckEntity::get($this->_entityTypeName)
+      ->addWhere('id', '=', $this->_id)
+      ->execute()
+      ->single();
     // Retrieve fields.
-    $fields = civicrm_api4('Eck_' . $entity_type_name, 'getfields', [
-      'where' => [['type', '=', 'Field']],
-    ], 'name');
+    $fields = \Civi\Api4\EckEntity::getFields($this->_entityTypeName)
+      ->addWhere('type', '=', 'Field')
+      ->execute()
+      ->indexBy('name');
     $this->assign('fields', $fields);
 
     // Set page title.
@@ -67,9 +85,9 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
 
     // Retrieve and build custom data view.
     $custom_group_tree = CRM_Core_BAO_CustomGroup::getTree(
-      'Eck_' . $entity_type_name,
+      'Eck_' . $this->_entityTypeName,
       [],
-      $entity_id,
+      $this->_id,
       NULL,
       [$entity['subtype']],
       NULL,
@@ -86,7 +104,7 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
      * the field.
      * @todo: Migrate to SearchKit.
      */
-    $custom_group_tree = $this->convertOptionIdsToValues($custom_group_tree);
+    $this->convertOptionIdsToValues($custom_group_tree);
 
     CRM_Core_BAO_CustomGroup::buildCustomDataView(
       $this,
@@ -95,20 +113,20 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
       NULL,
       NULL,
       NULL,
-      $entity_id
+      $this->_id
     );
 
     // Replace subtype value with its name.
-    $subtypes = CRM_Eck_BAO_EckEntityType::getSubTypes($entity_type_name);
+    $subtypes = CRM_Eck_BAO_EckEntityType::getSubTypes($this->_entityTypeName);
     $entity['subtype'] = $subtypes[$entity['subtype']];
 
     $this->assign('entity', $entity);
 
     // Add to recent items
-    if (!empty($entity_type['in_recent'])) {
+    if (FALSE === (bool) $this->_entityType['in_recent']) {
       \Civi\Api4\RecentItem::create()
-        ->addValue('entity_type', 'Eck_' . $entity_type_name)
-        ->addValue('entity_id', $entity_id)
+        ->addValue('entity_type', 'Eck_' . $this->_entityTypeName)
+        ->addValue('entity_id', $this->_id)
         ->execute();
     }
 
@@ -116,13 +134,12 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
   }
 
   /**
-   * @param array<string,array> $custom_group_tree
+   * @param array<string,array{fields:array{customValue:array{data:mixed},serialize?:bool}}> $custom_group_tree
    *
-   * @return array<string,array>
    * @throws \CRM_Core_Exception
    * @throws \Civi\API\Exception\UnauthorizedException
    */
-  private function convertOptionIdsToValues(array $custom_group_tree): array {
+  private function convertOptionIdsToValues(array &$custom_group_tree): void {
     foreach ($custom_group_tree as $key => &$group) {
       if ('info' === $key) {
         continue;
@@ -134,8 +151,10 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
         }
 
         foreach ($field['customValue'] as &$custom_value) {
-          $option_ids = empty($field['serialize']) ? (array) $custom_value['data']
-            : CRM_Utils_Array::explodePadded($custom_value['data']);
+          $serialize = (bool) $field['serialize'];
+          $option_ids = $serialize
+            ? CRM_Utils_Array::explodePadded($custom_value['data'])
+            : (array) $custom_value['data'];
 
           if ([] !== $option_ids) {
             $option_values = OptionValue::get(FALSE)
@@ -144,18 +163,13 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
               ->execute()
               ->column('value');
 
-            if (empty($field['serialize'])) {
-              $custom_value['data'] = reset($option_values);
-            }
-            else {
-              $custom_value['data'] = CRM_Utils_Array::implodePadded($option_values);
-            }
+            $custom_value['data'] = $serialize
+              ? CRM_Utils_Array::implodePadded($option_values)
+              : reset($option_values);
           }
         }
       }
     }
-
-    return $custom_group_tree;
   }
 
 }

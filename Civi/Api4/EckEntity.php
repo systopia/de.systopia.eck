@@ -141,10 +141,13 @@ class EckEntity {
 
   /**
    * @return array{
-   *   meta:array<string|array<string>>, default:array<string|array<string>>,
-   *   get:array<string|array<string>>, create:array<string|array<string>>, update:array<string|array<string>>,
+   *   meta:array<string|array<string>>,
+   *   default:array<string|array<string>>,
+   *   get:array<string|array<string>>,
+   *   create:array<string|array<string>>,
+   *   update:array<string|array<string>>,
    *   delete:array<string|array<string>>
-   *     }
+   *   }
    */
   public static function permissions(string $entityName): array {
     $type = \CRM_Eck_BAO_Entity::getEntityType($entityName);

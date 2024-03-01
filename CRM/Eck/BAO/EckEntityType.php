@@ -25,7 +25,7 @@ use Civi\Api4\Managed;
 class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements HookInterface {
 
   /**
-   * @return array[]
+   * @return array<string, array<string, string>>
    */
   public static function getEntityTypes(): array {
     $entityTypes = Civi::cache('metadata')->get('EckEntityTypes');
@@ -98,7 +98,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @param $entity_type_name
    *   The name of the entity type to retrieve custom groups for.
    *
-   * @return array<int, array>
+   * @return array<int, array<string, mixed>>
    */
   public static function getCustomGroups(string $entity_type_name): array {
     return CustomGroup::get(FALSE)
@@ -113,7 +113,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @param string $entity_type_name
    *   The name of the entity type to retrieve a list of sub types for.
    * @param bool $as_mapping
-   * @return array<int|string,array>
+   * @return array<int|string,array{'value':int|string,'label':string}>
    *   A list of sub types for the given entity type.
    */
   public static function getSubTypes($entity_type_name, $as_mapping = TRUE): array {
@@ -134,12 +134,12 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * - deleting all custom groups attached to this subtype
    * - deleting the subtype option value from the "eck_sub_types" option group
    *
-   * @param $sub_type_value
+   * @param string $sub_type_value
    *   The value of the subtype in the "eck_sub_types" option group.
    *
    * @throws \Exception
    */
-  public static function deleteSubType($sub_type_value) {
+  public static function deleteSubType(string $sub_type_value): void {
     $sub_type = \Civi\Api4\OptionValue::get(FALSE)
       ->addWhere('option_group_id:name', '=', 'eck_sub_types')
       ->addWhere('value', '=', $sub_type_value)
@@ -147,10 +147,9 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
       ->single();
 
     // Delete entities of subtype.
-    civicrm_api4('Eck_' . $sub_type['grouping'], 'delete', [
-      'checkPermissions' => FALSE,
-      'where' => [['id', 'IS NOT NULL']],
-    ]);
+    EckEntity::delete($sub_type['grouping'], FALSE)
+      ->addWhere('id', 'IS NOT NULL')
+      ->execute();
 
     // TODO: Delete CustomFields in CustomGroup attached to subtype.
 
@@ -162,7 +161,8 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
           && is_array($custom_group['extends_entity_column_value'])
           && in_array(
             $sub_type_value,
-            $custom_group['extends_entity_column_value']
+            $custom_group['extends_entity_column_value'],
+            TRUE
           );
       }
     );
@@ -172,21 +172,20 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
         && is_array($custom_group['extends_entity_column_value'])
         && in_array(
           $sub_type_value,
-          $custom_group['extends_entity_column_value']
+          $custom_group['extends_entity_column_value'],
+          TRUE
         )
       ) {
-        civicrm_api4('CustomGroup', 'delete', [
-          'checkPermissions' => FALSE,
-          'where' => [['id', '=', $custom_group['id']]],
-        ]);
+        CustomGroup::delete(FALSE)
+          ->addWhere('id', '=', $custom_group['id'])
+          ->execute();
       }
     }
 
     // Delete subtype.
-    civicrm_api4('OptionValue', 'delete', [
-      'checkPermissions' => FALSE,
-      'where' => [['id', '=', $sub_type['id']]],
-    ]);
+    OptionValue::delete(FALSE)
+      ->addWhere('id', '=', $sub_type['id'])
+      ->execute();
   }
 
   /**
@@ -196,17 +195,23 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_pre
    */
   public static function self_hook_civicrm_pre(PreEvent $event): void {
-    $eckTypeName = $event->id ? CRM_Core_DAO::getFieldValue('CRM_Eck_DAO_EckEntityType', $event->id) : NULL;
+    $eckTypeName = isset($event->id)
+      ? (string) CRM_Core_DAO::getFieldValue('CRM_Eck_DAO_EckEntityType', $event->id)
+      : NULL;
 
     switch ($event->action) {
       case 'create':
         // Replace special characters in the name
-        if (!empty($event->params['name'])) {
+        if (isset($event->params['name'])) {
           $event->params['name'] = CRM_Utils_String::munge($event->params['name'], '_', 52);
         }
         break;
 
       case 'edit':
+        if (!isset($eckTypeName)) {
+          throw new CRM_Core_Exception(E::ts('Error retrieving ECK entity type name.'));
+        }
+
         // Do not allow entity type to be renamed, as the table name depends on it
         if (isset($event->params['name']) && $event->params['name'] !== $eckTypeName) {
           throw new RuntimeException('Renaming an EckEntityType is not allowed.');
@@ -215,6 +220,10 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
 
       // Perform cleanup before deleting an EckEntityType
       case 'delete':
+        if (!isset($eckTypeName)) {
+          throw new CRM_Core_Exception(E::ts('Error retrieving ECK entity type name.'));
+        }
+
         // Delete entities of this type.
         EckEntity::delete($eckTypeName, FALSE)
           ->addWhere('id', 'IS NOT NULL')

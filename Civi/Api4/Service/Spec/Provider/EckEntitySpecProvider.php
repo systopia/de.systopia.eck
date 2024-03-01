@@ -35,17 +35,17 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
   /**
    * Callback function to get subtypes for this fields's entity type.
    *
-   * @param \Civi\Api4\Service\Spec\FieldSpec|array $field
+   * @param \Civi\Api4\Service\Spec\FieldSpec|array{'entity':string} $field
    * @param array<mixed> $values
    * @param bool|array<string> $returnFormat
    * @param bool $checkPermissions
-   * @return array|false
+   * @return array<int|string, array<string,mixed>>|false
    */
   public static function getSubTypes($field, $values, $returnFormat, $checkPermissions) {
     // TODO: After dropping support for 5.70 and below, $field will always be an array
     $entity = is_array($field) ? $field['entity'] : $field->getEntity();
     $entityType = \CRM_Eck_BAO_Entity::getEntityType($entity);
-    $options = \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType, FALSE);
+    $options = NULL !== $entityType ? \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType, FALSE) : [];
     foreach ($options as &$option) {
       $option['id'] = $option['value'];
     }

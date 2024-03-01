@@ -89,55 +89,55 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
    * {@inheritDoc}
    */
   public function buildQuickForm() {
-    switch ($this->_action) {
-      case CRM_Core_Action::UPDATE:
-      case CRM_Core_Action::ADD:
-        $submit_button_caption = E::ts('Save');
+    if (
+      $this->_action == CRM_Core_Action::UPDATE
+      || $this->_action == CRM_Core_Action::ADD
+    ) {
+      $submit_button_caption = E::ts('Save');
 
-        foreach (['label', 'name', 'icon', 'in_recent'] as $fieldName) {
-          $field = CRM_Eck_DAO_EckEntityType::getSupportedFields()[$fieldName] ?? NULL;
-          if ($field) {
-            $this->addField(
-              $field['name'],
-              [
-                'entity' => 'EckEntityType',
-                'name' => $field['name'],
-                'action' => 'create',
-                'class' => $field['name'] === 'icon' ? 'crm-icon-picker' : '',
-                'context' => array_search(
-                  $this->_action,
-                  CRM_Core_Action::$_names
-                ),
-              ],
-              !empty($field['required'])
-            );
-          }
-        }
-        if ($this->_action === CRM_Core_Action::UPDATE) {
-          $this->getElement('name')->freeze();
-        }
-
-        // Add links to custom groups.
-        $this->assign('customGroupAdminUrl', CRM_Utils_System::url('civicrm/admin/custom/group'));
-        foreach ($this->_customGroups as &$custom_group) {
-          $custom_group['browse_url'] = CRM_Utils_System::url(
-            'civicrm/admin/custom/group/field',
+      foreach (['label', 'name', 'icon', 'in_recent'] as $fieldName) {
+        $field = CRM_Eck_DAO_EckEntityType::getSupportedFields()[$fieldName] ?? NULL;
+        if ($field) {
+          $this->addField(
+            $field['name'],
             [
-              'action' => CRM_Core_Action::BROWSE,
-              'gid' => $custom_group['id'],
-            ]
+              'entity' => 'EckEntityType',
+              'name' => $field['name'],
+              'action' => 'create',
+              'class' => $field['name'] === 'icon' ? 'crm-icon-picker' : '',
+              'context' => array_search(
+                $this->_action,
+                CRM_Core_Action::$_names,
+                TRUE
+              ),
+            ],
+            !empty($field['required'])
           );
         }
-        $this->assign('customGroups', $this->_customGroups);
-        $this->assign('subTypes', $this->_subTypes);
-        break;
+      }
+      if ($this->_action === CRM_Core_Action::UPDATE) {
+        $this->getElement('name')->freeze();
+      }
 
-      case CRM_Core_Action::DELETE:
-        $submit_button_caption = E::ts('Delete');
-        break;
-
-      default:
-        throw new Exception(E::ts('Invalid operation.'));
+      // Add links to custom groups.
+      $this->assign('customGroupAdminUrl', CRM_Utils_System::url('civicrm/admin/custom/group'));
+      foreach ($this->_customGroups as &$custom_group) {
+        $custom_group['browse_url'] = CRM_Utils_System::url(
+          'civicrm/admin/custom/group/field',
+          [
+            'action' => CRM_Core_Action::BROWSE,
+            'gid' => $custom_group['id'],
+          ]
+        );
+      }
+      $this->assign('customGroups', $this->_customGroups);
+      $this->assign('subTypes', $this->_subTypes);
+    }
+    elseif ($this->_action == CRM_Core_Action::DELETE) {
+      $submit_button_caption = E::ts('Delete');
+    }
+    else {
+      throw new CRM_Core_Exception(E::ts('Invalid operation.'));
     }
 
     $this->addButtons(
@@ -165,14 +165,18 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
   public function setDefaultValues() {
     // Set current field values as element default values.
     $values = $this->exportValues();
+    $defaults = [];
     foreach ($this->getRenderableElementNames() as $elementName) {
       if (isset($values[$elementName])) {
         $this->getElement($elementName)->setValue($values[$elementName]);
+        $defaults[$elementName] = $values[$elementName];
       }
       elseif (isset($this->_entityType[$elementName])) {
         $this->getElement($elementName)->setValue($this->_entityType[$elementName]);
+        $defaults[$elementName] = $this->_entityType[$elementName];
       }
     }
+    return $defaults;
   }
 
   /**
@@ -194,10 +198,11 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       }
 
       // Do not allow duplicate entity type names.
-      $count = civicrm_api4('EckEntityType', 'get', [
-        'select' => ['row_count'],
-        'where' => [['name', '=', $values['name']]],
-      ])->count();
+      $count = EckEntityType::get(FALSE)
+        ->addSelect('row_count')
+        ->addWhere('name', '=', $values['name'])
+        ->execute()
+        ->count();
       if (
         // case-insensitive checking according to API/database behavior.
         strtolower($values['name']) != strtolower($this->_entityType['name'] ?? NULL)
@@ -252,9 +257,9 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
     // the 'label'.
     $elementNames = [];
     foreach ($this->_elements as $element) {
-      /** @var HTML_QuickForm_Element $element */
+      /** @var HTML_QuickForm_element $element */
       $label = $element->getLabel();
-      if (!empty($label)) {
+      if ('' !== $label) {
         $elementNames[] = $element->getName();
       }
     }

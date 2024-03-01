@@ -28,8 +28,9 @@ class CRM_Eck_Page_Entity_TabHeader {
    */
   public static function build(&$page): ?array {
     $tabs = $page->get('tabHeader');
-    if (!$tabs || empty($_GET['reset'])) {
-      $tabs = self::process($page);
+    $reset = (bool) CRM_Utils_Request::retrieve('reset', 'Boolean');
+    if ([] === $tabs || !$reset) {
+      $tabs = self::process($page) ?? [];
       $page->set('tabHeader', $tabs);
     }
     $page->assign_by_ref('tabHeader', $tabs);
@@ -143,22 +144,23 @@ class CRM_Eck_Page_Entity_TabHeader {
    * @return string
    */
   public static function getCurrentTab(?array $tabs): string {
-    static $current = FALSE;
+    $tabs ??= [];
+    static $current;
 
-    if ($current) {
-      return $current;
-    }
-
-    if (is_array($tabs)) {
-      foreach ($tabs as $subPage => $pageVal) {
-        if (CRM_Utils_Array::value('current', $pageVal) === TRUE) {
-          $current = $subPage;
-          break;
+    if (!isset($current)) {
+      if ([] !== $tabs) {
+        foreach ($tabs as $subPage => $pageVal) {
+          if ((bool) ($pageVal['current'] ?? FALSE)) {
+            $current = $subPage;
+            break;
+          }
         }
+      }
+      else {
+        $current = 'view';
       }
     }
 
-    $current = FALSE !== $current ? $current : 'view';
     return $current;
   }
 
