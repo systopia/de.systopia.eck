@@ -33,7 +33,7 @@ parameters:
 			- \Webmozart\Assert\InvalidArgumentException
 		implicitThrows: false
 	ignoreErrors:
-		# Note paths are prefixed with ""*/" to wirk with inspections in PHPStorm because of:
+		# Note paths are prefixed with "*/" to work with inspections in PHPStorm because of:
 		# https://youtrack.jetbrains.com/issue/WI-63891/PHPStan-ignoreErrors-configuration-isnt-working-with-inspections
 
 		# Example

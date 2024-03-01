@@ -2,8 +2,12 @@ includes:
 	- phpstan.neon.dist
 
 parameters:
+	scanFiles:
+		- ci/vendor/civicrm/civicrm-core/ext/afform/core/afform.php
 	scanDirectories:
 		- ci/vendor/civicrm/civicrm-core/CRM/
+		- ci/vendor/civicrm/civicrm-core/api/
+		- ci/vendor/civicrm/civicrm-packages/
 	bootstrapFiles:
 		- ci/vendor/autoload.php
 	# Because we test with different versions in CI we have unmatched errors

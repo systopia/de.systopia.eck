@@ -15,6 +15,7 @@
 
 namespace Civi\Eck\API;
 
+use Civi\Api4\EckEntity;
 use Civi\Core\Service\AutoSubscriber;
 use Civi\Eck\Permissions;
 use CRM_Eck_ExtensionUtil as E;
@@ -40,6 +41,7 @@ class Entity extends AutoSubscriber {
    *
    * @see CRM_Utils_Hook::permission
    * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_permission/
+   * @phpstan-ignore-next-line Hook implementations should not duplicate @param and @return documentation.
    */
   public static function on_hook_civicrm_permission(array &$permissions): void {
     $permissions += Permissions::getPermissions();
@@ -114,9 +116,9 @@ class Entity extends AutoSubscriber {
 
     // Early return if this api call is fetching afforms by name and those names are not eck-related
     if (
-      (!empty($getNames['name']) && !strstr(implode(' ', $getNames['name']), 'Eck_'))
-      || (!empty($getNames['module_name']) && !strstr(implode(' ', $getNames['module_name']), 'Eck'))
-      || (!empty($getNames['directive_name']) && !strstr(implode(' ', $getNames['directive_name']), 'eck'))
+      (isset($getNames['name']) && FALSE === strstr(implode(' ', $getNames['name']), 'Eck_'))
+      || (isset($getNames['module_name']) && FALSE === strstr(implode(' ', $getNames['module_name']), 'Eck'))
+      || (isset($getNames['directive_name']) && FALSE === strstr(implode(' ', $getNames['directive_name']), 'eck'))
     ) {
       return;
     }
@@ -146,17 +148,14 @@ class Entity extends AutoSubscriber {
           'redirect' => "civicrm/eck/entity/list/{$entityType['name']}#?subtype={$subType['value']}",
         ];
         if ($event->getLayout) {
-          $fields = \civicrm_api4($entityType['entity_name'], 'getFields', [
-            'values' => ['subtype' => $subType['value']],
-            'select' => ['name'],
-            'where' => [
-              ['readonly', 'IS EMPTY'],
-              ['input_type', 'IS NOT EMPTY'],
-              // Don't allow subtype to be changed on the form, since this form is specific to subtype
-              ['name', '!=', 'subtype'],
-            ],
-            'checkPermissions' => FALSE,
-          ]);
+          $fields = EckEntity::getFields($entityType['name'], FALSE)
+            ->addValue('subtype', $subType['value'])
+            ->addSelect('name')
+            ->addWhere('readonly', 'IS EMPTY')
+            ->addWhere('input_type', 'IS NOT EMPTY')
+            // Don't allow subtype to be changed on the form, since this form is specific to subtype
+            ->addWhere('name', '!=', 'subtype')
+            ->execute();
           $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afformEck.tpl', [
             'entityType' => $entityType,
             'subType' => $subType,
