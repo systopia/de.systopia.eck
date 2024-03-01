@@ -34,7 +34,7 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
   public string $_entityTypeName;
 
   /**
-   * @var array<string,mixed>
+   * @var mixed[]
    *
    * The entity type of the entity we are processing.
    *
