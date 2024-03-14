@@ -26,7 +26,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
 
   protected ?string $_subTypeValue = NULL;
 
-  protected ?string $_subType = NULL;
+  protected ?array $_subType = NULL;
 
   protected array $_customGroups = [];
 
