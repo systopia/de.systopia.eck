@@ -36,6 +36,14 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
         $entityType['entity_name'] = 'Eck_' . $entityType['name'];
         $entityType['table_name'] = _eck_get_table_name($entityType['name']);
       }
+      $entityTypes = array_combine(
+        array_map(
+          function($entityType) {
+            return $entityType['entity_name'];
+          },
+          $entityTypes),
+        $entityTypes
+      );
       Civi::cache('metadata')->set('EckEntityTypes', $entityTypes);
     }
     return $entityTypes;

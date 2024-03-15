@@ -123,7 +123,7 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
     $this->assign('entity', $entity);
 
     // Add to recent items
-    if (FALSE === (bool) $this->_entityType['in_recent']) {
+    if (FALSE !== (bool) $this->_entityType['in_recent']) {
       \Civi\Api4\RecentItem::create()
         ->addValue('entity_type', 'Eck_' . $this->_entityTypeName)
         ->addValue('entity_id', $this->_id)
