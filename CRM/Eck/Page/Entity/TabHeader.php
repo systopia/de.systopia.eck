@@ -27,7 +27,7 @@ class CRM_Eck_Page_Entity_TabHeader {
    * @throws \CRM_Core_Exception
    */
   public static function build(&$page): ?array {
-    $tabs = $page->get('tabHeader');
+    $tabs = $page->get('tabHeader') ?? [];
     $reset = (bool) CRM_Utils_Request::retrieve('reset', 'Boolean');
     if ([] === $tabs || !$reset) {
       $tabs = self::process($page) ?? [];
@@ -148,17 +148,13 @@ class CRM_Eck_Page_Entity_TabHeader {
     static $current;
 
     if (!isset($current)) {
-      if ([] !== $tabs) {
-        foreach ($tabs as $subPage => $pageVal) {
-          if ((bool) ($pageVal['current'] ?? FALSE)) {
-            $current = $subPage;
-            break;
-          }
+      foreach ($tabs as $subPage => $pageVal) {
+        if ((bool) ($pageVal['current'] ?? FALSE)) {
+          $current = $subPage;
+          break;
         }
       }
-      else {
-        $current = 'view';
-      }
+      $current ??= 'view';
     }
 
     return $current;
