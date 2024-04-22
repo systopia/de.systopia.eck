@@ -20,10 +20,14 @@ class ECKLinksProvider extends \Civi\Core\Service\AutoSubscriber {
 
   public static function alterECKLinksResult(RespondEvent $e): void {
     $request = $e->getApiRequest();
-    if (is_object($request) && is_a($request, '\Civi\Api4\Action\GetLinks') && str_starts_with($request->getEntityName(), 'Eck_')) {
+    if (
+      is_object($request)
+      && is_a($request, '\Civi\Api4\Action\GetLinks') && str_starts_with($request->getEntityName(), 'Eck_')
+    ) {
       $links = (array) $e->getResponse();
       $addLinkIndex = self::getActionIndex($links, 'add');
-      // Expand the "add" link to multiple subtypes if it exists (otherwise the WHERE clause excluded "add" so we should too)
+      // Expand the "add" link to multiple subtypes if it exists (otherwise the WHERE clause excluded "add" so we should
+      // too).
       if ($request->getExpandMultiple() && isset($addLinkIndex)) {
         [, $entityTypeName] = explode('_', $request->getEntityName(), 2);
         $addLinks = [];
