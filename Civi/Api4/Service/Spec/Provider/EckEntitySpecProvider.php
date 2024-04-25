@@ -3,6 +3,7 @@
 namespace Civi\Api4\Service\Spec\Provider;
 
 use Civi\Api4\Service\Spec\RequestSpec;
+use Civi\Api4\Service\Spec\SpecFormatter;
 
 /**
  * Class EckEntitySpecProvider
@@ -15,10 +16,55 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
    * @param \Civi\Api4\Service\Spec\RequestSpec $spec
    */
   public function modifySpec(RequestSpec $spec) {
+    // Add DAO fields, since they might not have been set by \Civi\Api4\Service\Spec\SpecGatherer::addDAOFields(), as
+    // CRM_Eck_DAO_Entity::fields() is static, but depends on the ECK entity type for compiling the field list.
+    $entityTypes = \CRM_Eck_BAO_EckEntityType::getEntityTypes();
+    $entityName = $spec->getEntity();
+    // Instantiate the BAO for initialization with the given ECK entity type.
+    $bao = new \CRM_Eck_BAO_Entity($entityTypes[$entityName]['name']);
+    foreach ($bao::getSupportedFields() as $DAOField) {
+      if (NULL === $spec->getFieldByName($DAOField['name'])) {
+        $this->setDynamicFk($DAOField, $spec);
+        $field = SpecFormatter::arrayToField($DAOField, $entityName);
+        $spec->addFieldSpec($field);
+      }
+    }
+
     if (NULL !== ($subTypeField = $spec->getFieldByName('subtype'))) {
       $subTypeField
         ->setSuffixes(['name', 'label', 'description', 'icon'])
         ->setOptionsCallback([$this, 'getSubTypes']);
+    }
+  }
+
+  /**
+   * Copied from \Civi\Api4\Service\Spec\SpecGatherer::setDynamicFk()
+   *
+   * Adds metadata about dynamic foreign key fields.
+   *
+   * E.g. some tables have a DFK with a pair of columns named `entity_table` and `entity_id`.
+   * This will gather the list of 'dfk_entities' to add as metadata to the e.g. `entity_id` column.
+   *
+   * Additionally, if $values contains a value for e.g. `entity_table`,
+   * then getFields will also output the corresponding `fk_entity` for the `entity_id` field.
+   */
+  private function setDynamicFk(array &$DAOField, RequestSpec $spec): void {
+    if (empty($DAOField['FKClassName']) && !empty($DAOField['bao']) && $DAOField['type'] == \CRM_Utils_Type::T_INT) {
+      // Check if this field is a key for a dynamic FK
+      foreach ($DAOField['bao']::getReferenceColumns() ?? [] as $reference) {
+        if ($reference instanceof \CRM_Core_Reference_Dynamic && $reference->getReferenceKey() === $DAOField['name']) {
+          $entityTableColumn = $reference->getTypeColumn();
+          $DAOField['DFKEntities'] = $reference->getTargetEntities();
+          $DAOField['html']['controlField'] = $entityTableColumn;
+          // If we have a value for entity_table then this field can pretend to be a single FK too.
+          if ($spec->hasValue($entityTableColumn) && $DAOField['DFKEntities']) {
+            $DAOField['FKClassName'] = \CRM_Core_DAO_AllCoreTables::getDAONameForEntity(
+              $DAOField['DFKEntities'][$spec->getValue($entityTableColumn)]
+            );
+          }
+          break;
+        }
+      }
     }
   }
 
