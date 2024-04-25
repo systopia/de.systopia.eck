@@ -44,6 +44,7 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
       ->execute();
 
     // Update Custom Groups.
+    /** @phpstan-var array<array{id: int|string, extends: string}> $custom_groups */
     $custom_groups = \Civi\Api4\CustomGroup::get(FALSE)
       ->addWhere('extends', 'IN', $oldEntityNames)
       ->execute();
@@ -65,13 +66,18 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
    * Implements hook_civicrm_upgrade_N().
    */
   public function upgrade_0011(): bool {
-    $entityTypes = CRM_Core_DAO::executeQuery('
+    $entityTypesQuery = CRM_Core_DAO::executeQuery('
         SELECT
             *,
             CONCAT("Eck_", name) AS entity_name,
             CONCAT("civicrm_eck_", LOWER(name)) AS table_name
         FROM `civicrm_eck_entity_type`;
-    ')->fetchAll();
+    ');
+    if (!is_a($entityTypesQuery, CRM_Core_DAO::class)) {
+      Civi::log()->error('Error retrieving ECK entity types during database upgrade.');
+      return FALSE;
+    }
+    $entityTypes = $entityTypesQuery->fetchAll();
 
     foreach ($entityTypes as $tableName => $entityType) {
       $tableName = $entityType['table_name'];

@@ -26,21 +26,32 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
 
   protected ?string $_subTypeValue = NULL;
 
+  /**
+   * @var array<string, int|string>
+   */
   protected ?array $_subType = NULL;
 
+  /**
+   * @var array<array<string, mixed>>
+   */
   protected array $_customGroups = [];
 
   /**
    * {@inheritDoc}
    */
-  public function preProcess() {
-    $this->setAction(CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? 'add');
+  public function preProcess(): void {
     Civi::resources()->addScriptFile('civicrm', 'js/jquery/jquery.crmIconPicker.js');
 
+    /** @var int $action */
+    $action = CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? CRM_Core_Action::map('add');
+    $this->setAction($action);
+
     if ($this->_action == CRM_Core_Action::ADD) {
-      if (!($this->_entityType = CRM_Utils_Request::retrieve('type', 'String', $this))) {
-        throw new Exception(E::ts('No ECK entity type given.'));
+      $entityType = CRM_Utils_Request::retrieve('type', 'String', $this);
+      if (!is_string($entityType) || '' === $entityType) {
+        throw new CRM_Core_Exception('No ECK entity type given.');
       }
+      $this->_entityType = $entityType;
       $this->setTitle(E::ts('Add Subtype'));
       $this->_subType = [
         'grouping' => $this->_entityType,
@@ -48,11 +59,14 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
       ];
     }
     elseif ($this->_action == CRM_Core_Action::UPDATE || $this->_action == CRM_Core_Action::DELETE) {
-      if (!($this->_subTypeValue = CRM_Utils_Request::retrieve('subtype', 'String', $this))) {
-        throw new Exception(E::ts('No subtype given.'));
+      $subTypeValue = CRM_Utils_Request::retrieve('subtype', 'String', $this);
+      if (!is_string($subTypeValue) || '' === $subTypeValue) {
+        throw new CRM_Core_Exception('No subtype given.');
       }
+      $this->_subTypeValue = $subTypeValue;
       try {
-        $this->_subType = civicrm_api3(
+        /** @var array{value: int|string, label: string, grouping: string} $subType */
+        $subType = civicrm_api3(
           'OptionValue',
           'getsingle',
           [
@@ -60,9 +74,10 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
             'value' => $this->_subTypeValue,
           ]
         );
+        $this->_subType = $subType;
       }
       catch (Exception $exception) {
-        throw new Exception(E::ts('Invalid subtype.'));
+        throw new CRM_Core_Exception('Invalid subtype.', 0, [], $exception);
       }
       switch ($this->_action) {
         case CRM_Core_Action::UPDATE:
@@ -72,9 +87,11 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
             function($custom_group) {
               return isset($custom_group['extends_entity_column_value'])
                 && is_array($custom_group['extends_entity_column_value'])
+                && isset($this->_subType['value'])
                 && in_array(
                   $this->_subType['value'],
-                  $custom_group['extends_entity_column_value']
+                  $custom_group['extends_entity_column_value'],
+                  TRUE
                 );
             }
           );
@@ -86,7 +103,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
       }
     }
     else {
-      throw new Exception(E::ts('Invalid action.'));
+      throw new CRM_Core_Exception('Invalid action.');
     }
 
     $this->assign('subType', $this->_subType);
@@ -99,7 +116,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
 
   }
 
-  public function buildQuickForm() {
+  public function buildQuickForm(): void {
     switch ($this->_action) {
       case CRM_Core_Action::UPDATE:
       case CRM_Core_Action::ADD:
@@ -140,6 +157,9 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
       case CRM_Core_Action::DELETE:
         $submit_button_caption = E::ts('Delete');
         break;
+
+      default:
+        throw new CRM_Core_Exception('Invalid form action.');
     }
 
     $this->addButtons(
@@ -167,17 +187,27 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
   public function setDefaultValues() {
     // Set current field values as element default values.
     $values = $this->exportValues();
+    $defaults = [];
     foreach ($this->getRenderableElementNames() as $elementName) {
       if (isset($values[$elementName])) {
+        $defaults[$elementName] = $values[$elementName];
         $this->getElement($elementName)->setValue($values[$elementName]);
       }
       elseif (isset($this->_subType[$elementName])) {
-        $this->getElement($elementName)->setValue($this->_subType[$elementName]);
+        $defaults[$elementName] = $this->_subType[$elementName];
+        $this->getElement($elementName)->setValue((string) $this->_subType[$elementName]);
       }
     }
+    return $defaults;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function postProcess() {
+    if (!isset($this->_subType)) {
+      throw new CRM_Core_Exception('No ECK subtype given.');
+    }
     switch ($this->getAction()) {
       case CRM_Core_Action::ADD:
       case CRM_Core_Action::UPDATE:
@@ -190,7 +220,7 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
         break;
 
       case CRM_Core_Action::DELETE:
-        CRM_Eck_BAO_EckEntityType::deleteSubType($this->_subType['value']);
+        CRM_Eck_BAO_EckEntityType::deleteSubType((string) $this->_subType['value']);
         break;
     }
 
@@ -198,20 +228,20 @@ class CRM_Eck_Form_EckSubtype extends CRM_Core_Form {
   }
 
   /**
-   * Get the fields/elements defined in this form.
+   * Retrieves the fields/elements defined in this form.
    *
-   * @return array (string)
+   * @return array<string>
    */
-  public function getRenderableElementNames() {
+  public function getRenderableElementNames(): array {
     // The _elements list includes some items which should not be
     // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
     // items don't have labels.  We'll identify renderable by filtering on
     // the 'label'.
     $elementNames = [];
     foreach ($this->_elements as $element) {
-      /** @var HTML_QuickForm_Element $element */
+      /** @var HTML_QuickForm_element $element */
       $label = $element->getLabel();
-      if (!empty($label)) {
+      if ('' !== $label) {
         $elementNames[] = $element->getName();
       }
     }

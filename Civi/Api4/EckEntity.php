@@ -126,7 +126,7 @@ class EckEntity {
   /**
    * @return \Civi\Api4\Action\GetLinks
    */
-  public static function getLinks(string $entity_type, $checkPermissions = TRUE) {
+  public static function getLinks(string $entity_type, bool $checkPermissions = TRUE) {
     return (new \Civi\Api4\Action\GetLinks('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
@@ -151,6 +151,9 @@ class EckEntity {
    */
   public static function permissions(string $entityName): array {
     $type = \CRM_Eck_BAO_Entity::getEntityType($entityName);
+    if (!isset($type)) {
+      throw new \CRM_Core_Exception('No ECK entity type given for compiling permissions.');
+    }
     return [
       'meta' => [
         Permissions::ACCESS_CIVICRM,

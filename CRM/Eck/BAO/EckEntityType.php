@@ -30,8 +30,11 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
   public static function getEntityTypes(): array {
     $entityTypes = Civi::cache('metadata')->get('EckEntityTypes');
     if (!is_array($entityTypes)) {
-      $entityTypes = CRM_Core_DAO::executeQuery('SELECT * FROM `civicrm_eck_entity_type`')
-        ->fetchAll();
+      $entityTypesQuery = CRM_Core_DAO::executeQuery('SELECT * FROM `civicrm_eck_entity_type`');
+      if (!is_a($entityTypesQuery, CRM_Core_DAO::class)) {
+        throw new CRM_Core_Exception('Error retrieving ECK entity types: ');
+      }
+      $entityTypes = $entityTypesQuery->fetchAll();
       foreach ($entityTypes as &$entityType) {
         $entityType['entity_name'] = 'Eck_' . $entityType['name'];
         $entityType['table_name'] = _eck_get_table_name($entityType['name']);
@@ -109,10 +112,12 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @return array<int, array<string, mixed>>
    */
   public static function getCustomGroups(string $entity_type_name): array {
-    return CustomGroup::get(FALSE)
+    /** @phpstan-var array<int, array<string, mixed>> $customGroups */
+    $customGroups = CustomGroup::get(FALSE)
       ->addWhere('extends', '=', 'Eck_' . $entity_type_name)
       ->execute()
       ->getArrayCopy();
+    return $customGroups;
   }
 
   /**
@@ -121,7 +126,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @param string $entity_type_name
    *   The name of the entity type to retrieve a list of sub types for.
    * @param bool $as_mapping
-   * @return array<int|string,array{'value':int|string,'label':string}>
+   * @return array<int|string, array{value: int|string, label: string}>
    *   A list of sub types for the given entity type.
    */
   public static function getSubTypes($entity_type_name, $as_mapping = TRUE): array {
