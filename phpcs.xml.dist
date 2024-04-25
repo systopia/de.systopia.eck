@@ -19,6 +19,12 @@
     <config name="ignore_warnings_on_exit" value="true"/>
 
     <rule ref="tools/phpcs/vendor/drupal/coder/coder_sniffer/Drupal">
+        <!-- Conflicts with PHPStan type hints -->
+        <exclude name="Drupal.Commenting.VariableComment.IncorrectVarType"/>
+        <exclude name="Drupal.Commenting.FunctionComment.ParamTypeSpaces"/>
+        <exclude name="Drupal.Commenting.FunctionComment.ReturnTypeSpaces"/>
+        <exclude name="Drupal.Commenting.VariableComment.MissingVar"/>
+
         <!-- Don't enforce phpdoc type hint because it (might) only duplicate a PHP type hint -->
         <exclude name="Drupal.Commenting.VariableComment.MissingVar"/>
 

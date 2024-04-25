@@ -26,7 +26,7 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
   public $_id;
 
   /**
-   * @var arraystringmixed
+   * @var array<string, mixed>
    *
    * The entity type of the entity we are processing.
    */
