@@ -97,7 +97,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public function initialize() {
-    if (self::$_entityType) {
+    if (isset(self::$_entityType)) {
       self::$_className = 'CRM_Eck_DAO_' . self::$_entityType;
       self::$_tableName = _eck_get_table_name(self::$_entityType);
     }
@@ -112,7 +112,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
     // TODO: This is being called without the constructor being called
     //   beforehand, so this will not always work due to static variables not
     //   being set.
-    if (!isset(Civi::$statics[self::$_className]['fields'])) {
+    if (!isset(Civi::$statics[self::$_className]['fields']) && isset(self::$_entityType)) {
       Civi::$statics[self::$_className]['fields'] = [
         'id' => [
           'name' => 'id',
@@ -231,7 +231,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
         Civi::$statics[self::$_className]['fields']
       );
     }
-    return Civi::$statics[self::$_className]['fields'];
+    return Civi::$statics[self::$_className]['fields'] ?? [];
   }
 
   /**
