@@ -40,6 +40,8 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
   /**
    * Copied from \Civi\Api4\Service\Spec\SpecGatherer::setDynamicFk()
    *
+   * @param array{name: string, FKClassName: string, bao: string, type: int, DFKEntities: array<mixed>} $DAOField
+   *
    * Adds metadata about dynamic foreign key fields.
    *
    * E.g. some tables have a DFK with a pair of columns named `entity_table` and `entity_id`.
@@ -49,6 +51,7 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
    * then getFields will also output the corresponding `fk_entity` for the `entity_id` field.
    */
   private function setDynamicFk(array &$DAOField, RequestSpec $spec): void {
+    // @phpstan-ignore-next-line
     if (empty($DAOField['FKClassName']) && !empty($DAOField['bao']) && $DAOField['type'] == \CRM_Utils_Type::T_INT) {
       // Check if this field is a key for a dynamic FK
       foreach ($DAOField['bao']::getReferenceColumns() ?? [] as $reference) {
@@ -57,8 +60,10 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
           $DAOField['DFKEntities'] = $reference->getTargetEntities();
           $DAOField['html']['controlField'] = $entityTableColumn;
           // If we have a value for entity_table then this field can pretend to be a single FK too.
+          // @phpstan-ignore-next-line
           if ($spec->hasValue($entityTableColumn) && $DAOField['DFKEntities']) {
             $DAOField['FKClassName'] = \CRM_Core_DAO_AllCoreTables::getDAONameForEntity(
+              // @phpstan-ignore-next-line
               $DAOField['DFKEntities'][$spec->getValue($entityTableColumn)]
             );
           }
@@ -90,6 +95,9 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
   public static function getSubTypes($field, $values, $returnFormat, $checkPermissions) {
     // TODO: After dropping support for 5.70 and below, $field will always be an array
     $entity = is_array($field) ? $field['entity'] : $field->getEntity();
+    if (!is_string($entity)) {
+      throw new \CRM_Core_Exception('No ECK entity type given while retrieving subtypes.');
+    }
     $entityType = \CRM_Eck_BAO_Entity::getEntityType($entity);
     $options = NULL !== $entityType ? \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType, FALSE) : [];
     foreach ($options as &$option) {

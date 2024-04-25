@@ -34,6 +34,7 @@ class CRM_Eck_Page_Entity_TabHeader {
       $page->set('tabHeader', $tabs);
     }
     $page->assign_by_ref('tabHeader', $tabs);
+    /** @var array<string, array<mixed>> $tabs */
     CRM_Core_Resources::singleton()
       ->addScriptFile(
         'civicrm',
@@ -73,6 +74,7 @@ class CRM_Eck_Page_Entity_TabHeader {
     ];
 
     $entityID = $page->getVar('_id');
+    /** @phpstan-var array{name: string} $entityType */
     $entityType = $page->getVar('_entityType');
     $subtype = $page->getVar('_subtype');
 
@@ -93,7 +95,9 @@ class CRM_Eck_Page_Entity_TabHeader {
       'module' => $module,
       'directive' => _afform_angular_module_name($afform_name, 'dash'),
     ] + $default;
-    Civi::service('angularjs.loader')->addModules($module);
+    /** @var \Civi\Angular\AngularLoader $angularLoader */
+    $angularLoader = Civi::service('angularjs.loader');
+    $angularLoader->addModules($module);
 
     // see if any other modules want to add any tabs
     // note: status of 'valid' flag of any injected tab, needs to be taken care in the hook implementation.

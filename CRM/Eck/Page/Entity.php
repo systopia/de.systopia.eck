@@ -67,13 +67,17 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
     ])->single();
 
     // Retrieve ECK entity subtype.
-    if (!is_string($subtype_value = CRM_Utils_Request::retrieve('subtype', 'String', $this))) {
+    $subtype_value = CRM_Utils_Request::retrieve('subtype', 'String', $this);
+    if (!is_string($subtype_value)) {
       $subtypes = \CRM_Eck_BAO_EckEntityType::getSubTypes($entity_type_name, FALSE);
       $subtype = $subtypes[$entity['subtype']];
       $subtype_value = $subtype['value'];
     }
-    $this->assign('subtype', $subtype_value);
-    $this->_subtype = $subtype_value;
+    if (!is_numeric($subtype_value)) {
+      throw new CRM_Core_Exception('Invalid ECK value for parameter "subtype".');
+    }
+    $this->_subtype = (int) $subtype_value;
+    $this->assign('subtype', $this->_subtype);
 
     // Set page title.
     CRM_Utils_System::setTitle($entity['title']);

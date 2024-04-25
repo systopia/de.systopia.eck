@@ -158,6 +158,9 @@ class EckEntity {
    */
   public static function permissions(string $entityName): array {
     $type = \CRM_Eck_BAO_Entity::getEntityType($entityName);
+    if (!isset($type)) {
+      throw new \CRM_Core_Exception('No ECK entity type given for compiling permissions.');
+    }
     return [
       'meta' => [
         Permissions::ACCESS_CIVICRM,

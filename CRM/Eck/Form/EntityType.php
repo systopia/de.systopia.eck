@@ -23,13 +23,22 @@ use Civi\Api4\EckEntityType;
  */
 class CRM_Eck_Form_EntityType extends CRM_Core_Form {
 
-  protected $_entityTypeName;
+  protected ?string $_entityTypeName = NULL;
 
-  protected $_entityType = [];
+  /**
+   * @var array<string, int|string>
+   */
+  protected array $_entityType = [];
 
-  protected $_customGroups = [];
+  /**
+   * @var array<int|string, array<string, mixed>>
+   */
+  protected array $_customGroups = [];
 
-  protected $_subTypes = [];
+  /**
+   * @var array<int|string, mixed>
+   */
+  protected array $_subTypes = [];
 
   /**
    * {@inheritDoc}
@@ -38,15 +47,18 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
     Civi::resources()->addScriptFile('civicrm', 'js/jquery/jquery.crmIconPicker.js');
     Civi::resources()->addScriptFile(E::LONG_NAME, 'js/entityTypeForm.js');
 
-    $this->setAction(CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? 'add');
-
+    /** @var int $action */
+    $action = CRM_Utils_Request::retrieve('action', 'String', $this, FALSE) ?? CRM_Core_Action::map('add');
+    $this->setAction($action);
     if ($this->_action == CRM_Core_Action::ADD) {
       $this->setTitle(E::ts('Add Entity Type'));
     }
-    elseif ($this->_action == CRM_Core_Action::UPDATE || $this->_action == CRM_Core_Action::DELETE) {
-      if (!($this->_entityTypeName = CRM_Utils_Request::retrieve('type', 'String', $this))) {
-        throw new Exception(E::ts('No ECK entity type given.'));
+    elseif ($this->_action === CRM_Core_Action::UPDATE || $this->_action === CRM_Core_Action::DELETE) {
+      $entityTypeName = CRM_Utils_Request::retrieve('type', 'String', $this);
+      if (!is_string($entityTypeName) || '' === $entityTypeName) {
+        throw new CRM_Core_Exception('No ECK entity type given.');
       }
+      $this->_entityTypeName = $entityTypeName;
       try {
         $this->_entityType = EckEntityType::get(FALSE)
           ->addWhere('name', '=', $this->_entityTypeName)
@@ -54,7 +66,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           ->single();
       }
       catch (Exception $exception) {
-        throw new Exception(E::ts('Invalid ECK entity type.'));
+        throw new CRM_Core_Exception('Invalid ECK entity type.', 0, [], $exception);
       }
       switch ($this->_action) {
         case CRM_Core_Action::UPDATE:
@@ -65,7 +77,9 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           $this->_customGroups = array_filter(
             CRM_Eck_BAO_EckEntityType::getCustomGroups($this->_entityTypeName),
             function($custom_group) {
-              return empty($custom_group['extends_entity_column_value']);
+              return !isset($custom_group['extends_entity_column_value'])
+                || !is_array($custom_group['extends_entity_column_value'])
+                || [] === $custom_group['extends_entity_column_value'];
             }
           );
           break;
@@ -76,7 +90,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       }
     }
     else {
-      throw new Exception(E::ts('Invalid action.'));
+      throw new CRM_Core_Exception('Invalid action.');
     }
 
     $this->assign('entityType', $this->_entityType);
@@ -88,7 +102,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
   /**
    * {@inheritDoc}
    */
-  public function buildQuickForm() {
+  public function buildQuickForm(): void {
     if (
       $this->_action == CRM_Core_Action::UPDATE
       || $this->_action == CRM_Core_Action::ADD
@@ -111,7 +125,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
                 TRUE
               ),
             ],
-            !empty($field['required'])
+            (bool) ($field['required'] ?? FALSE)
           );
         }
       }
@@ -172,7 +186,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
         $defaults[$elementName] = $values[$elementName];
       }
       elseif (isset($this->_entityType[$elementName])) {
-        $this->getElement($elementName)->setValue($this->_entityType[$elementName]);
+        $this->getElement($elementName)->setValue((string) $this->_entityType[$elementName]);
         $defaults[$elementName] = $this->_entityType[$elementName];
       }
     }
@@ -205,7 +219,7 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
         ->count();
       if (
         // case-insensitive checking according to API/database behavior.
-        strtolower($values['name']) != strtolower($this->_entityType['name'] ?? NULL)
+        strtolower($values['name']) != strtolower((string) ($this->_entityType['name'] ?? ''))
         && $count > 0
       ) {
         $this->_errors['name'] = E::ts('An entity type with this name already exists.');
