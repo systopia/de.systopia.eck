@@ -33,7 +33,7 @@ class CRM_Eck_Page_Entity_TabHeader {
       $tabs = self::process($page) ?? [];
       $page->set('tabHeader', $tabs);
     }
-    $page->assign_by_ref('tabHeader', $tabs);
+    $page->assign('tabHeader', $tabs);
     /** @var array<string, array<mixed>> $tabs */
     CRM_Core_Resources::singleton()
       ->addScriptFile(
