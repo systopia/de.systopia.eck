@@ -95,8 +95,6 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
    * {@inheritDoc}
    */
   public function getTemplateFileName() {
-    // hack lets suppress the form rendering for now
-    self::$_template->assign('isForm', FALSE);
     return 'CRM/Eck/Page/Entity/Tab.tpl';
   }
 
