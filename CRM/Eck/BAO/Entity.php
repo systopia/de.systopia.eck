@@ -79,7 +79,7 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
     // callback feels responsible only for the exact routes, not nested ones.
     if (in_array('checkMenuAccess', $args, TRUE)) {
       $null = NULL;
-      $type = CRM_Utils_Request::retrieve('type', 'String', $null, TRUE);
+      $type = CRM_Utils_Request::retrieve('type', 'String', $null);
       if (!is_string($type)) {
         throw new CRM_Core_Exception(E::ts('Error retrieving ECK entity type from request.'));
       }
