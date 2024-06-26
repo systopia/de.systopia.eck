@@ -113,132 +113,130 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
     //   beforehand, so this will not always work due to static variables not
     //   being set.
     if (
-      (
-        !isset(Civi::$statics[self::$_className]['fields'])
-        || [] === Civi::$statics[self::$_className]['fields']
-      )
-      && isset(self::$_entityType)
+      !isset(Civi::$statics[self::$_className]['fields'])
+      || [] === Civi::$statics[self::$_className]['fields']
     ) {
-      Civi::$statics[self::$_className]['fields'] = [
-        'id' => [
-          'name' => 'id',
-          'title' => E::ts('ID'),
-          'type' => CRM_Utils_Type::T_INT,
-          'description' => E::ts('The unique entity ID.'),
-          'required' => TRUE,
-          'where' => static::getTableName() . '.id',
-          'export' => TRUE,
-          'table_name' => static::getTableName(),
-          'entity' => self::$_entityType,
-          'bao' => 'CRM_Eck_DAO_Entity',
-          'localizable' => 0,
-          'readonly' => TRUE,
-          'html' => [
-            'type' => 'Number',
+      if (isset(self::$_entityType)) {
+        Civi::$statics[self::$_className]['fields'] = [
+          'id' => [
+            'name' => 'id',
+            'title' => E::ts('ID'),
+            'type' => CRM_Utils_Type::T_INT,
+            'description' => E::ts('The unique entity ID.'),
+            'required' => TRUE,
+            'where' => static::getTableName() . '.id',
+            'export' => TRUE,
+            'table_name' => static::getTableName(),
+            'entity' => self::$_entityType,
+            'bao' => 'CRM_Eck_DAO_Entity',
+            'localizable' => 0,
+            'readonly' => TRUE,
+            'html' => [
+              'type' => 'Number',
+            ],
           ],
-        ],
-        'title' => [
-          'name' => 'title',
-          'title' => E::ts('Title'),
-          'type' => CRM_Utils_Type::T_STRING,
-          'description' => E::ts('The entity title.'),
-          'required' => TRUE,
-          'where' => static::getTableName() . '.title',
-          'export' => TRUE,
-          'table_name' => static::getTableName(),
-          'entity' => self::$_entityType,
-          'bao' => 'CRM_Eck_DAO_Entity',
-          'localizable' => 1,
-          'html' => [
-            'type' => 'Text',
+          'title' => [
+            'name' => 'title',
+            'title' => E::ts('Title'),
+            'type' => CRM_Utils_Type::T_STRING,
+            'description' => E::ts('The entity title.'),
+            'required' => TRUE,
+            'where' => static::getTableName() . '.title',
+            'export' => TRUE,
+            'table_name' => static::getTableName(),
+            'entity' => self::$_entityType,
+            'bao' => 'CRM_Eck_DAO_Entity',
+            'localizable' => 1,
+            'html' => [
+              'type' => 'Text',
+            ],
           ],
-        ],
-        'subtype' => [
-          'name' => 'subtype',
-          'title' => E::ts('Subtype'),
-          'type' => CRM_Utils_Type::T_STRING,
-          'description' => E::ts('The entity subtype.'),
-          'required' => TRUE,
-          'where' => static::getTableName() . '.subtype',
-          'export' => TRUE,
-          'table_name' => static::getTableName(),
-          'entity' => self::$_entityType,
-          'bao' => 'CRM_Eck_DAO_Entity',
-          'localizable' => 0,
-          'html' => [
-            'type' => 'Text',
+          'subtype' => [
+            'name' => 'subtype',
+            'title' => E::ts('Subtype'),
+            'type' => CRM_Utils_Type::T_STRING,
+            'description' => E::ts('The entity subtype.'),
+            'required' => TRUE,
+            'where' => static::getTableName() . '.subtype',
+            'export' => TRUE,
+            'table_name' => static::getTableName(),
+            'entity' => self::$_entityType,
+            'bao' => 'CRM_Eck_DAO_Entity',
+            'localizable' => 0,
+            'html' => [
+              'type' => 'Text',
+            ],
           ],
-        ],
-        'created_id' => [
-          'name' => 'created_id',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => E::ts('Created By Contact ID'),
-          'description' => E::ts('FK to contact table.'),
-          'where' => 'civicrm_saved_search.created_id',
-          'table_name' => static::getTableName(),
-          'entity' => self::$_entityType,
-          'bao' => 'CRM_Eck_DAO_Entity',
-          'localizable' => 0,
-          'readonly' => TRUE,
-          'FKClassName' => 'CRM_Contact_DAO_Contact',
-          'html' => [
-            'label' => E::ts("Created By"),
+          'created_id' => [
+            'name' => 'created_id',
+            'type' => CRM_Utils_Type::T_INT,
+            'title' => E::ts('Created By Contact ID'),
+            'description' => E::ts('FK to contact table.'),
+            'where' => 'civicrm_saved_search.created_id',
+            'table_name' => static::getTableName(),
+            'entity' => self::$_entityType,
+            'bao' => 'CRM_Eck_DAO_Entity',
+            'localizable' => 0,
+            'readonly' => TRUE,
+            'FKClassName' => 'CRM_Contact_DAO_Contact',
+            'html' => [
+              'label' => E::ts("Created By"),
+            ],
           ],
-        ],
-        'modified_id' => [
-          'name' => 'modified_id',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => E::ts('Modified By Contact ID'),
-          'description' => E::ts('FK to contact table.'),
-          'where' => 'civicrm_saved_search.modified_id',
-          'table_name' => static::getTableName(),
-          'entity' => self::$_entityType,
-          'bao' => 'CRM_Eck_DAO_Entity',
-          'localizable' => 0,
-          'readonly' => TRUE,
-          'FKClassName' => 'CRM_Contact_DAO_Contact',
-          'html' => [
-            'label' => E::ts("Modified By"),
+          'modified_id' => [
+            'name' => 'modified_id',
+            'type' => CRM_Utils_Type::T_INT,
+            'title' => E::ts('Modified By Contact ID'),
+            'description' => E::ts('FK to contact table.'),
+            'where' => 'civicrm_saved_search.modified_id',
+            'table_name' => static::getTableName(),
+            'entity' => self::$_entityType,
+            'bao' => 'CRM_Eck_DAO_Entity',
+            'localizable' => 0,
+            'readonly' => TRUE,
+            'FKClassName' => 'CRM_Contact_DAO_Contact',
+            'html' => [
+              'label' => E::ts("Modified By"),
+            ],
           ],
-        ],
-        'created_date' => [
-          'name' => 'created_date',
-          'type' => CRM_Utils_Type::T_TIMESTAMP,
-          'title' => E::ts('Created Date'),
-          'description' => E::ts('When the record was created.'),
-          'required' => TRUE,
-          'where' => 'civicrm_saved_search.created_date',
-          'default' => 'CURRENT_TIMESTAMP',
-          'table_name' => static::getTableName(),
-          'entity' => self::$_entityType,
-          'bao' => 'CRM_Eck_DAO_Entity',
-          'localizable' => 0,
-          'readonly' => TRUE,
-        ],
-        'modified_date' => [
-          'name' => 'modified_date',
-          'type' => CRM_Utils_Type::T_TIMESTAMP,
-          'title' => E::ts('Modified Date'),
-          'description' => E::ts('When the record was last modified.'),
-          'required' => TRUE,
-          'where' => 'civicrm_saved_search.modified_date',
-          'default' => 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
-          'table_name' => static::getTableName(),
-          'entity' => self::$_entityType,
-          'bao' => 'CRM_Eck_DAO_Entity',
-          'localizable' => 0,
-          'readonly' => TRUE,
-        ],
-      ];
-
-      CRM_Core_DAO_AllCoreTables::invoke(
-        self::$_className,
-        'fields_callback',
-        Civi::$statics[self::$_className]['fields']
-      );
-    }
-    else {
-      Civi::$statics[self::$_className]['fields'] = [];
+          'created_date' => [
+            'name' => 'created_date',
+            'type' => CRM_Utils_Type::T_TIMESTAMP,
+            'title' => E::ts('Created Date'),
+            'description' => E::ts('When the record was created.'),
+            'required' => TRUE,
+            'where' => 'civicrm_saved_search.created_date',
+            'default' => 'CURRENT_TIMESTAMP',
+            'table_name' => static::getTableName(),
+            'entity' => self::$_entityType,
+            'bao' => 'CRM_Eck_DAO_Entity',
+            'localizable' => 0,
+            'readonly' => TRUE,
+          ],
+          'modified_date' => [
+            'name' => 'modified_date',
+            'type' => CRM_Utils_Type::T_TIMESTAMP,
+            'title' => E::ts('Modified Date'),
+            'description' => E::ts('When the record was last modified.'),
+            'required' => TRUE,
+            'where' => 'civicrm_saved_search.modified_date',
+            'default' => 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+            'table_name' => static::getTableName(),
+            'entity' => self::$_entityType,
+            'bao' => 'CRM_Eck_DAO_Entity',
+            'localizable' => 0,
+            'readonly' => TRUE,
+          ],
+        ];
+        CRM_Core_DAO_AllCoreTables::invoke(
+          self::$_className,
+          'fields_callback',
+          Civi::$statics[self::$_className]['fields']
+        );
+      }
+      else {
+        Civi::$statics[self::$_className]['fields'] = [];
+      }
     }
     return Civi::$statics[self::$_className]['fields'];
   }
