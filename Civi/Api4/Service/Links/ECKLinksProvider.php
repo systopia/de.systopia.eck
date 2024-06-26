@@ -38,7 +38,7 @@ class ECKLinksProvider extends \Civi\Core\Service\AutoSubscriber {
         foreach (\CRM_Eck_BAO_EckEntityType::getSubTypes($entityTypeName, FALSE) as $subType) {
           /** @phpstan-var array{value: string, label: string, icon: string} $subType */
           $addLink = $links[$addLinkIndex];
-          if (!is_string($addLink['path']) || '' === $addLink['path']) {
+          if (is_string($addLink['path']) && '' !== $addLink['path']) {
             $addLink['path'] = str_replace('[subtype]', $subType['value'], $addPath);
           }
           if (array_key_exists('icon', $addLink)) {
