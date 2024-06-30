@@ -21,6 +21,9 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
       ->apply();
   }
 
+  /**
+   * @covers \Civi\Api4\EckEntityType::create
+   */
   public function testCreateEntityType():void {
     $entityType = EckEntityType::create(FALSE)
       ->addValue('label', 'Test One Type')
@@ -77,6 +80,9 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     self::assertArrayNotHasKey('Eck_Test_One_Type', $extends['options']);
   }
 
+  /**
+   * @covers \Civi\Api4\EckEntityType::update
+   */
   public function testRenameEntityType():void {
     $entityType = EckEntityType::create(FALSE)
       ->addValue('label', 'Test Two Type')
@@ -110,6 +116,9 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     self::assertStringContainsString('not allowed', $e->getMessage());
   }
 
+  /**
+   * @covers \Civi\Api4\EckEntityType::get
+   */
   public function testTwoEntityTypes(): void {
     $firstEntity = $this->createEntity(['one' => 'One', 'two' => 'Two']);
     $secondEntity = $this->createEntity(['one' => 'One', 'three' => 'Three']);
@@ -191,6 +200,9 @@ class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInter
     self::assertEquals('three', $secondRecords[1]['subtype:name']);
   }
 
+  /**
+   * @covers \Civi\Api4\EckEntityType::get
+   */
   public function testEntityCustomFields(): void {
     $entityName = $this->createEntity(['one' => 'One', 'two' => 'Two']);
 
