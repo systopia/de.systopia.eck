@@ -6,6 +6,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 ini_set('memory_limit', '2G');
 
+if (file_exists(__DIR__ . '/bootstrap.local.php')) {
+  require_once __DIR__ . '/bootstrap.local.php';
+}
+
 /*
  * The return value of this function call is used in the strftime()
  * implementation used in CiviCRM. If it is 'C' this results in this error:
