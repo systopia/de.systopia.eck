@@ -27,13 +27,19 @@ else
     -i /var/www/html/sites/default/civicrm.settings.php
   civicrm-docker-install
 
-  cv ext:enable "$EXT_NAME"
+  # Avoid this error:
+  # The autoloader expected class "Civi\ActionSchedule\Mapping" to be defined in
+  # file "[...]/Civi/ActionSchedule/Mapping.php". The file was found but the
+  # class was not in it, the class name or namespace probably has a typo.
+  rm -f /var/www/html/sites/all/modules/civicrm/Civi/ActionSchedule/Mapping.php
 
   # For headless tests these files need to exist.
   touch /var/www/html/sites/all/modules/civicrm/sql/test_data.mysql
   touch /var/www/html/sites/all/modules/civicrm/sql/test_data_second_domain.mysql
+
+  cv ext:enable "$EXT_NAME"
 fi
 
 cd "$EXT_DIR"
-composer update --no-progress --prefer-dist --optimize-autoloader --no-dev
+composer update --no-progress --prefer-dist --optimize-autoloader
 composer composer-phpunit -- update --no-progress --prefer-dist

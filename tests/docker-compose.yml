@@ -1,7 +1,7 @@
 version: "3"
 services:
   civicrm:
-    image: michaelmcandrew/civicrm:${CIVICRM_IMAGE_TAG:-5-drupal-php8.1}
+    image: michaelmcandrew/civicrm:${CIVICRM_IMAGE_TAG:-5-drupal}
     environment:
       - PROJECT_NAME=test
       - BASE_URL=http://localhost
@@ -10,6 +10,7 @@ services:
       - CIVICRM_DB_PASS=secret
       - CIVICRM_DB_HOST=mysql
       - CIVICRM_DB_PORT=3306
+      - CIVICRM_SITE_KEY=TEST_KEY
       - DRUPAL_DB_NAME=test
       - DRUPAL_DB_USER=root
       - DRUPAL_DB_PASS=secret

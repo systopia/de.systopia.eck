@@ -1,20 +1,71 @@
 <?php
+declare(strict_types = 1);
+
+use Composer\Autoload\ClassLoader;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 ini_set('memory_limit', '2G');
 
-// phpcs:disable
+/*
+ * The return value of this function call is used in the strftime()
+ * implementation used in CiviCRM. If it is 'C' this results in this error:
+ * datefmt_create: invalid locale: U_ILLEGAL_ARGUMENT_ERROR
+ *
+ * Patch applied by CiviCRM containing strftime():
+ * https://patch-diff.githubusercontent.com/raw/pear/Log/pull/23.patch
+ *
+ * https://lab.civicrm.org/dev/core/-/issues/4739
+ * Fixed in 5.67.0 https://github.com/civicrm/civicrm-core/pull/27981
+ */
+if ('C' === setlocale(LC_TIME, '0')) {
+  setlocale(LC_TIME, 'en_US.UTF-8');
+}
+
+// phpcs:disable Drupal.Functions.DiscouragedFunctions.Discouraged
 eval(cv('php:boot --level=classloader', 'phpcode'));
 // phpcs:enable
 
+if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+  require_once __DIR__ . '/../../vendor/autoload.php';
+}
+
+// Make CRM_Eck_ExtensionUtil available.
+require_once __DIR__ . '/../../eck.civix.php';
+
 // phpcs:disable PSR1.Files.SideEffects
 
-// Allow autoloading of PHPUnit helper classes in this extension.
-$loader = new \Composer\Autoload\ClassLoader();
-$loader->add('CRM_', __DIR__);
-$loader->add('Civi\\', __DIR__);
-$loader->add('api_', __DIR__);
-$loader->add('api\\', __DIR__);
-$loader->register();
+// Add test classes to class loader.
+addExtensionDirToClassLoader(__DIR__);
+addExtensionToClassLoader('de.systopia.eck');
+
+if (!function_exists('ts')) {
+  // Ensure function ts() is available - it's declared in the same file as CRM_Core_I18n in CiviCRM < 5.74.
+  // In later versions the function is registered following the composer conventions.
+  \CRM_Core_I18n::singleton();
+}
+
+/**
+ * Modify DI container for tests.
+ */
+function _eck_test_civicrm_container(ContainerBuilder $container): void {
+}
+
+function addExtensionToClassLoader(string $extension): void {
+  addExtensionDirToClassLoader(__DIR__ . '/../../../' . $extension);
+}
+
+function addExtensionDirToClassLoader(string $extensionDir): void {
+  $loader = new ClassLoader();
+  $loader->add('CRM_', [$extensionDir]);
+  $loader->addPsr4('Civi\\', [$extensionDir . '/Civi']);
+  $loader->add('api_', [$extensionDir]);
+  $loader->addPsr4('api\\', [$extensionDir . '/api']);
+  $loader->register();
+
+  if (file_exists($extensionDir . '/autoload.php')) {
+    require_once $extensionDir . '/autoload.php';
+  }
+}
 
 /**
  * Call the "cv" command.
@@ -54,12 +105,12 @@ function cv(string $cmd, string $decode = 'json') {
     case 'phpcode':
       // If the last output is /*PHPCODE*/, then we managed to complete execution.
       if (substr(trim($result), 0, 12) !== '/*BEGINPHP*/' || substr(trim($result), -10) !== '/*ENDPHP*/') {
-        throw new \RuntimeException("Command failed ($cmd):\n$result");
+        throw new RuntimeException("Command failed ($cmd):\n$result");
       }
       return $result;
 
     case 'json':
-      return json_decode($result, 1);
+      return json_decode($result, TRUE);
 
     default:
       throw new RuntimeException("Bad decoder format ($decode)");

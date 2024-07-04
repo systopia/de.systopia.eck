@@ -1,7 +1,13 @@
 name: PHPUnit
 
 on:
-  push: ~
+  pull_request:
+    paths:
+      - '**.php'
+      - composer.json
+      - tools/phpunit/composer.json
+      - phpunit.xml.dist
+      - tests/docker-prepare.sh
 
 env:
   # On github CI machine creating the "/vendor" volume fails otherwise with: read-only file system: unknown
@@ -12,8 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        civicrm-image-tags: [ '5-drupal-php8.2', '5-drupal-php8.1', '5-drupal-php8.0', '5-drupal-php7.4' ]
-      fail-fast: false
+        civicrm-image-tags: [ '5-drupal-php8.3', '5-drupal-php8.0', '5-drupal-php7.4' ]
     name: PHPUnit with Docker image michaelmcandrew/civicrm:${{ matrix.civicrm-image-tags }}
     env:
       CIVICRM_IMAGE_TAG: ${{ matrix.civicrm-image-tags }}
