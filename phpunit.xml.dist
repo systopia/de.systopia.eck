@@ -21,16 +21,6 @@
       <directory>./tests/phpunit</directory>
     </testsuite>
   </testsuites>
-  <filter>
-    <whitelist>
-      <directory suffix=".php">api</directory>
-      <directory suffix=".php">CRM</directory>
-      <directory suffix=".php">Civi</directory>
-      <exclude>
-        <directory>CRM/Eck/DAO</directory>
-      </exclude>
-    </whitelist>
-  </filter>
   <listeners>
     <listener class="Civi\Test\CiviTestListener">
       <arguments/>
