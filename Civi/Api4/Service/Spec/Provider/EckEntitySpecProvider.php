@@ -117,6 +117,26 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
   }
 
   /**
+   * Get the data type from an array. Defaults to 'data_type' with fallback to
+   * mapping for the integer value 'type'
+   *
+   * @param array $data
+   *
+   * @return string
+   */
+  private static function getDataType(array $data) {
+    $dataType = $data['data_type'] ?? $data['dataType'] ?? NULL;
+    if (isset($dataType)) {
+      return !empty($data['time_format']) ? 'Timestamp' : $dataType;
+    }
+
+    $dataTypeInt = $data['type'] ?? NULL;
+    $dataTypeName = \CRM_Utils_Type::typeToString($dataTypeInt);
+
+    return $dataTypeName === 'Int' ? 'Integer' : $dataTypeName;
+  }
+
+  /**
    * Copied from \Civi\Api4\Service\Spec\SpecFormatter
    *
    * @param \Civi\Api4\Service\Spec\FieldSpec $fieldSpec
