@@ -15,6 +15,7 @@
 
 namespace Civi\Eck\API;
 
+use Civi\Api4\CustomGroup;
 use Civi\Api4\EckEntity;
 use Civi\Core\Service\AutoSubscriber;
 use Civi\Eck\Permissions;
@@ -155,11 +156,28 @@ class Entity extends AutoSubscriber {
             ->addWhere('input_type', 'IS NOT EMPTY')
             // Don't allow subtype to be changed on the form, since this form is specific to subtype
             ->addWhere('name', '!=', 'subtype')
+            // Exclude custom fields, as they are being handled by Afform's automatic custom blocks.
+            ->addWhere('type', '!=', 'Custom')
             ->execute();
+          $customGroups = CustomGroup::get(FALSE)
+            ->addSelect('name', 'title')
+            ->addWhere('extends', '=', $entityType['entity_name'])
+            ->addClause(
+              'OR',
+              ['extends_entity_column_value', '=', $subType['value']],
+              ['extends_entity_column_value', 'IS EMPTY']
+            )
+            ->execute()
+            ->getArrayCopy();
+          array_walk($customGroups, function (&$customGroup) {
+            /** @phpstan-var array{id: int, name: string, title: string} $customGroup */
+            $customGroup['afName'] = \CRM_Utils_String::convertStringToDash($customGroup['name']);
+          });
           $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afformEck.tpl', [
             'entityType' => $entityType,
             'subType' => $subType,
             'fields' => $fields,
+            'customGroups' => $customGroups,
           ]);
         }
         $afforms[$name] = $item;
