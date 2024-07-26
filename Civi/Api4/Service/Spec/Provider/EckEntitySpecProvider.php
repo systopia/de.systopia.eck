@@ -40,6 +40,7 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
     }
   }
 
+  // phpcs:disable
   /**
    * Copied from \Civi\Api4\Service\Spec\SpecFormatter
    *
@@ -115,7 +116,9 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
 
     return $field;
   }
+  // phpcs:enable
 
+  // phpcs:disable
   /**
    * Get the data type from an array. Defaults to 'data_type' with fallback to
    * mapping for the integer value 'type'
@@ -135,7 +138,9 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
 
     return $dataTypeName === 'Int' ? 'Integer' : $dataTypeName;
   }
+  // phpcs:enable
 
+  // phpcs:disable
   /**
    * Copied from \Civi\Api4\Service\Spec\SpecFormatter
    *
@@ -221,7 +226,9 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
       ->setInputType($inputType)
       ->setInputAttrs($inputAttrs);
   }
+  // phpcs:enable
 
+  // phpcs:disable
   /**
    * Copied from \Civi\Api4\Service\Spec\SpecFormatter
    *
@@ -240,6 +247,7 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
     $inputAttrs['start_date_years'] = (int) $dateFormat['start'];
     $inputAttrs['end_date_years'] = (int) $dateFormat['end'];
   }
+  // phpcs:enable
 
   /**
    * Copied from \Civi\Api4\Service\Spec\SpecGatherer::setDynamicFk()
