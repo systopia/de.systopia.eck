@@ -244,14 +244,6 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   /**
    * {@inheritDoc}
    */
-  public static function getSelectWhereClause($tableAlias = NULL, $entityName = NULL, $conditions = []): array {
-    // TODO: ECK entities do not implement ACLs
-    return [];
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public static function writeRecord(array $record): CRM_Core_DAO {
     $loggedInContactID = CRM_Core_Session::getLoggedInContactID();
     if ($loggedInContactID) {
