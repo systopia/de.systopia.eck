@@ -77,7 +77,7 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
         // These suffixes are always supported if a field has options
         $suffixes = ['name', 'label'];
         // Add other columns specified in schema (e.g. 'abbrColumn')
-        foreach (array_diff(FormattingUtil::$pseudoConstantSuffixes, $suffixes) as $suffix) {
+        foreach (['abbr', 'color', 'description', 'icon', 'grouping', 'url'] as $suffix) {
           if (!empty($data['pseudoconstant'][$suffix . 'Column'])) {
             $suffixes[] = $suffix;
           }
