@@ -90,13 +90,15 @@ class Entity extends AutoSubscriber {
    */
   public static function afformEntityTypes(GenericHookEvent $e): void {
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
-      $e->entities[$entityType['entity_name']] = [
-        'entity' => $entityType['entity_name'],
-        'label' => $entityType['label'],
-        'icon' => $entityType['icon'],
-        'type' => 'primary',
-        'defaults' => '{}',
-      ];
+      if ([] !== \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType['name'])) {
+        $e->entities[$entityType['entity_name']] = [
+          'entity' => $entityType['entity_name'],
+          'label' => $entityType['label'],
+          'icon' => $entityType['icon'],
+          'type' => 'primary',
+          'defaults' => '{}',
+        ];
+      }
     }
   }
 
