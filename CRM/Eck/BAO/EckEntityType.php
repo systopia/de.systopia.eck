@@ -337,6 +337,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
     // Flush UF route cache for registering routes in the user framework (CMS).
     $config = CRM_Core_Config::singleton();
     $config->userSystem->invalidateRouteCache();
+    self::createCivirulesTriggers($event->params['name']);
   }
 
   /**
@@ -356,6 +357,56 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
           ->addWhere('grouping', '=', $eckTypeName)
           ->execute();
       }
+    }
+  }
+
+  /**
+   * @param string|null $entityName
+   *
+   * @return void
+   * @throws \CRM_Core_Exception
+   * @throws \Civi\API\Exception\UnauthorizedException
+   */
+  public static function createCivirulesTriggers(?string $entityName) : void {
+    // Is CiviRules installed?
+    if (!\Civi\Api4\Extension::get(FALSE)->addWhere('file', '=', 'civirules')->execute()->count()) {
+      return;
+    }
+    $eckEntityTypes = $entityName ? [self::getEntityType($entityName)] : self::getEntityTypes();
+    foreach ($eckEntityTypes as $eckEntityType) {
+      $name = $eckEntityType['name'];
+      $label = $eckEntityType['label'];
+      $records[] = [
+        'name' => "new_$name",
+        'label' => "$label is added",
+        'cron' => FALSE,
+        'object_name' => 'Eck_' . $name,
+        'op' => 'create',
+        'class_name' => 'CRM_CiviRulesPostTrigger_Eck',
+      ];
+      $records[] = [
+        'name' => "changed_$name",
+        'label' => "$label is changed",
+        'cron' => FALSE,
+        'object_name' => 'Eck_' . $name,
+        'op' => 'edit',
+        'class_name' => 'CRM_CiviRulesPostTrigger_Eck',
+      ];
+      $records[] = [
+        'name' => "deleted_$name",
+        'label' => "$label is deleted",
+        'cron' => FALSE,
+        'object_name' => 'Eck_' . $name,
+        'op' => 'delete',
+        'class_name' => 'CRM_CiviRulesPostTrigger_Eck',
+      ];
+    }
+
+    if (!empty($records)) {
+      \Civi\Api4\CiviRulesTrigger::save(FALSE)
+        ->setRecords($records)
+        ->setMatch(['name'])
+        ->execute();
     }
   }
 
