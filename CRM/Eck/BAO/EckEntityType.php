@@ -302,6 +302,21 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
     // Flush UF route cache for registering routes in the user framework (CMS).
     $config = CRM_Core_Config::singleton();
     $config->userSystem->invalidateRouteCache();
+    self::createCivirulesTriggers($event->params['name']);
   }
 
+  public static function createCivirulesTriggers(?string $entityName) : void {
+    // Is CiviRules installed?
+    if (!\Civi\Api4\Extension::get(FALSE)->addWhere('file', '=', 'civirules')->execute()->count()) {
+      return;
+    }
+    $eckEntityTypes = $entityName ? [self::getEntityType($entityName)] : self::getEntityTypes();
+    foreach ($eckEntityTypes as $eckEntityType) {
+      $name = $eckEntityType['name'];
+      $label = $eckEntityType['label'];
+      CRM_Civirules_Utils_Upgrader::insertTrigger("new_$name", "$label is added", 0, 'CRM_CiviRulesPostTrigger_Eck', 'Eck_' . $name, 'create');
+      CRM_Civirules_Utils_Upgrader::insertTrigger("changed_$name", "$label is changed", 0, 'CRM_CiviRulesPostTrigger_Eck', 'Eck_' . $name, 'edit');
+      CRM_Civirules_Utils_Upgrader::insertTrigger("deleted_$name", "$label is deleted", 0, 'CRM_CiviRulesPostTrigger_Eck', 'Eck_' . $name, 'delete');
+    }
+  }
 }
