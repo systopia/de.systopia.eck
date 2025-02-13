@@ -135,9 +135,7 @@ class Entity extends AutoSubscriber {
           'title' => $entityType['label'] . ' (' . $subType['label'] . ')',
           'description' => '',
           'base_module' => E::LONG_NAME,
-          'is_dashlet' => FALSE,
           'is_public' => FALSE,
-          'is_token' => FALSE,
           'permission' => [
             Permissions::ADMINISTER_ECK_ENTITIES,
             Permissions::EDIT_ANY_ECK_ENTITY,
@@ -173,9 +171,7 @@ class Entity extends AutoSubscriber {
         'title' => $entityType['label'],
         'description' => E::ts('Search listing for %1', [1 => $entityType['label']]),
         'base_module' => E::LONG_NAME,
-        'is_dashlet' => FALSE,
         'is_public' => FALSE,
-        'is_token' => FALSE,
         'permission' => [
           Permissions::ADMINISTER_ECK_ENTITIES,
           Permissions::VIEW_ANY_ECK_ENTITY,
