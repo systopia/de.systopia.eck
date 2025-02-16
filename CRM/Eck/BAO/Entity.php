@@ -22,7 +22,7 @@ use Civi\Eck\Permissions;
 class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
 
   public static function getEntityType(string $entityName): ?string {
-    return strpos($entityName, 'Eck_') === 0 ? substr($entityName, strlen('Eck_')) : NULL;
+    return str_starts_with($entityName, 'Eck_') ? substr($entityName, strlen('Eck_')) : NULL;
   }
 
   /**
@@ -53,7 +53,7 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
   public static function on_hook_civicrm_post(PostEvent $event): void {
     // Add the recently created Entity to the list of recently viewed items.
     if (
-      strpos($event->entity, 'Eck_') === 0
+      str_starts_with($event->entity, 'Eck_')
       && in_array($event->action, ['create', 'edit'], TRUE)
       && ((bool) (CRM_Eck_BAO_EckEntityType::getEntityType(substr($event->entity, 4))['in_recent'] ?? FALSE))
     ) {
