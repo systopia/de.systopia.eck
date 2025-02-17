@@ -1,0 +1,69 @@
+parameters:
+	ignoreErrors:
+		-
+			message: """
+				#^Call to deprecated method getTree\\(\\) of class CRM_Core_BAO_CustomGroup\\:
+				Function demonstrates just how bad code can get from 20 years of entropy\\.$#
+			"""
+			count: 1
+			path: CRM/Eck/Page/Entity/View.php
+
+		-
+			message: "#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#"
+			count: 19
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Method Civi\\\\Api4\\\\Service\\\\Spec\\\\Provider\\\\EckEntitySpecProvider\\:\\:arrayToField\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Method Civi\\\\Api4\\\\Service\\\\Spec\\\\Provider\\\\EckEntitySpecProvider\\:\\:getDataType\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Method Civi\\\\Api4\\\\Service\\\\Spec\\\\Provider\\\\EckEntitySpecProvider\\:\\:setInputTypeAndAttrs\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Method Civi\\\\Api4\\\\Service\\\\Spec\\\\Provider\\\\EckEntitySpecProvider\\:\\:setInputTypeAndAttrs\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Method Civi\\\\Api4\\\\Service\\\\Spec\\\\Provider\\\\EckEntitySpecProvider\\:\\:setLegacyDateFormat\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Method Civi\\\\Api4\\\\Service\\\\Spec\\\\Provider\\\\EckEntitySpecProvider\\:\\:setLegacyDateFormat\\(\\) has parameter \\$inputAttrs with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Only booleans are allowed in &&, int\\<0, max\\>\\|false given on the right side\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Only booleans are allowed in a ternary operator condition, int\\<0, max\\>\\|false given\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Civi\\\\Api4\\\\Service\\\\Spec\\\\FieldSpec\\:\\:setOptionsCallback\\(\\) expects callable\\(\\)\\: mixed, array\\{'Civi\\\\\\\\Api4\\\\\\\\Service\\\\\\\\Spec\\\\\\\\Provider\\\\\\\\EckEntitySpecProvider', 'getOptions'\\} given\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$fkEntity of method Civi\\\\Api4\\\\Service\\\\Spec\\\\FieldSpec\\:\\:setFkEntity\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Short ternary operator is not allowed\\. Use null coalesce operator if applicable or consider using long ternary\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
