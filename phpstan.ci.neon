@@ -5,6 +5,7 @@ parameters:
 	scanFiles:
 		- ci/vendor/civicrm/civicrm-core/ext/afform/core/afform.php
 	scanDirectories:
+		- ci/vendor/civicrm/civicrm-core/Civi/
 		- ci/vendor/civicrm/civicrm-core/CRM/
 		- ci/vendor/civicrm/civicrm-core/api/
 		- ci/vendor/civicrm/civicrm-packages/
