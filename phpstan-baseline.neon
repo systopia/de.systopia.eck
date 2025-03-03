@@ -67,3 +67,33 @@ parameters:
 			message: "#^Short ternary operator is not allowed\\. Use null coalesce operator if applicable or consider using long ternary\\.$#"
 			count: 1
 			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Call to an undefined method CRM_Eck_Form_EckSubtype\\:\\:getElement\\(\\)\\.$#"
+			count: 2
+			path: CRM/Eck/Form/EckSubtype.php
+
+		-
+			message: "#^Access to an undefined property CRM_Eck_Form_EckSubtype\\:\\:\\$_elements\\.$#"
+			count: 1
+			path: CRM/Eck/Form/EckSubtype.php
+
+		-
+			message: "#^Call to an undefined method CRM_Eck_Form_EntityType\\:\\:getElement\\(\\)\\.$#"
+			count: 3
+			path: CRM/Eck/Form/EntityType.php
+
+		-
+			message: "#^Access to an undefined property CRM_Eck_Form_EntityType\\:\\:\\$_submitValues\\.$#"
+			count: 2
+			path: CRM/Eck/Form/EntityType.php
+
+		-
+			message: "#^Access to an undefined property CRM_Eck_Form_EntityType\\:\\:\\$_errors\\.$#"
+			count: 3
+			path: CRM/Eck/Form/EntityType.php
+
+		-
+			message: "#^Access to an undefined property CRM_Eck_Form_EntityType\\:\\:\\$_elements\\.$#"
+			count: 1
+			path: CRM/Eck/Form/EntityType.php
