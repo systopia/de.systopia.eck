@@ -97,3 +97,13 @@ parameters:
 			message: "#^Access to an undefined property CRM_Eck_Form_EntityType\\:\\:\\$_elements\\.$#"
 			count: 1
 			path: CRM/Eck/Form/EntityType.php
+
+		-
+			message: "#^Method CRM_Eck_BAO_EckEntityType\\:\\:getEntityTypes\\(\\) should return array\\<string, array\\<string, string\\>\\> but returns array\\|false\\.$#"
+			count: 1
+			path: CRM/Eck/BAO/EckEntityType.php
+
+		-
+			message: "#^Method CRM_Eck_BAO_Entity\\:\\:getEntityType\\(\\) should return string\\|null but returns string\\|false\\|null\\.$#"
+			count: 1
+			path: CRM/Eck/BAO/Entity.php
