@@ -18,7 +18,7 @@
   <version>1.0-dev</version>
   <develStage>dev</develStage>
   <compatibility>
-    <ver>5.67</ver>
+    <ver>5.73</ver>
   </compatibility>
   <requires></requires>
   <upgrader>CRM_Eck_Upgrader</upgrader>
