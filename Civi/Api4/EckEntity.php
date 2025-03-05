@@ -123,7 +123,9 @@ class EckEntity {
   }
 
   /**
-   * @return \Civi\Api4\Action\GetLinks
+   * @param string $entity_type
+   * @param bool $checkPermissions
+   * @return \Civi\Api4\Action\GetLinks | \Civi\Api4\Generic\BasicGetAction
    */
   public static function getLinks(string $entity_type, $checkPermissions = TRUE) {
     // CiviCRM 5.70+
