@@ -142,4 +142,12 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Implements hook_civicrm_upgrade_N().
+   */
+  public function upgrade_0016(): bool {
+    $this->ctx->log->info('Add CiviRules support');
+    CRM_Eck_BAO_EckEntityType::createCivirulesTriggers(NULL);
+    return TRUE;
+  }
 }
