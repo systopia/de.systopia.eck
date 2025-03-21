@@ -33,6 +33,9 @@ class CRM_Eck_Page_Entity_TabHeader {
       $tabs = self::process($page) ?? [];
       $page->set('tabHeader', $tabs);
     }
+    if (method_exists(CRM_Core_Smarty::class, 'setRequiredTabTemplateKeys')) {
+      $tabs = \CRM_Core_Smarty::setRequiredTabTemplateKeys($tabs);
+    }
     $page->assign('tabHeader', $tabs);
     /** @var array<string, array<mixed>> $tabs */
     CRM_Core_Resources::singleton()
