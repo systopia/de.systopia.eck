@@ -72,38 +72,46 @@ parameters:
 			message: "#^Call to an undefined method CRM_Eck_Form_EckSubtype\\:\\:getElement\\(\\)\\.$#"
 			count: 2
 			path: CRM/Eck/Form/EckSubtype.php
+			reportUnmatched: false
 
 		-
 			message: "#^Access to an undefined property CRM_Eck_Form_EckSubtype\\:\\:\\$_elements\\.$#"
 			count: 1
 			path: CRM/Eck/Form/EckSubtype.php
+			reportUnmatched: false
 
 		-
 			message: "#^Call to an undefined method CRM_Eck_Form_EntityType\\:\\:getElement\\(\\)\\.$#"
 			count: 3
 			path: CRM/Eck/Form/EntityType.php
+			reportUnmatched: false
 
 		-
 			message: "#^Access to an undefined property CRM_Eck_Form_EntityType\\:\\:\\$_submitValues\\.$#"
 			count: 2
 			path: CRM/Eck/Form/EntityType.php
+			reportUnmatched: false
 
 		-
 			message: "#^Access to an undefined property CRM_Eck_Form_EntityType\\:\\:\\$_errors\\.$#"
 			count: 3
 			path: CRM/Eck/Form/EntityType.php
+			reportUnmatched: false
 
 		-
 			message: "#^Access to an undefined property CRM_Eck_Form_EntityType\\:\\:\\$_elements\\.$#"
 			count: 1
 			path: CRM/Eck/Form/EntityType.php
+			reportUnmatched: false
 
 		-
 			message: "#^Method CRM_Eck_BAO_EckEntityType\\:\\:getEntityTypes\\(\\) should return array\\<string, array\\<string, string\\>\\> but returns array\\|false\\.$#"
 			count: 1
 			path: CRM/Eck/BAO/EckEntityType.php
+			reportUnmatched: false
 
 		-
 			message: "#^Method CRM_Eck_BAO_Entity\\:\\:getEntityType\\(\\) should return string\\|null but returns string\\|false\\|null\\.$#"
 			count: 1
 			path: CRM/Eck/BAO/Entity.php
+			reportUnmatched: false
