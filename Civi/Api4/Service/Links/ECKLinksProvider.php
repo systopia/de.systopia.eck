@@ -40,6 +40,12 @@ class ECKLinksProvider extends \Civi\Core\Service\AutoSubscriber {
           $addLink = $links[$addLinkIndex];
           if (is_string($addLink['path']) && '' !== $addLink['path']) {
             $addLink['path'] = str_replace('[subtype]', $subType['value'], $addPath);
+            $values = $request->getValues();
+            // Add values to url to pass to the form
+            if (count($values) > 0) {
+              // @phpstan-ignore-next-line
+              $addLink['path'] .= '#?' . http_build_query($values);
+            }
           }
           if (array_key_exists('icon', $addLink)) {
             $addLink['icon'] = $subType['icon'] ?? NULL;
