@@ -1,14 +1,21 @@
 name: PHPStan
 
 on:
-  push: ~
+  pull_request:
+    paths:
+      - '**.php'
+      - composer.json
+      - tools/phpstan/composer.json
+      - ci/composer.json
+      - phpstan.ci.neon
+      - phpstan.neon.dist
 
 jobs:
   phpstan:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['7.4', '8.0', '8.2']
+        php-versions: ['7.4', '8.0', '8.3']
         prefer: ['prefer-stable', 'prefer-lowest']
     name: PHPStan with PHP ${{ matrix.php-versions }} ${{ matrix.prefer }}
 
@@ -36,10 +43,10 @@ jobs:
 
     - name: Install dependencies
       run: |
-        composer update --no-progress --prefer-dist --${{ matrix.prefer }} &&
+        composer update --no-progress --prefer-dist --${{ matrix.prefer }} --optimize-autoloader &&
         composer composer-phpunit -- update --no-progress --prefer-dist &&
         composer composer-phpstan -- update --no-progress --prefer-dist --optimize-autoloader &&
-        composer --working-dir=ci update --no-progress --prefer-dist --${{ matrix.prefer }} --optimize-autoloader --ignore-platform-req=ext-gd
+        composer --working-dir=ci update --no-progress --prefer-dist --${{ matrix.prefer }} --ignore-platform-req=ext-gd
 
     - name: Run PHPStan
       run: composer phpstan -- analyse -c phpstan.ci.neon

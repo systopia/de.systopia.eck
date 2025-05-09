@@ -127,17 +127,9 @@ class EckEntity {
    * @param bool $checkPermissions
    * @return \Civi\Api4\Action\GetLinks | \Civi\Api4\Generic\BasicGetAction
    */
-  public static function getLinks(string $entity_type, $checkPermissions = TRUE) {
-    // CiviCRM 5.70+
-    if (class_exists('Civi\Api4\Action\GetLinks')) {
-      return (new \Civi\Api4\Action\GetLinks('Eck_' . $entity_type, __FUNCTION__))
-        ->setCheckPermissions($checkPermissions);
-    }
-    // Older versions do not support this action so just return a placeholder
-    else {
-      return (new \Civi\Api4\Generic\BasicGetAction('Eck_' . $entity_type, __FUNCTION__, fn() => []))
-        ->setCheckPermissions($checkPermissions);
-    }
+  public static function getLinks(string $entity_type, bool $checkPermissions = TRUE) {
+    return (new \Civi\Api4\Action\GetLinks('Eck_' . $entity_type, __FUNCTION__))
+      ->setCheckPermissions($checkPermissions);
   }
 
   /**

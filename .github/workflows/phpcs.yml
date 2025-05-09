@@ -1,7 +1,11 @@
 name: PHP_CodeSniffer
 
 on:
-  push: ~
+  pull_request:
+    paths:
+      - '**.php'
+      - tools/phpcs/composer.json
+      - phpcs.xml.dist
 
 jobs:
   phpcs:
