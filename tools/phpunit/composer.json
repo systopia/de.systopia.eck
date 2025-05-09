@@ -1,13 +1,13 @@
 {
     "require": {
-        "symfony/phpunit-bridge": "^6.1"
+        "symfony/phpunit-bridge": "^7"
     },
     "scripts": {
         "post-install-cmd": [
-            "@php vendor/bin/simple-phpunit install"
+            "@php vendor/bin/simple-phpunit install --configuration ../../phpunit.xml.dist"
         ],
         "post-update-cmd": [
-            "@php vendor/bin/simple-phpunit install"
+            "@php vendor/bin/simple-phpunit install --configuration ../../phpunit.xml.dist"
         ]
     }
 }

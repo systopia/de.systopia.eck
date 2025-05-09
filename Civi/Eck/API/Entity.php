@@ -15,6 +15,7 @@
 
 namespace Civi\Eck\API;
 
+use Civi\Api4\CustomGroup;
 use Civi\Api4\EckEntity;
 use Civi\Core\Service\AutoSubscriber;
 use Civi\Eck\Permissions;
@@ -89,13 +90,17 @@ class Entity extends AutoSubscriber {
    */
   public static function afformEntityTypes(GenericHookEvent $e): void {
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
-      $e->entities[$entityType['entity_name']] = [
-        'entity' => $entityType['entity_name'],
-        'label' => $entityType['label'],
-        'icon' => $entityType['icon'],
-        'type' => 'primary',
-        'defaults' => '{}',
-      ];
+      // Don't expose entity types without subtypes, as ECK entities are required to have a subtype and saving those
+      // forms without a subtype would fail silently.
+      if ([] !== \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType['name'])) {
+        $e->entities[$entityType['entity_name']] = [
+          'entity' => $entityType['entity_name'],
+          'label' => $entityType['label'],
+          'icon' => $entityType['icon'],
+          'type' => 'primary',
+          'defaults' => '{}',
+        ];
+      }
     }
   }
 
@@ -153,11 +158,28 @@ class Entity extends AutoSubscriber {
             ->addWhere('input_type', 'IS NOT EMPTY')
             // Don't allow subtype to be changed on the form, since this form is specific to subtype
             ->addWhere('name', '!=', 'subtype')
+            // Exclude custom fields, as they are being handled by Afform's automatic custom blocks.
+            ->addWhere('type', '!=', 'Custom')
             ->execute();
+          $customGroups = CustomGroup::get(FALSE)
+            ->addSelect('name', 'title')
+            ->addWhere('extends', '=', $entityType['entity_name'])
+            ->addClause(
+              'OR',
+              ['extends_entity_column_value', '=', $subType['value']],
+              ['extends_entity_column_value', 'IS EMPTY']
+            )
+            ->execute()
+            ->getArrayCopy();
+          array_walk($customGroups, function (&$customGroup) {
+            /** @phpstan-var array{id: int, name: string, title: string} $customGroup */
+            $customGroup['afName'] = \CRM_Utils_String::convertStringToDash($customGroup['name']);
+          });
           $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afformEck.tpl', [
             'entityType' => $entityType,
             'subType' => $subType,
             'fields' => $fields,
+            'customGroups' => $customGroups,
           ]);
         }
         $afforms[$name] = $item;
@@ -183,7 +205,6 @@ class Entity extends AutoSubscriber {
       ];
       $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afsearch_eck_listing.tpl', [
         'entityType' => $entityType,
-        'subTypes' => $subTypes,
       ]);
       $afforms[$name] = $item;
     }

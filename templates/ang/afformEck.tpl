@@ -4,6 +4,12 @@
   {foreach item="field" from=$fields}
     <af-field name="{$field.name}"></af-field>
   {/foreach}
+  {foreach item="customGroup" from=$customGroups}
+    <fieldset>
+      <legend>{$customGroup.title}</legend>
+      <afblock-custom-{$customGroup.afName}></afblock-custom-{$customGroup.afName}>
+    </fieldset>
+  {/foreach}
   </fieldset>
   <button class="af-button btn btn-primary" crm-icon="fa-check" ng-click="afform.submit()">{ts}Submit{/ts}</button>
 </af-form>
