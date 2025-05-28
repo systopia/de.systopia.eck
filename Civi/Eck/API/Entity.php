@@ -203,9 +203,11 @@ class Entity extends AutoSubscriber {
         'server_route' => "civicrm/eck/entity/list/{$entityType['name']}",
         'requires' => ['crmSearchDisplayTable'],
       ];
-      $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afsearch_eck_listing.tpl', [
-        'entityType' => $entityType,
-      ]);
+      if ($event->getLayout) {
+        $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afsearch_eck_listing.tpl', [
+          'entityType' => $entityType,
+        ]);
+      }
       $afforms[$name] = $item;
     }
   }
