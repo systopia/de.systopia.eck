@@ -30,24 +30,25 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
   public static function getEntityTypes(): array {
     $entityTypes = Civi::cache('metadata')->get('EckEntityTypes');
     if (!is_array($entityTypes)) {
-      $entityTypesQuery = CRM_Core_DAO::executeQuery('SELECT * FROM `civicrm_eck_entity_type`');
-      if (!is_a($entityTypesQuery, CRM_Core_DAO::class)) {
-        throw new CRM_Core_Exception('Error retrieving ECK entity types: ');
+      // The table might not yet exist (e.g. when flushing caches/fetching permissions during installation).
+      if (CRM_Core_DAO::checkTableExists('civicrm_eck_entity_type')) {
+        $entityTypesQuery = CRM_Core_DAO::executeQuery('SELECT * FROM `civicrm_eck_entity_type`');
+        if (!is_a($entityTypesQuery, CRM_Core_DAO::class)) {
+          throw new CRM_Core_Exception('Error retrieving ECK entity types: ');
+        }
+        $entityTypes = [];
+        while ($entityTypesQuery->fetch()) {
+          $entityTypes['Eck_' . $entityTypesQuery->name] = $entityTypesQuery->toArray()
+            + [
+              'entity_name' => 'Eck_' . $entityTypesQuery->name,
+              'table_name' => _eck_get_table_name($entityTypesQuery->name),
+            ];
+        }
+        Civi::cache('metadata')->set('EckEntityTypes', $entityTypes);
       }
-      $entityTypes = $entityTypesQuery->fetchAll();
-      foreach ($entityTypes as &$entityType) {
-        $entityType['entity_name'] = 'Eck_' . $entityType['name'];
-        $entityType['table_name'] = _eck_get_table_name($entityType['name']);
+      else {
+        $entityTypes = [];
       }
-      $entityTypes = array_combine(
-        array_map(
-          function($entityType) {
-            return $entityType['entity_name'];
-          },
-          $entityTypes),
-        $entityTypes
-      );
-      Civi::cache('metadata')->set('EckEntityTypes', $entityTypes);
     }
     return $entityTypes;
   }
