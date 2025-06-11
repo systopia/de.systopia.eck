@@ -15,6 +15,9 @@
 
 namespace Civi\Api4;
 
+use Civi\Api4\Generic\BasicBatchAction;
+use Civi\Api4\Generic\ExportAction;
+use Civi\Api4\Generic\Traits\ManagedEntity;
 use CRM_Eck_ExtensionUtil as E;
 use Civi\Api4\Generic\BasicReplaceAction;
 use Civi\Api4\Generic\CheckAccessAction;
@@ -31,6 +34,32 @@ use Civi\Eck\Permissions;
  * @package Civi\Api4
  */
 class EckEntity {
+
+  use ManagedEntity;
+
+  /**
+   * @param bool $checkPermissions
+   * @return \Civi\Api4\Generic\BasicBatchAction
+   */
+  public static function revert(string $entity_type, $checkPermissions = TRUE) {
+    return (new BasicBatchAction('Eck_' . $entity_type, __FUNCTION__, function($item, BasicBatchAction $action) {
+      if (\CRM_Core_ManagedEntities::singleton()->revert($action->getEntityName(), $item['id'])) {
+        return $item;
+      }
+      else {
+        throw new \CRM_Core_Exception('Cannot revert ' . $action->getEntityName() . ' with id ' . $item['id']);
+      }
+    }))->setCheckPermissions($checkPermissions);
+  }
+
+  /**
+   * @param bool $checkPermissions
+   * @return \Civi\Api4\Generic\ExportAction
+   */
+  public static function export(string $entity_type, $checkPermissions = TRUE) {
+    return (new ExportAction('Eck_' . $entity_type, __FUNCTION__))
+      ->setCheckPermissions($checkPermissions);
+  }
 
   /**
    * @param string $entity_type
