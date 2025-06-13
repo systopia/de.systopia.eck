@@ -8,6 +8,7 @@ on:
       - tools/phpunit/composer.json
       - phpunit.xml.dist
       - tests/docker-prepare.sh
+  workflow_dispatch: ~
 
 env:
   # On github CI machine creating the "/vendor" volume fails otherwise with: read-only file system: unknown
