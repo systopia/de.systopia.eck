@@ -25,4 +25,23 @@ class CRM_CiviRulesPostTrigger_Eck extends CRM_Civirules_Trigger_Post {
     $triggerData->setContactId($entityData['modified_id']);
     parent::alterTriggerData($triggerData);
   }
+
+  public function getExtraDataInputUrl($ruleId) {
+    return $this->getFormattedExtraDataInputUrl('civicrm/civirule/form/trigger/post', $ruleId);
+  }
+
+  /**
+   * Get various types of help text for the trigger:
+   *   - triggerDescription: When choosing from a list of triggers, explains what the trigger does.
+   *   - triggerDescriptionWithParams: When a trigger has been configured for a rule provides a
+   *       user friendly description of the trigger and params (see $this->getTriggerDescription())
+   *   - triggerParamsHelp (default): If the trigger has configurable params, show this help text when configuring
+   * @param string $context
+   *
+   * @return string
+   */
+  public function getHelpText(string $context = 'triggerParamsHelp'): string {
+    return parent::getHelpText($context);
+  }
+
 }
