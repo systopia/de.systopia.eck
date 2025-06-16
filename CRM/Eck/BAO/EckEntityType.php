@@ -34,7 +34,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
       if (CRM_Core_DAO::checkTableExists('civicrm_eck_entity_type')) {
         $entityTypesQuery = CRM_Core_DAO::executeQuery('SELECT * FROM `civicrm_eck_entity_type`');
         if (!is_a($entityTypesQuery, CRM_Core_DAO::class)) {
-          throw new CRM_Core_Exception('Error retrieving ECK entity types: ');
+          throw new CRM_Core_Exception('Error retrieving ECK entity types');
         }
         $entityTypes = [];
         while ($entityTypesQuery->fetch()) {
