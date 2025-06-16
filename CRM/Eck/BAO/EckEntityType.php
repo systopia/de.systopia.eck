@@ -302,21 +302,86 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
     // Flush UF route cache for registering routes in the user framework (CMS).
     $config = CRM_Core_Config::singleton();
     $config->userSystem->invalidateRouteCache();
-    self::createCivirulesTriggers($event->params['name']);
+
+    if (CRM_Extension_System::singleton()->getMapper()->isActiveModule('civirules')) {
+      self::createCivirulesTriggers($event->params['name']);
+      self::cleanupCivirulesTriggers();
+    }
   }
 
+  /**
+   * Create CiviRules triggers for ECK entities
+   *
+   * @param string|null $entityName
+   *
+   * @return void
+   * @throws \CRM_Core_Exception
+   */
   public static function createCivirulesTriggers(?string $entityName) : void {
-    // Is CiviRules installed?
-    if (!\Civi\Api4\Extension::get(FALSE)->addWhere('file', '=', 'civirules')->execute()->count()) {
-      return;
-    }
     $eckEntityTypes = $entityName ? [self::getEntityType($entityName)] : self::getEntityTypes();
     foreach ($eckEntityTypes as $eckEntityType) {
       $name = $eckEntityType['name'];
       $label = $eckEntityType['label'];
-      CRM_Civirules_Utils_Upgrader::insertTrigger("new_$name", "$label is added", 0, 'CRM_CiviRulesPostTrigger_Eck', 'Eck_' . $name, 'create');
-      CRM_Civirules_Utils_Upgrader::insertTrigger("changed_$name", "$label is changed", 0, 'CRM_CiviRulesPostTrigger_Eck', 'Eck_' . $name, 'edit');
-      CRM_Civirules_Utils_Upgrader::insertTrigger("deleted_$name", "$label is deleted", 0, 'CRM_CiviRulesPostTrigger_Eck', 'Eck_' . $name, 'delete');
+      // ECK_X is create|edit
+      $record = [
+        'name' => "createedit_$name",
+        'label' => "$label is created/edited",
+        'cron' => FALSE,
+        'object_name' => 'Eck_' . $name,
+        'op' => 'create|edit',
+        'class_name' => 'CRM_CiviRulesPostTrigger_Eck',
+      ];
+      $records[] = $record;
+      // ECK_X is Deleted
+      $record['name'] = "deleted_$name";
+      $record['label'] = "$label is deleted";
+      $record['op'] = 'delete';
+      $records[] = $record;
+    }
+    if (!empty($records)) {
+      \Civi\Api4\CiviRulesTrigger::save(FALSE)
+        ->setRecords($records)
+        ->setMatch(['name'])
+        ->execute();
     }
   }
+
+  /**
+   * Cleanup (delete) Civirules triggers if the ECK entities have been deleted
+   *
+   * @return void
+   * @throws \CRM_Core_Exception
+   * @throws \Civi\API\Exception\UnauthorizedException
+   */
+  private static function cleanupCivirulesTriggers() {
+    $eckEntities = \Civi\Api4\EckEntityType::get(FALSE)
+      ->addSelect('id', 'name')
+      ->execute();
+    if (!$eckEntities->count()) {
+      return;
+    }
+
+    foreach ($eckEntities as $eckEntity) {
+      $eckObjectNames[] = 'Eck_' . $eckEntity['name'];
+    }
+
+    $deletedTriggers = \Civi\Api4\CiviRulesTrigger::get(FALSE)
+      ->addWhere('object_name', 'NOT IN', $eckObjectNames)
+      ->addWhere('object_name', 'LIKE', 'Eck_%')
+      ->execute();
+    foreach ($deletedTriggers as $deletedTrigger) {
+      try {
+        \Civi\Api4\CiviRulesTrigger::delete(FALSE)
+          ->addWhere('id', '=', $deletedTrigger['id'])
+          ->execute();
+      }
+      catch (\Civi\Core\Exception\DBQueryException $e) {
+        // DB Constraint error because we have rules setup using this Trigger
+        // That's ok. If the rule is deleted then next time this code runs the trigger will be removed
+        \Civi::log()
+          ->warning('Could not delete CiviRules trigger with object_name: ' . $deletedTrigger['object_name']);
+      }
+    }
+  }
+
 }
