@@ -337,7 +337,11 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
     // Flush UF route cache for registering routes in the user framework (CMS).
     $config = CRM_Core_Config::singleton();
     $config->userSystem->invalidateRouteCache();
-    self::createCivirulesTriggers($event->params['name']);
+
+    if (CRM_Extension_System::singleton()->getMapper()->isActiveModule('civirules')) {
+      self::createCivirulesTriggers($event->params['name']);
+      self::cleanupCivirulesTriggers();
+    }
   }
 
   /**
@@ -361,6 +365,8 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
   }
 
   /**
+   * Create CiviRules triggers for ECK entities
+   *
    * @param string|null $entityName
    *
    * @return void
@@ -368,38 +374,26 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @throws \Civi\API\Exception\UnauthorizedException
    */
   public static function createCivirulesTriggers(?string $entityName) : void {
-    // Is CiviRules installed?
-    if (!\Civi\Api4\Extension::get(FALSE)->addWhere('file', '=', 'civirules')->execute()->count()) {
-      return;
-    }
     $eckEntityTypes = $entityName ? [self::getEntityType($entityName)] : self::getEntityTypes();
     foreach ($eckEntityTypes as $eckEntityType) {
       $name = $eckEntityType['name'];
       $label = $eckEntityType['label'];
-      $records[] = [
-        'name' => "new_$name",
-        'label' => "$label is added",
+
+      // ECK_X is create|edit
+      $record = [
+        'name' => "createedit_$name",
+        'label' => "$label is created/edited",
         'cron' => FALSE,
         'object_name' => 'Eck_' . $name,
-        'op' => 'create',
+        'op' => 'create|edit',
         'class_name' => 'CRM_CiviRulesPostTrigger_Eck',
       ];
-      $records[] = [
-        'name' => "changed_$name",
-        'label' => "$label is changed",
-        'cron' => FALSE,
-        'object_name' => 'Eck_' . $name,
-        'op' => 'edit',
-        'class_name' => 'CRM_CiviRulesPostTrigger_Eck',
-      ];
-      $records[] = [
-        'name' => "deleted_$name",
-        'label' => "$label is deleted",
-        'cron' => FALSE,
-        'object_name' => 'Eck_' . $name,
-        'op' => 'delete',
-        'class_name' => 'CRM_CiviRulesPostTrigger_Eck',
-      ];
+      $records[] = $record;
+      // ECK_X is Deleted
+      $record['name'] = "deleted_$name";
+      $record['label'] = "$label is deleted";
+      $record['op'] = 'delete';
+      $records[] = $record;
     }
 
     if (!empty($records)) {
@@ -407,6 +401,44 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
         ->setRecords($records)
         ->setMatch(['name'])
         ->execute();
+    }
+  }
+
+  /**
+   * Cleanup (delete) Civirules triggers if the ECK entities have been deleted
+   *
+   * @return void
+   * @throws \CRM_Core_Exception
+   * @throws \Civi\API\Exception\UnauthorizedException
+   */
+  private static function cleanupCivirulesTriggers() {
+    $eckEntities = \Civi\Api4\EckEntityType::get(FALSE)
+      ->addSelect('id', 'name')
+      ->execute();
+    if (!$eckEntities->count()) {
+      return;
+    }
+
+    foreach ($eckEntities as $eckEntity) {
+      $eckObjectNames[] = 'Eck_' . $eckEntity['name'];
+    }
+
+    $deletedTriggers = \Civi\Api4\CiviRulesTrigger::get(FALSE)
+      ->addWhere('object_name', 'NOT IN', $eckObjectNames)
+      ->addWhere('object_name', 'LIKE', 'Eck_%')
+      ->execute();
+    foreach ($deletedTriggers as $deletedTrigger) {
+      try {
+        \Civi\Api4\CiviRulesTrigger::delete(FALSE)
+          ->addWhere('id', '=', $deletedTrigger['id'])
+          ->execute();
+      }
+      catch (\Civi\Core\Exception\DBQueryException $e) {
+        // DB Constraint error because we have rules setup using this Trigger
+        // That's ok. If the rule is deleted then next time this code runs the trigger will be removed
+        \Civi::log()
+          ->warning('Could not delete CiviRules trigger with object_name: ' . $deletedTrigger['object_name']);
+      }
     }
   }
 
