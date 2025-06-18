@@ -23,6 +23,7 @@ parameters:
 		- phpstanBootstrap.php
 	level: 9
 	universalObjectCratesClasses:
+		- CRM_Core_DAO
 		- Civi\Core\Event\GenericHookEvent
 	checkTooWideReturnTypesInProtectedAndPublicMethods: true
 	checkUninitializedProperties: true

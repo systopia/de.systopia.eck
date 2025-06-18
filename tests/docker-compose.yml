@@ -1,4 +1,3 @@
-version: "3"
 services:
   civicrm:
     image: michaelmcandrew/civicrm:${CIVICRM_IMAGE_TAG:-5-drupal}
