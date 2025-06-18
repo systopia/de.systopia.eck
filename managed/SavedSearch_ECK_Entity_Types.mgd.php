@@ -45,7 +45,7 @@ return [
         'saved_search_id.name' => 'ECK_Entity_Types',
         'type' => 'table',
         'settings' => [
-          'description' => E::ts('The Entity Construction Kit extension allows you to create and manage custom CiviCRM entities.'),
+          'description' => E::ts('The Entity Construction Kit extension allows you to create and manage custom CiviCRM entities. Note: Entities require at least one subtype.'),
           'sort' => [
             [
               'label',
