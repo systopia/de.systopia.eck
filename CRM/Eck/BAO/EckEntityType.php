@@ -260,6 +260,16 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
           ->addWhere('option_group_id:name', '=', 'eck_sub_types')
           ->addWhere('grouping', '=', $eckTypeName)
           ->execute();
+
+        // Delete from extendable entities option group.
+        // TODO: This should be taken care of by the managed entity, but fails with CiviCRM 6.1+
+        //       @url https://github.com/systopia/de.systopia.eck/issues/163
+        //       Remove once core version requirement is 6.5+
+        OptionValue::delete(FALSE)
+          ->addWhere('option_group_id.name', '=', 'cg_extend_objects')
+          ->addWhere('value', '=', 'Eck_' . $eckTypeName)
+          ->execute();
+
         break;
     }
   }
