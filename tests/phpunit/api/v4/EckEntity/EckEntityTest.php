@@ -2,22 +2,25 @@
 
 namespace api\v4\EckEntity;
 
+use PHPUnit\Framework\TestCase;
+use Civi\Test\HeadlessInterface;
+use Civi\Test\TransactionalInterface;
+use Civi\Test;
+use Civi\Test\CiviEnvBuilder;
+use Civi\Api4\EckEntityType;
 use Civi\Api4\CustomField;
 use Civi\Api4\CustomGroup;
-use Civi\Api4\EckEntityType;
 use Civi\Api4\OptionValue;
 use Civi\Core\Exception\DBQueryException;
-use Civi\Test\CiviEnvBuilder;
-use Civi\Test\HeadlessInterface;
 
 /**
  * @group headless
  */
-class EckEntityTest extends \PHPUnit\Framework\TestCase implements HeadlessInterface {
+class EckEntityTest extends TestCase implements HeadlessInterface, TransactionalInterface {
 
   public function setUpHeadless(): CiviEnvBuilder {
-    return \Civi\Test::headless()
-      ->install(['de.systopia.eck', 'org.civicrm.search_kit'])
+    return Test::headless()
+      ->installMe(__DIR__)
       ->apply();
   }
 
