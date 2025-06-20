@@ -12,6 +12,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
+#: CRM/Eck/BAO/EckEntityType.php
+msgid "Error retrieving ECK entity type name."
+msgstr "Fehler beim Abrufen des Entitätstyp-Namens."
+
+#: CRM/Eck/BAO/Entity.php
+msgid "Error retrieving ECK entity type from request."
+msgstr "Fehler beim Abrufen des ECK-Entitätstyps aus der Anfrage."
+
 #: CRM/Eck/DAO/EckEntityType.php ang/afsearchECKEntityTypes.aff.php
 #: managed/Navigation_afsearchECKEntityTypes.mgd.php
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
@@ -90,7 +98,7 @@ msgstr "Ersteller-Kontakt-ID"
 
 #: CRM/Eck/DAO/Entity.php
 msgid "FK to contact table."
-msgstr "Fremdschlüssel zur Kontakt-Tabelle"
+msgstr "Fremdschlüssel zur Kontakt-Tabelle."
 
 #: CRM/Eck/DAO/Entity.php
 msgid "Created By"
@@ -120,21 +128,9 @@ msgstr "Bearbeitungsdatum"
 msgid "When the record was last modified."
 msgstr "Wann der Eintrag zuletzt bearbeitet wurde."
 
-#: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
-msgid "No ECK entity type given."
-msgstr "Kein ECK-Entitätstyp angegben."
-
 #: CRM/Eck/Form/EckSubtype.php templates/CRM/Eck/Form/EntityType.tpl
 msgid "Add Subtype"
 msgstr "Untertyp hinzufügen"
-
-#: CRM/Eck/Form/EckSubtype.php
-msgid "No subtype given."
-msgstr "Kein Untertyp angegeben."
-
-#: CRM/Eck/Form/EckSubtype.php
-msgid "Invalid subtype."
-msgstr "Ungültiger Untertyp."
 
 #: CRM/Eck/Form/EckSubtype.php
 msgid "Edit Subtype <em>%1</em>"
@@ -143,10 +139,6 @@ msgstr "Untertyp <em>%1</em> bearbeiten"
 #: CRM/Eck/Form/EckSubtype.php
 msgid "Delete Subtype <em>%1</em>"
 msgstr "Untertyp <em>%1</em> löschen"
-
-#: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
-msgid "Invalid action."
-msgstr "Ungültige Aktion."
 
 #: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
 msgid "Save"
@@ -168,11 +160,6 @@ msgstr "Abbrechen"
 #: CRM/Eck/Form/EntityType.php
 msgid "Add Entity Type"
 msgstr "Entitätstyp hinzufügen"
-
-#: CRM/Eck/Form/EntityType.php CRM/Eck/Page/Entity/View.php
-#: CRM/Eck/Page/Entity.php
-msgid "Invalid ECK entity type."
-msgstr "Ungültiger Entitätstyp."
 
 #: CRM/Eck/Form/EntityType.php
 msgid "Edit Entity Type %1"
@@ -221,7 +208,7 @@ msgstr "Untertypen"
 
 #: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
 msgid "All subtypes of this entity."
-msgstr "Alle Untertypen dieser Entitäts"
+msgstr "Alle Untertypen dieser Entität."
 
 #: Civi/Eck/API/Entity.php
 msgid "Entity Construction Kit entity type %1"
@@ -326,10 +313,11 @@ msgstr "ECK-Entitätstypen"
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid ""
 "The Entity Construction Kit extension allows you to create and manage custom "
-"CiviCRM entities."
+"CiviCRM entities. Note: Entities require at least one subtype."
 msgstr ""
 "Die Erweiterung \"Entity Construction Kit\" ermöglicht das Erstellen und "
-"Verwalten benutzerdefinierter CiviCRM-Entitäten"
+"Verwalten benutzerdefinierter CiviCRM-Entitäten. Hinweis: Entitätstypen "
+"erfordern mindestens einen Untertyp."
 
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "Entity Type"
@@ -383,6 +371,10 @@ msgstr "Bearbeitet"
 msgid "[modified_date] by [modified_id.display_name]"
 msgstr "[modified_date] von [modified_id.display_name]"
 
+#: managed/SavedSearch_listings.mgd.php
+msgid "Add %1"
+msgstr "%1 hinzufügen"
+
 #: templates/CRM/Eck/Form/EckSubtype.tpl templates/CRM/Eck/Form/EntityType.tpl
 msgid "Custom Groups"
 msgstr "Benutzerdefinierte (Feld-)Gruppen"
@@ -434,6 +426,12 @@ msgstr ""
 "Untertypen können nach dem Anlegen des neuen Entitätstyps hinzugefügt werden."
 
 #: templates/CRM/Eck/Form/EntityType.tpl
+msgid "Note: ECK entities require that you add at least one subtype."
+msgstr ""
+"Hinweis: ECK-Entitätstypen erfordern das Hinzufügen mindestens eines "
+"Untertyps."
+
+#: templates/CRM/Eck/Form/EntityType.tpl
 msgid ""
 "You may add custom fields to this entity type using\n"
 "                <a href=\"%1\">CiviCRM's custom groups</a>\n"
@@ -473,16 +471,24 @@ msgid "Submit"
 msgstr "Übermitteln"
 
 #: templates/ang/afsearch_eck_listing.tpl
-msgid "Add %1"
-msgstr "%1 hinzufügen"
-
-#: templates/ang/afsearch_eck_listing.tpl
 msgid "Filter by Title"
 msgstr "Nach Titel filtern"
 
 #: templates/ang/afsearch_eck_listing.tpl
 msgid "Filter by Type"
 msgstr "Nach Typ filtern"
+
+#~ msgid "No subtype given."
+#~ msgstr "Kein Untertyp angegeben."
+
+#~ msgid "Invalid subtype."
+#~ msgstr "Ungültiger Untertyp."
+
+#~ msgid "Invalid action."
+#~ msgstr "Ungültige Aktion."
+
+#~ msgid "Invalid ECK entity type."
+#~ msgstr "Ungültiger Entitätstyp."
 
 #~ msgid "The entity type's name"
 #~ msgstr "Name des Entitätstyps"
