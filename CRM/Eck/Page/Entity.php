@@ -54,7 +54,7 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
       $this->_entityType = $entity_type;
     }
     catch (Exception $exception) {
-      throw new CRM_Core_Exception(E::ts('Invalid ECK entity type.'), 0, [], $exception);
+      throw new CRM_Core_Exception('Invalid ECK entity type.', 0, [], $exception);
     }
 
     // Retrieve ECK entity using the API.
