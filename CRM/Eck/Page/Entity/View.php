@@ -54,7 +54,7 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
       $this->_entityType = EckEntityType::get(FALSE)->addWhere('name', '=', $entity_type_name)->execute()->single();
     }
     catch (Exception $exception) {
-      throw new CRM_Core_Exception(E::ts('Invalid ECK entity type.'), 0, [], $exception);
+      throw new CRM_Core_Exception('Invalid ECK entity type.', 0, [], $exception);
     }
 
     // Retrieve entity ID.
