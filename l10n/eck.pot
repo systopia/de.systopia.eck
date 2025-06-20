@@ -1,3 +1,11 @@
+#: ./CRM/Eck/BAO/EckEntityType.php
+msgid "Error retrieving ECK entity type name."
+msgstr ""
+
+#: ./CRM/Eck/BAO/Entity.php
+msgid "Error retrieving ECK entity type from request."
+msgstr ""
+
 #: ./CRM/Eck/DAO/EckEntityType.php ./ang/afsearchECKEntityTypes.aff.php ./managed/Navigation_afsearchECKEntityTypes.mgd.php ./managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "ECK Entity Types"
 msgstr ""
@@ -102,20 +110,8 @@ msgstr ""
 msgid "When the record was last modified."
 msgstr ""
 
-#: ./CRM/Eck/Form/EckSubtype.php ./CRM/Eck/Form/EntityType.php
-msgid "No ECK entity type given."
-msgstr ""
-
 #: ./CRM/Eck/Form/EckSubtype.php ./templates/CRM/Eck/Form/EntityType.tpl
 msgid "Add Subtype"
-msgstr ""
-
-#: ./CRM/Eck/Form/EckSubtype.php
-msgid "No subtype given."
-msgstr ""
-
-#: ./CRM/Eck/Form/EckSubtype.php
-msgid "Invalid subtype."
 msgstr ""
 
 #: ./CRM/Eck/Form/EckSubtype.php
@@ -124,10 +120,6 @@ msgstr ""
 
 #: ./CRM/Eck/Form/EckSubtype.php
 msgid "Delete Subtype <em>%1</em>"
-msgstr ""
-
-#: ./CRM/Eck/Form/EckSubtype.php ./CRM/Eck/Form/EntityType.php
-msgid "Invalid action."
 msgstr ""
 
 #: ./CRM/Eck/Form/EckSubtype.php ./CRM/Eck/Form/EntityType.php
@@ -148,10 +140,6 @@ msgstr ""
 
 #: ./CRM/Eck/Form/EntityType.php
 msgid "Add Entity Type"
-msgstr ""
-
-#: ./CRM/Eck/Form/EntityType.php ./CRM/Eck/Page/Entity/View.php ./CRM/Eck/Page/Entity.php
-msgid "Invalid ECK entity type."
 msgstr ""
 
 #: ./CRM/Eck/Form/EntityType.php
@@ -279,7 +267,7 @@ msgid "ECK Entity Type List"
 msgstr ""
 
 #: ./managed/SavedSearch_ECK_Entity_Types.mgd.php
-msgid "The Entity Construction Kit extension allows you to create and manage custom CiviCRM entities."
+msgid "The Entity Construction Kit extension allows you to create and manage custom CiviCRM entities. Note: Entities require at least one subtype."
 msgstr ""
 
 #: ./managed/SavedSearch_ECK_Entity_Types.mgd.php
@@ -334,6 +322,10 @@ msgstr ""
 msgid "[modified_date] by [modified_id.display_name]"
 msgstr ""
 
+#: ./managed/SavedSearch_listings.mgd.php
+msgid "Add %1"
+msgstr ""
+
 #: ./templates/CRM/Eck/Form/EckSubtype.tpl ./templates/CRM/Eck/Form/EntityType.tpl
 msgid "Custom Groups"
 msgstr ""
@@ -375,6 +367,10 @@ msgid "You may add subtypes after saving this new entity type."
 msgstr ""
 
 #: ./templates/CRM/Eck/Form/EntityType.tpl
+msgid "Note: ECK entities require that you add at least one subtype."
+msgstr ""
+
+#: ./templates/CRM/Eck/Form/EntityType.tpl
 msgid "You may add custom fields to this entity type using\n                <a href=\"%1\">CiviCRM's custom groups</a>\n                ."
 msgstr ""
 
@@ -396,10 +392,6 @@ msgstr ""
 
 #: ./templates/ang/afformEck.tpl
 msgid "Submit"
-msgstr ""
-
-#: ./templates/ang/afsearch_eck_listing.tpl
-msgid "Add %1"
 msgstr ""
 
 #: ./templates/ang/afsearch_eck_listing.tpl

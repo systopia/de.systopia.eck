@@ -87,7 +87,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
       // TODO: We can't just throw an exception as this leads to errors
       //       everywhere, e.g. for get API actions on entities that reference
       //       at least one ECK entity.
-      // throw new Exception(E::ts('No ECK entity type given.'));
+      // throw new Exception('No ECK entity type given.');
     }
     self::$_entityType = $entityType;
     parent::__construct();
