@@ -74,7 +74,7 @@
                     {crmButton p='civicrm/admin/eck/subtype' q="reset=1&action=add&type=$entityTypeName" id="newEckSubtype"  icon="plus-circle"}{ts}Add Subtype{/ts}{/crmButton}
                 </div>
               {else}
-                <p class="description">{ts}You may add subtypes after saving this new entity type.{/ts}</p>
+                <p class="description">{ts}You may add subtypes after saving this new entity type.{/ts} {ts}Note: ECK entities require that you add at least one subtype.{/ts}</p>
               {/if}
 
           </div>
