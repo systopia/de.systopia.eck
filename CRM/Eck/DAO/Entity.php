@@ -180,6 +180,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
             'readonly' => TRUE,
             'FKClassName' => 'CRM_Contact_DAO_Contact',
             'html' => [
+              'type' => 'EntityRef',
               'label' => E::ts("Created By"),
             ],
           ],
@@ -196,6 +197,7 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
             'readonly' => TRUE,
             'FKClassName' => 'CRM_Contact_DAO_Contact',
             'html' => [
+              'type' => 'EntityRef',
               'label' => E::ts("Modified By"),
             ],
           ],
