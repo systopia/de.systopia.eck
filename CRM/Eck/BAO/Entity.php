@@ -57,7 +57,7 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
       && in_array($event->action, ['create', 'edit'], TRUE)
       && ((bool) (CRM_Eck_BAO_EckEntityType::getEntityType(substr($event->entity, 4))['in_recent'] ?? FALSE))
     ) {
-      RecentItem::create()
+      RecentItem::create(FALSE)
         ->addValue('entity_type', $event->entity)
         ->addValue('entity_id', $event->id)
         ->execute();
