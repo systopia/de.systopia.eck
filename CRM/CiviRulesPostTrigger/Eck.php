@@ -1,5 +1,10 @@
 <?php
 
+if (!CRM_Extension_System::singleton()->getMapper()->isActiveModule('civirules')) {
+  // CiviRules is not installed. Don't load class
+  return;
+}
+
 class CRM_CiviRulesPostTrigger_Eck extends CRM_Civirules_Trigger_Post {
 
   /**
