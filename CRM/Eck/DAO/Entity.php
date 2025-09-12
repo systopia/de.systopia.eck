@@ -112,6 +112,9 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
     // TODO: This is being called without the constructor being called
     //   beforehand, so this will not always work due to static variables not
     //   being set.
+    //   A workaround for this has been developed by always calling the
+    //   constructor for ECK entities in CiviCRM Core 6.6.0.
+    //   @link https://github.com/civicrm/civicrm-core/pull/33263
     if (
       !isset(Civi::$statics[self::$_className]['fields'])
       || [] === Civi::$statics[self::$_className]['fields']
