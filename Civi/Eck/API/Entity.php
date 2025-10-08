@@ -63,7 +63,7 @@ class Entity extends AutoSubscriber {
         'title_plural' => $entity_type['label'],
         'description' => E::ts('Entity Construction Kit entity type %1', [1 => $entity_type['label']]),
         'primary_key' => ['id'],
-        'type' => ['DAOEntity', 'EckEntity'],
+        'type' => ['DAOEntity', 'EckEntity', 'ManagedEntity'],
         'dao' => 'CRM_Eck_DAO_Entity',
         'table_name' => $entity_type['table_name'],
         'class_args' => [$entity_type['name']],
