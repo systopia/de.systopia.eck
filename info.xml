@@ -5,8 +5,8 @@
   <description>Provides the ability to create and manage custom CiviCRM entities.</description>
   <license>AGPL-3.0</license>
   <maintainer>
-    <author>Jens Schuppe</author>
-    <email>schuppe@systopia.de</email>
+    <author>SYSTOPIA GmbH</author>
+    <email>info@systopia.de</email>
   </maintainer>
   <urls>
     <url desc="Main Extension Page">https://github.com/systopia/de.systopia.eck</url>
@@ -18,7 +18,7 @@
   <version>1.1.0-dev</version>
   <develStage>dev</develStage>
   <compatibility>
-    <ver>5.75</ver>
+    <ver>5.76</ver>
   </compatibility>
   <requires></requires>
   <upgrader>CRM_Eck_Upgrader</upgrader>

@@ -1,7 +1,8 @@
-site_name: Entity Construction Kit (ECK)
+site_name: Entity Construction Kit
+site_description: Provides the ability to create and manage custom CiviCRM entities.
+site_author: SYSTOPIA GmbH
 repo_url: https://github.com/systopia/de.systopia.eck
-site_description: 'A guide for the Entity Construction Kit (ECK) CiviCRM extension.'
-site_author: 'systopia'
+
 theme:
   name: material
 
@@ -17,7 +18,7 @@ markdown_extensions:
   - def_list
   - codehilite
   - toc:
-      permalink: True
+      permalink: true
   - pymdownx.superfences
   - pymdownx.inlinehilite
   - pymdownx.tilde
