@@ -20,7 +20,7 @@
   <compatibility>
     <ver>5.76</ver>
   </compatibility>
-  <requires></requires>
+  <requires/>
   <upgrader>CRM_Eck_Upgrader</upgrader>
   <classloader>
     <psr0 prefix="CRM_" path=""/>
@@ -28,13 +28,13 @@
   </classloader>
   <civix>
     <namespace>CRM/Eck</namespace>
-    <format>23.02.1</format>
+    <format>25.10.1</format>
   </civix>
   <mixins>
     <mixin>menu-xml@1.0.0</mixin>
     <mixin>mgd-php@1.0.0</mixin>
-    <mixin>smarty-v2@1.0.1</mixin>
     <mixin>entity-types-php@1.0.0</mixin>
     <mixin>scan-classes@1.0.0</mixin>
+    <mixin>smarty@1.0.3</mixin>
   </mixins>
 </extension>
