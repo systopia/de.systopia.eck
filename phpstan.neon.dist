@@ -6,25 +6,30 @@ parameters:
 		- Civi
 		- CRM
 		- tests
+		- eck.php
 	excludePaths:
 		analyse:
 			- CRM/Eck/DAO/*
-			- CRM/Eck/Upgrader/Base.php
+			- CRM/Eck/Page/*
+			- CRM/Eck/Form/*
 			- tests/phpunit/bootstrap.php
 	scanFiles:
-		- eck.php
 		- eck.civix.php
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/src/Framework/TestCase.php
 	scanDirectories:
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/src/Framework
+		- mixin
 	bootstrapFiles:
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/vendor/autoload.php
-		- vendor/autoload.php
 		- phpstanBootstrap.php
 	level: 9
 	universalObjectCratesClasses:
-		- CRM_Core_DAO
 		- Civi\Core\Event\GenericHookEvent
+		- CRM_Core_Config
+		- CRM_Core_DAO
+	earlyTerminatingMethodCalls:
+		CRM_Queue_Runner:
+		  - runAllViaWeb
 	checkTooWideReturnTypesInProtectedAndPublicMethods: true
 	checkUninitializedProperties: true
 	checkMissingCallableSignature: true
@@ -44,12 +49,4 @@ parameters:
 		#- # Accessing results of API requests
 			#message: "#^Offset '[^']+' does not exist on array[^\\|]+\\|null.$#"
 			#path: */tests/phpunit/**/*Test.php
-		- '#Parameter \#2 \$searchValue of static method CRM_Core_DAO::getFieldValue\(\) expects int, string given.#'
-		- '#Method Civi\\Api4\\EckDAODeleteAction::deleteObjects\(\) has parameter \$items with no type specified.#'
-		- '#Method Civi\\Api4\\EckDAODeleteAction::deleteObjects\(\) return type has no value type specified in iterable type array.#'
-		- '#Method CRM_Eck_Form_EntityType::preProcess\(\) has no return type specified.#'
-		- '#Method CRM_Eck_Form_EntityType::postProcess\(\) has no return type specified.#'
-		- '#Method CRM_Eck_Form_EntityType::setDefaultValues\(\) return type has no value type specified in iterable type array.#'
-		- '#Method CRM_Eck_Form_EckSubtype::postProcess\(\) has no return type specified.#'
-		- '#Method CRM_Eck_Form_EckSubtype::setDefaultValues\(\) return type has no value type specified in iterable type array.#'
 	tmpDir: .phpstan

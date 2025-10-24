@@ -1,13 +1,14 @@
 {
     "require": {
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.7",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.1",
-        "phpstan/phpstan-strict-rules": "^1.2",
-        "phpstan/phpstan-webmozart-assert": "^1.2",
-        "thecodingmachine/phpstan-strict-rules": "^1.0",
-        "voku/phpstan-rules": "^3.0"
+        "kcs/phpstan-strict-rules": "^2",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2",
+        "phpstan/phpstan-beberlei-assert": "^2",
+        "phpstan/phpstan-deprecation-rules": "^2",
+        "phpstan/phpstan-phpunit": "^2",
+        "phpstan/phpstan-strict-rules": "^2",
+        "phpstan/phpstan-webmozart-assert": "^2",
+        "voku/phpstan-rules": "^3.6"
     },
     "config": {
         "allow-plugins": {

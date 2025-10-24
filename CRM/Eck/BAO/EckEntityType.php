@@ -28,6 +28,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @return array<string, array<string, string>>
    */
   public static function getEntityTypes(): array {
+    /** @phpstan-var array<string, array<string, string>> $entityTypes */
     $entityTypes = Civi::cache('metadata')->get('EckEntityTypes');
     if (!is_array($entityTypes)) {
       // The table might not yet exist (e.g. when flushing caches/fetching permissions during installation).

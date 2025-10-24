@@ -42,7 +42,6 @@ class Entity extends AutoSubscriber {
    *
    * @see CRM_Utils_Hook::permission
    * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_permission/
-   * @phpstan-ignore-next-line Hook implementations should not duplicate @param and @return documentation.
    */
   public static function on_hook_civicrm_permission(array &$permissions): void {
     $permissions += Permissions::getPermissions();

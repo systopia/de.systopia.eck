@@ -170,7 +170,7 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
     if (in_array($inputType, ['Select', 'EntityRef'], TRUE) && !empty($data['serialize'])) {
       $inputAttrs['multiple'] = TRUE;
     }
-    if ($inputType == 'Date' && !empty($inputAttrs['formatType'])) {
+    if ($inputType === 'Date' && !empty($inputAttrs['formatType'])) {
       self::setLegacyDateFormat($inputAttrs);
     }
     // Number input for numeric fields
@@ -179,10 +179,10 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
       // Todo: make 'step' configurable for the custom field
       $inputAttrs['step'] = $dataTypeName === 'Integer' ? 1 : .01;
     }
-    if ($inputType == 'Text' && !empty($data['maxlength'])) {
+    if ($inputType === 'Text' && !empty($data['maxlength'])) {
       $inputAttrs['maxlength'] = (int) $data['maxlength'];
     }
-    if ($inputType == 'TextArea') {
+    if ($inputType === 'TextArea') {
       foreach (['rows', 'cols', 'note_rows', 'note_columns'] as $prop) {
         if (!empty($data[$prop])) {
           $key = str_replace('note_', '', $prop);
@@ -203,6 +203,7 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
       if ($key === 'filter' && is_array($val)) {
         $filters = [];
         foreach ($val as $filter) {
+          /** @var string $filter */
           [$k, $v] = explode('=', $filter);
           // Explode comma-separated values
           $filters[$k] = strpos($v, ',') ? explode(',', $v) : $v;
@@ -269,16 +270,19 @@ class EckEntitySpecProvider implements Generic\SpecProviderInterface {
       // Check if this field is a key for a dynamic FK
       foreach ($DAOField['bao']::getReferenceColumns() ?? [] as $reference) {
         if ($reference instanceof \CRM_Core_Reference_Dynamic && $reference->getReferenceKey() === $DAOField['name']) {
+          /** @phpstan-var string $entityTableColumn */
           $entityTableColumn = $reference->getTypeColumn();
           $DAOField['DFKEntities'] = $reference->getTargetEntities();
           $DAOField['html']['controlField'] = $entityTableColumn;
           // If we have a value for entity_table then this field can pretend to be a single FK too.
-          // @phpstan-ignore-next-line
-          if ($spec->hasValue($entityTableColumn) && $DAOField['DFKEntities']) {
-            $DAOField['FKClassName'] = \CRM_Core_DAO_AllCoreTables::getDAONameForEntity(
-              // @phpstan-ignore-next-line
-              $DAOField['DFKEntities'][$spec->getValue($entityTableColumn)]
+          if ($spec->hasValue($entityTableColumn) && [] !== $DAOField['DFKEntities']) {
+            /** @phpstan-var string $columnName */
+            $columnName = $spec->getValue($entityTableColumn);
+            /** @phpstan-var string $className */
+            $className = \CRM_Core_DAO_AllCoreTables::getDAONameForEntity(
+              $DAOField['DFKEntities'][$columnName]
             );
+            $DAOField['FKClassName'] = $className;
           }
           break;
         }

@@ -33,7 +33,6 @@ class CRM_Eck_Page_Entity_TabHeader {
       $tabs = self::process($page) ?? [];
       $page->set('tabHeader', $tabs);
     }
-    // @phpstan-ignore function.alreadyNarrowedType
     if (method_exists(CRM_Core_Smarty::class, 'setRequiredTabTemplateKeys')) {
       $tabs = \CRM_Core_Smarty::setRequiredTabTemplateKeys($tabs);
     }

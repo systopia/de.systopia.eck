@@ -1,12 +1,49 @@
 parameters:
 	ignoreErrors:
 		-
-			message: """
-				#^Call to deprecated method getTree\\(\\) of class CRM_Core_BAO_CustomGroup\\:
-				Function demonstrates just how bad code can get from 20 years of entropy\\.$#
-			"""
+			message: "#^Method CRM_Eck_Form_EckSubtype\\:\\:postProcess\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: CRM/Eck/Page/Entity/View.php
+			path: CRM/Eck/Form/EckSubtype.php
+
+		-
+			message: "#^Method CRM_Eck_Form_EckSubtype\\:\\:setDefaultValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: CRM/Eck/Form/EckSubtype.php
+
+		-
+			message: "#^Method CRM_Eck_Form_EntityType\\:\\:postProcess\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: CRM/Eck/Form/EntityType.php
+
+		-
+			message: "#^Method CRM_Eck_Form_EntityType\\:\\:preProcess\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: CRM/Eck/Form/EntityType.php
+
+		-
+			message: "#^Method CRM_Eck_Form_EntityType\\:\\:setDefaultValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: CRM/Eck/Form/EntityType.php
+
+		-
+			message: "#^Call to function method_exists\\(\\) with 'CRM_Core_Smarty' and 'setRequiredTabTempl…' will always evaluate to true\\.$#"
+			count: 1
+			path: CRM/Eck/Page/Entity/TabHeader.php
+
+		-
+			message: "#^Method Civi\\\\Api4\\\\EckDAODeleteAction\\:\\:deleteObjects\\(\\) has parameter \\$items with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Civi/Api4/EckDAODeleteAction.php
+
+		-
+			message: "#^Method Civi\\\\Api4\\\\EckDAODeleteAction\\:\\:deleteObjects\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Civi/Api4/EckDAODeleteAction.php
+
+		-
+			message: "#^Cannot call method exchangeArray\\(\\) on mixed\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Links/ECKLinksProvider.php
 
 		-
 			message: "#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#"
@@ -44,6 +81,11 @@ parameters:
 			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
 
 		-
+			message: "#^Only booleans are allowed in &&, array given on the right side\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
 			message: "#^Only booleans are allowed in &&, int\\<0, max\\>\\|false given on the right side\\.$#"
 			count: 1
 			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
@@ -64,54 +106,46 @@ parameters:
 			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
 
 		-
+			message: "#^Parameter \\#1 \\$key of method Civi\\\\Api4\\\\Service\\\\Spec\\\\RequestSpec\\:\\:getValue\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$key of method Civi\\\\Api4\\\\Service\\\\Spec\\\\RequestSpec\\:\\:hasValue\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
+
+		-
 			message: "#^Short ternary operator is not allowed\\. Use null coalesce operator if applicable or consider using long ternary\\.$#"
 			count: 1
 			path: Civi/Api4/Service/Spec/Provider/EckEntitySpecProvider.php
 
 		-
-			message: "#^Call to an undefined method CRM_Eck_Form_EckSubtype\\:\\:getElement\\(\\)\\.$#"
-			count: 2
-			path: CRM/Eck/Form/EckSubtype.php
-			reportUnmatched: false
-
-		-
-			message: "#^Access to an undefined property CRM_Eck_Form_EckSubtype\\:\\:\\$_elements\\.$#"
+			message: "#^Parameter \\#2 \\$searchValue of static method CRM_Core_DAO\\:\\:getFieldValue\\(\\) expects int, string given\\.$#"
 			count: 1
-			path: CRM/Eck/Form/EckSubtype.php
-			reportUnmatched: false
+			path: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
 
 		-
-			message: "#^Call to an undefined method CRM_Eck_Form_EntityType\\:\\:getElement\\(\\)\\.$#"
-			count: 3
-			path: CRM/Eck/Form/EntityType.php
-			reportUnmatched: false
-
-		-
-			message: "#^Access to an undefined property CRM_Eck_Form_EntityType\\:\\:\\$_submitValues\\.$#"
-			count: 2
-			path: CRM/Eck/Form/EntityType.php
-			reportUnmatched: false
-
-		-
-			message: "#^Access to an undefined property CRM_Eck_Form_EntityType\\:\\:\\$_errors\\.$#"
-			count: 3
-			path: CRM/Eck/Form/EntityType.php
-			reportUnmatched: false
-
-		-
-			message: "#^Access to an undefined property CRM_Eck_Form_EntityType\\:\\:\\$_elements\\.$#"
+			message: "#^Method Civi\\\\Eck\\\\API\\\\Entity\\:\\:on_hook_civicrm_permission\\(\\) has parameter \\$permissions with no value type specified in iterable type array\\.$#"
 			count: 1
-			path: CRM/Eck/Form/EntityType.php
-			reportUnmatched: false
+			path: Civi/Eck/API/Entity.php
 
 		-
-			message: "#^Method CRM_Eck_BAO_EckEntityType\\:\\:getEntityTypes\\(\\) should return array\\<string, array\\<string, string\\>\\> but returns array\\|false\\.$#"
+			message: "#^Call to an undefined method object\\:\\:fetchAll\\(\\)\\.$#"
 			count: 1
-			path: CRM/Eck/BAO/EckEntityType.php
-			reportUnmatched: false
+			path: eck.php
 
 		-
-			message: "#^Method CRM_Eck_BAO_Entity\\:\\:getEntityType\\(\\) should return string\\|null but returns string\\|false\\|null\\.$#"
+			message: "#^Function eck_civicrm_config\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: CRM/Eck/BAO/Entity.php
-			reportUnmatched: false
+			path: eck.php
+
+		-
+			message: "#^Function eck_civicrm_config\\(\\) has parameter \\$config with no type specified\\.$#"
+			count: 1
+			path: eck.php
+
+		-
+			message: "#^Function eck_civicrm_entityTypes\\(\\) has parameter \\$entityTypes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: eck.php
