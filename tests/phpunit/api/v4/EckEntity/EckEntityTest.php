@@ -132,7 +132,8 @@ class EckEntityTest extends TestCase implements HeadlessInterface, Transactional
       $entityTypes = \Civi\Api4\EckEntityType::get(FALSE)
         ->addSelect('api_name', 'sub_types:label', 'sub_types:name')
         ->execute()
-        ->indexBy('api_name');
+        ->indexBy('api_name')
+        ->getArrayCopy();
     }
     catch (DBQueryException $e) {
       static::fail($e->getDebugInfo());
@@ -171,7 +172,7 @@ class EckEntityTest extends TestCase implements HeadlessInterface, Transactional
       'select' => ['title', 'subtype:name'],
       'checkPermissions' => FALSE,
       'orderBy' => ['subtype' => 'ASC'],
-    ]);
+    ])->getArrayCopy();
     self::assertCount(2, $firstRecords);
     self::assertEquals('Abc', $firstRecords[0]['title']);
     self::assertEquals('one', $firstRecords[0]['subtype:name']);
@@ -195,7 +196,7 @@ class EckEntityTest extends TestCase implements HeadlessInterface, Transactional
       'select' => ['title', 'subtype:name'],
       'checkPermissions' => FALSE,
       'orderBy' => ['subtype' => 'ASC'],
-    ]);
+    ])->getArrayCopy();
     self::assertCount(2, $secondRecords);
     self::assertEquals('New', $secondRecords[0]['title']);
     self::assertEquals('one', $secondRecords[0]['subtype:name']);
@@ -287,7 +288,7 @@ class EckEntityTest extends TestCase implements HeadlessInterface, Transactional
    */
   private function createEntity(array $subTypes): string {
     $name = uniqid();
-    /** @phpstan-var array<string, mixed> $entityType */
+    /** @phpstan-var array{name: string} $entityType */
     $entityType = EckEntityType::create(FALSE)
       ->addValue('label', $name)
       ->execute()->first();

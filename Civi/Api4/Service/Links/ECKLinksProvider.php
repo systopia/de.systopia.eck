@@ -55,7 +55,6 @@ class ECKLinksProvider extends \Civi\Core\Service\AutoSubscriber {
         }
         // Replace the one generic "add" link with multiple per-subtype links.
         array_splice($links, $addLinkIndex, 1, $addLinks);
-        // @phpstan-ignore-next-line
         $e->getResponse()->exchangeArray(array_values($links));
       }
     }

@@ -44,7 +44,7 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
       ->execute();
 
     // Update Custom Groups.
-    /** @phpstan-var array<array{id: int|string, extends: string}> $custom_groups */
+    /** @phpstan-var iterable<array{id: int|string, extends: string}> $custom_groups */
     $custom_groups = \Civi\Api4\CustomGroup::get(FALSE)
       ->addWhere('extends', 'IN', $oldEntityNames)
       ->execute();

@@ -30,7 +30,7 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
    * @param int|null $entityId
    * @return string
    */
-  public static function getEntityIcon(string $entityName, int $entityId = NULL): string {
+  public static function getEntityIcon(string $entityName, ?int $entityId = NULL): string {
     $entityTypes = \CRM_Eck_BAO_EckEntityType::getEntityTypes();
     $default = $entityTypes[$entityName]['icon'] ?? self::$_icon;
     if (!isset($entityId)) {

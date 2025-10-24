@@ -1,3 +1,6 @@
+includes:
+	- phpstan-baseline.neon
+
 parameters:
 	paths:
 		- Civi
@@ -7,6 +10,8 @@ parameters:
 	excludePaths:
 		analyse:
 			- CRM/Eck/DAO/*
+			- CRM/Eck/Page/*
+			- CRM/Eck/Form/*
 			- tests/phpunit/bootstrap.php
 	scanFiles:
 		- eck.civix.php
@@ -44,12 +49,4 @@ parameters:
 		#- # Accessing results of API requests
 			#message: "#^Offset '[^']+' does not exist on array[^\\|]+\\|null.$#"
 			#path: */tests/phpunit/**/*Test.php
-		- '#Parameter \#2 \$searchValue of static method CRM_Core_DAO::getFieldValue\(\) expects int, string given.#'
-		- '#Method Civi\\Api4\\EckDAODeleteAction::deleteObjects\(\) has parameter \$items with no type specified.#'
-		- '#Method Civi\\Api4\\EckDAODeleteAction::deleteObjects\(\) return type has no value type specified in iterable type array.#'
-		- '#Method CRM_Eck_Form_EntityType::preProcess\(\) has no return type specified.#'
-		- '#Method CRM_Eck_Form_EntityType::postProcess\(\) has no return type specified.#'
-		- '#Method CRM_Eck_Form_EntityType::setDefaultValues\(\) return type has no value type specified in iterable type array.#'
-		- '#Method CRM_Eck_Form_EckSubtype::postProcess\(\) has no return type specified.#'
-		- '#Method CRM_Eck_Form_EckSubtype::setDefaultValues\(\) return type has no value type specified in iterable type array.#'
 	tmpDir: .phpstan

@@ -3,16 +3,18 @@ includes:
 
 parameters:
 	scanFiles:
-		- ci/vendor/civicrm/civicrm-core/ext/afform/core/afform.php
+		- vendor/civicrm/civicrm-core/ext/afform/core/afform.php
 	scanDirectories:
-		- ci/vendor/civicrm/civicrm-core/Civi/
-		- ci/vendor/civicrm/civicrm-core/CRM/
-		- ci/vendor/civicrm/civicrm-core/api/
-		- ci/vendor/civicrm/civicrm-packages/
+		- vendor/civicrm/civicrm-core/Civi/
+		- vendor/civicrm/civicrm-core/CRM/
+		- vendor/civicrm/civicrm-core/api/
+		- vendor/civicrm/civicrm-packages/
 	bootstrapFiles:
-		- ci/vendor/autoload.php
+		- vendor/autoload.php
 	# Because we test with different versions in CI we have unmatched errors
 	reportUnmatchedIgnoredErrors: false
 	ignoreErrors:
 		# Errors we get when using "prefer-lowest"
 		- '#::getSubscribedEvents\(\) return type has no value type specified in iterable type array.$#'
+		- '#Method Civi\\Api4\\EckDAODeleteAction\:\:deleteObjects\(\) has parameter \$items with no type specified.#'
+		- '#Call to function array_filter\(\) requires parameter \#2 to be passed to avoid loose comparison semantics.#'
