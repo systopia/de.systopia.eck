@@ -15,6 +15,8 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
         'label' => $type['label'],
         'value' => $type['entity_name'],
         'name' => $type['table_name'],
+        // Allow multi-value custom groups
+        'filter' => TRUE,
         'is_reserved' => TRUE,
         'is_active' => TRUE,
         'grouping' => 'subtype',
