@@ -161,13 +161,14 @@ class Entity extends AutoSubscriber {
             ->addWhere('type', '!=', 'Custom')
             ->execute();
           $customGroups = CustomGroup::get(FALSE)
-            ->addSelect('name', 'title')
+            ->addSelect('name', 'title', 'is_multiple', 'max_multiple')
             ->addWhere('extends', '=', $entityType['entity_name'])
             ->addClause(
               'OR',
               ['extends_entity_column_value', '=', $subType['value']],
               ['extends_entity_column_value', 'IS EMPTY']
             )
+            ->addOrderBy('weight')
             ->execute()
             ->getArrayCopy();
           array_walk($customGroups, function (&$customGroup) {

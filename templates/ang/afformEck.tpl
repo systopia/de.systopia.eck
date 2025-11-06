@@ -7,7 +7,13 @@
   {foreach item="customGroup" from=$customGroups}
     <fieldset>
       <legend>{$customGroup.title}</legend>
-      <afblock-custom-{$customGroup.afName}></afblock-custom-{$customGroup.afName}>
+      {if $customGroup.is_multiple}
+        <div af-join="Custom_{$customGroup.name}" af-repeat="{ts}Add{/ts}" af-copy="{ts}Copy{/ts}" min="0"{if $customGroup.max_multiple} max="{$customGroup.max_multiple}"{/if} actions="{ldelim}update: true, delete: true{rdelim}">
+          <afblock-custom-{$customGroup.afName}></afblock-custom-{$customGroup.afName}>
+        </div>
+      {else}
+        <afblock-custom-{$customGroup.afName}></afblock-custom-{$customGroup.afName}>
+      {/if}
     </fieldset>
   {/foreach}
   </fieldset>
