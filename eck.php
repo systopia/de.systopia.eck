@@ -28,8 +28,7 @@ function eck_civicrm_config(&$config) {
 /**
  * Implements hook_civicrm_entityTypes().
  *
- * @see CRM_Utils_Hook::entityTypes()
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
+ * Returns all ECK entities in EFv2 format.
  */
 function eck_civicrm_entityTypes(array &$entityTypes): void {
   $eck_entity_types = CRM_Core_DAO::executeQuery(
@@ -37,13 +36,13 @@ function eck_civicrm_entityTypes(array &$entityTypes): void {
   )->fetchAll('id');
 
   foreach ($eck_entity_types as $entity_type) {
-    // "CRM_Eck_DAO_*" is a virtual class name, the corresponding class does
-    // not exist. "CRM_Eck_DAO_Entity" is therefore defined as the controller
-    // class.
-    $entityTypes['CRM_Eck_DAO_' . $entity_type['name']] = [
-      'name' => 'Eck_' . $entity_type['name'],
+    $entityName = 'Eck_' . $entity_type['name'];
+    $entityTypes[$entityName] = [
+      'name' => $entityName,
       'class' => 'CRM_Eck_DAO_Entity',
       'table' => _eck_get_table_name($entity_type['name']),
+      'module' => E::LONG_NAME,
+      'metaProvider' => \Civi\Eck\EckEntityMetaProvider::class,
     ];
   }
 }
