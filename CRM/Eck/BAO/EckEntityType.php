@@ -128,11 +128,12 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @param string $entity_type_name
    *   The name of the entity type to retrieve a list of sub types for.
    * @param bool $as_mapping
-   * @return array<int|string, array{value: int|string, label: string}>
+   * @return array<int|string, array{value: string, label: string, name: string, description: string, icon: string}>
    *   A list of sub types for the given entity type.
    */
   public static function getSubTypes($entity_type_name, $as_mapping = TRUE): array {
     $result = OptionValue::get(FALSE)
+      ->addSelect('value', 'name', 'label', 'description', 'icon')
       ->addWhere('option_group_id:name', '=', 'eck_sub_types')
       ->addWhere('grouping', '=', $entity_type_name)
       ->execute()

@@ -16,7 +16,8 @@
 use CRM_Eck_ExtensionUtil as E;
 
 /**
- *
+ * @TODO: This file is mostly unneeded since the upgrade to EFv2
+ * But the writeRecord and deleteRecord functions are still used.
  */
 class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
   const EXT = E::LONG_NAME;
@@ -105,8 +106,13 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
     parent::initialize();
   }
 
+  public static function getEntityTitle($plural = FALSE) {
+    return E::ts('ECK Entity');
+  }
+
   /**
-   * {@inheritDoc}
+   * @TODO: This is redundant with fields defined in EckEntityMetaProvider::getFields
+   * @deprecated
    */
   public static function &fields() {
     // TODO: This is being called without the constructor being called
@@ -250,14 +256,6 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
    * {@inheritDoc}
    */
   public static function writeRecord(array $record): CRM_Core_DAO {
-    $loggedInContactID = CRM_Core_Session::getLoggedInContactID();
-    if ($loggedInContactID) {
-      if (empty($record['id'])) {
-        $record['created_id'] = $loggedInContactID;
-      }
-      $record['modified_id'] = $loggedInContactID;
-    }
-
     $hook = empty($record['id']) ? 'create' : 'edit';
 
     \CRM_Utils_Hook::pre($hook, 'Eck_' . $record['entity_type'], $record['id'] ?? NULL, $record);
