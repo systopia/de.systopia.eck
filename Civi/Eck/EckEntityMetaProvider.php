@@ -173,7 +173,6 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
         // Substr is used to strip the `Eck_` prefix
         [1 => [substr($this->entityName, 4), 'String']]
       );
-      // @phpstan-ignore-next-line
       $this->eckDefn = $query->fetchAll()[0];
     }
     return $this->eckDefn;
