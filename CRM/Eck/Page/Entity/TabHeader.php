@@ -98,7 +98,7 @@ class CRM_Eck_Page_Entity_TabHeader {
       'module' => $module,
       'directive' => _afform_angular_module_name($afform_name, 'dash'),
     ] + $default;
-    
+
     $page->assign('afformOptions', ['Eck_' . $entityType['name'] => $entityID]);
     /** @var \Civi\Angular\AngularLoader $angularLoader */
     $angularLoader = Civi::service('angularjs.loader');
