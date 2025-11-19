@@ -1,7 +1,11 @@
 <?php
-// Auto-generate managed records for each entity type
+
+// Add each ECK type with `in_recent = true` as a recent item provider
 $values = [];
 foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
+  if (empty($type['in_recent'])) {
+    continue;
+  }
   $values[] = [
     'name' => 'recent_items_providers:' . $type['name'],
     'entity' => 'OptionValue',
