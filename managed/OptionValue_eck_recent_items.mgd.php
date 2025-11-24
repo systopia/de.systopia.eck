@@ -3,7 +3,7 @@
 // Add each ECK type with `in_recent = true` as a recent item provider
 $values = [];
 foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
-  if (!(bool) ($type['in_recent'] ?? TRUE)) {
+  if (!$type['in_recent']) {
     continue;
   }
   $values[] = [

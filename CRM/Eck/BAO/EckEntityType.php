@@ -22,13 +22,24 @@ use Civi\Api4\EckEntity;
 use Civi\Api4\OptionValue;
 use Civi\Api4\Managed;
 
+/**
+ * @phpstan-type entityTypeT array{
+ *      id: int,
+ *      name: string,
+ *      label: string,
+ *      icon: string,
+ *      in_recent: bool,
+ *      entity_name: string,
+ *      table_name: string,
+ *    }
+ */
 class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements HookInterface {
 
   /**
-   * @return array<string, array<string, string>>
+   * @phpstan-return array<string, entityTypeT>
    */
   public static function getEntityTypes(): array {
-    /** @phpstan-var array<string, array<string, string>> $entityTypes */
+    /** @phpstan-var array<string, entityTypeT> $entityTypes */
     $entityTypes = Civi::cache('metadata')->get('EckEntityTypes');
     if (!is_array($entityTypes)) {
       // The table might not yet exist (e.g. when flushing caches/fetching permissions during installation).
@@ -44,6 +55,9 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
               'entity_name' => 'Eck_' . $entityTypesQuery->name,
               'table_name' => _eck_get_table_name($entityTypesQuery->name),
             ];
+          $entityTypes['Eck_' . $entityTypesQuery->name]['in_recent']
+            = (bool) ($entityTypes['Eck_' . $entityTypesQuery->name]['in_recent'] ?? TRUE);
+          /** @phpstan-var array<string, entityTypeT> $entityTypes */
         }
         Civi::cache('metadata')->set('EckEntityTypes', $entityTypes);
       }
@@ -56,7 +70,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
 
   /**
    * @param string $name
-   * @return array<string>|null
+   * @phpstan-return entityTypeT|null
    */
   public static function getEntityType(string $name): ?array {
     foreach (self::getEntityTypes() as $type) {
