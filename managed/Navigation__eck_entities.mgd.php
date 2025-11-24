@@ -48,7 +48,7 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
     'entity' => 'Navigation',
     'cleanup' => 'always',
     'update' => 'unmodified',
-    'params' =>  [
+    'params' => [
       'version' => 4,
       'values' => [
         'label' => $entity_type['label'],
@@ -60,7 +60,7 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
         ],
         'permission_operator' => 'OR',
         'has_separator' => 0,
-        'icon' => $entity_type['icon'] ? 'crm-i ' . $entity_type['icon'] : NULL,
+        'icon' => '' !== $entity_type['icon'] ? 'crm-i ' . $entity_type['icon'] : NULL,
         'is_active' => TRUE,
         'parent_id.name' => 'eck_entities',
       ],

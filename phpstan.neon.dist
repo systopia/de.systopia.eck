@@ -5,6 +5,8 @@ parameters:
 	paths:
 		- Civi
 		- CRM
+		- managed
+		- schema
 		- tests
 		- eck.php
 	excludePaths:
