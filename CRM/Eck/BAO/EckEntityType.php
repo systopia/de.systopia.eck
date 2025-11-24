@@ -50,14 +50,16 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
         }
         $entityTypes = [];
         while ($entityTypesQuery->fetch()) {
-          $entityTypes['Eck_' . $entityTypesQuery->name] = $entityTypesQuery->toArray()
-            + [
-              'entity_name' => 'Eck_' . $entityTypesQuery->name,
-              'table_name' => _eck_get_table_name($entityTypesQuery->name),
-            ];
-          $entityTypes['Eck_' . $entityTypesQuery->name]['in_recent']
-            = (bool) ($entityTypes['Eck_' . $entityTypesQuery->name]['in_recent'] ?? TRUE);
-          /** @phpstan-var array<string, entityTypeT> $entityTypes */
+          /** @phpstan-var entityTypeT $entityType */
+          $entityType = $entityTypesQuery->toArray() + [
+            'entity_name' => 'Eck_' . $entityTypesQuery->name,
+            'table_name' => _eck_get_table_name($entityTypesQuery->name),
+          ];
+          // Cast non-string fields to correct type
+          $entityType['id'] = (int) $entityType['id'];
+          // Use `??` because `in_recent` might not exist if `upgrade_0013()` is pending.
+          $entityType['in_recent'] = (bool) ($entityType['in_recent'] ?? TRUE);
+          $entityTypes['Eck_' . $entityTypesQuery->name] = $entityType;
         }
         Civi::cache('metadata')->set('EckEntityTypes', $entityTypes);
       }
