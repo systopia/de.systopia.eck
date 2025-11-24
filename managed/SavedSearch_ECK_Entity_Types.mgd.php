@@ -45,7 +45,9 @@ return [
         'saved_search_id.name' => 'ECK_Entity_Types',
         'type' => 'table',
         'settings' => [
+          // phpcs:disable Generic.Files.LineLength.TooLong
           'description' => E::ts('The Entity Construction Kit extension allows you to create and manage custom CiviCRM entities. Note: Entities require at least one subtype.'),
+          // phpcs:enable
           'sort' => [
             [
               'label',
