@@ -10,13 +10,13 @@
       return;
     }
 
-    $('#label', $form).on('keyup', function() {
+    $('#label', $form).on('keyup change', function() {
       $name.val($(this).val()).trigger('blur');
     });
     // Replace special characters in name.
     $name.on('keyup blur', function(e) {
-      $(this).val(_.trimStart(_.deburr($(this).val()).replace(/[^a-z0-9]+/gi, '_'), ' _'));
-      // On blur remove trailing underscore.
+      $(this).val(_.deburr($(this).val()).replace(/[^a-z0-9]+/gi, '_'));
+      // On blur, trim leading/trailing whitespace & underscores.
       if (e.type === 'blur') {
         $(this).val(_.trim($(this).val(), ' _'));
       }
