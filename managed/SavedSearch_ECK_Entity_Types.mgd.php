@@ -101,6 +101,12 @@ return [
                   'target' => '',
                 ],
                 [
+                  'path' => 'civicrm/admin/custom/group#?extends=Eck_[name]',
+                  'icon' => 'fa-list-alt',
+                  'text' => E::ts('Custom Fields'),
+                  'style' => 'default',
+                ],
+                [
                   'entity' => 'EckEntityType',
                   'action' => 'update',
                   'join' => '',
