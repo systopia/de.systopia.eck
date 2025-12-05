@@ -28,6 +28,7 @@ use Civi\Api4\Managed;
  *      name: string,
  *      label: string,
  *      icon: string,
+ *      has_subtypes: bool,
  *      in_recent: bool,
  *      entity_name: string,
  *      table_name: string,
@@ -59,6 +60,8 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
           $entityType['id'] = (int) $entityType['id'];
           // Use `??` because `in_recent` might not exist if `upgrade_0013()` is pending.
           $entityType['in_recent'] = (bool) ($entityType['in_recent'] ?? TRUE);
+          // Use `??` because `has_subtypes` might not exist if `upgrade_0016()` is pending.
+          $entityType['has_subtypes'] = (bool) ($entityType['has_subtypes'] ?? TRUE);
           $entityTypes['Eck_' . $entityTypesQuery->name] = $entityType;
         }
         Civi::cache('metadata')->set('EckEntityTypes', $entityTypes);
