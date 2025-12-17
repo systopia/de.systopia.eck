@@ -95,8 +95,11 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
 
     $this->assign('entityType', $this->_entityType);
 
-    // Set redirect destination.
-    $this->controller->_destination = CRM_Utils_System::url('civicrm/admin/eck/entity-types', 'reset=1');
+    $destination = CRM_Utils_System::url('civicrm/admin/eck/entity-types', 'reset=1', FALSE, NULL, FALSE);
+    // Set redirect destination (for submit button).
+    $this->controller->_destination = $destination;
+    // Also set context (for cancel button)
+    CRM_Core_Session::singleton()->pushUserContext($destination);
   }
 
   /**
