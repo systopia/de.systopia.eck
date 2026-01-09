@@ -32,7 +32,7 @@
             </div>
           {/foreach}
 
-          {* Sub types *}
+        {* Subtypes *}
         <details class="crm-accordion-bold" open>
           <summary>
             <i class="crm-i fa-cube" aria-hidden="true" role="img"></i>

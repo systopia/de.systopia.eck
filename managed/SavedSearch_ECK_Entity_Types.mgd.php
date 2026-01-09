@@ -83,7 +83,7 @@ return [
               'type' => 'field',
               'key' => 'sub_types:label',
               'dataType' => 'Array',
-              'label' => E::ts('Sub Types'),
+              'label' => E::ts('Subtypes'),
               'sortable' => TRUE,
             ],
             [
