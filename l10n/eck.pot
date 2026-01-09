@@ -142,8 +142,8 @@ msgstr ""
 msgid "APIv4 name of this entity."
 msgstr ""
 
-#: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php managed/SavedSearch_ECK_Entity_Types.mgd.php
-msgid "Sub Types"
+#: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php managed/SavedSearch_ECK_Custom_Groups.mgd.php managed/SavedSearch_ECK_Entity_Types.mgd.php templates/CRM/Eck/Form/EntityType.tpl
+msgid "Subtypes"
 msgstr ""
 
 #: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
@@ -248,10 +248,6 @@ msgstr ""
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Custom Group"
-msgstr ""
-
-#: managed/SavedSearch_ECK_Custom_Groups.mgd.php templates/CRM/Eck/Form/EntityType.tpl
-msgid "Subtypes"
 msgstr ""
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
