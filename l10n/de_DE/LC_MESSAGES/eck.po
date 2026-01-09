@@ -167,8 +167,10 @@ msgid "APIv4 name of this entity."
 msgstr "API4-Name dieser Entität."
 
 #: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
-msgid "Sub Types"
+#: templates/CRM/Eck/Form/EntityType.tpl
+msgid "Subtypes"
 msgstr "Untertypen"
 
 #: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
@@ -297,11 +299,6 @@ msgstr "Satz benutzerdefinierter Felder hinzufügen"
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Custom Group"
 msgstr "Benutzerdefinierte (Feld-)Gruppe"
-
-#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
-#: templates/CRM/Eck/Form/EntityType.tpl
-msgid "Subtypes"
-msgstr "Untertypen"
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "All"
@@ -543,56 +540,3 @@ msgstr "Nach Titel filtern"
 #: templates/ang/afsearch_eck_listing.tpl
 msgid "Filter by Type"
 msgstr "Nach Typ filtern"
-
-#~ msgid "Operations"
-#~ msgstr "Operationen"
-
-#~ msgid "No subtypes"
-#~ msgstr "Keine Untertypen"
-
-#~ msgid ""
-#~ "You may add custom fields to this entity type using\n"
-#~ "                <a href=\"%1\">CiviCRM's custom groups</a>\n"
-#~ "                ."
-#~ msgstr ""
-#~ "Benutzerdefinierte Felder können diesem Untertyp mit Hilfe von\n"
-#~ "<a href=\"%1\">CiviCRMs benutzerdefinierter Feldgruppen</a> hinzugefügt "
-#~ "werden."
-
-#~ msgid ""
-#~ "You may administer custom fields for subtypes of this entity type by "
-#~ "editing the subtype."
-#~ msgstr ""
-#~ "Benutzerdefinierte Felder für Untertypen können beim Bearbeiten des "
-#~ "Untertyps verwaltet werden."
-
-#~ msgid "The following custom groups extend all subtypes of this entity type:"
-#~ msgstr ""
-#~ "Folgende Feldgruppen werden für alle Subtypen dieses Entitätstyps genutzt:"
-
-#~ msgid "No subtype given."
-#~ msgstr "Kein Untertyp angegeben."
-
-#~ msgid "Invalid subtype."
-#~ msgstr "Ungültiger Untertyp."
-
-#~ msgid "Invalid action."
-#~ msgstr "Ungültige Aktion."
-
-#~ msgid "Invalid ECK entity type."
-#~ msgstr "Ungültiger Entitätstyp."
-
-#~ msgid "The entity type's name"
-#~ msgstr "Name des Entitätstyps"
-
-#~ msgid "Upgrade %1 to revision %2"
-#~ msgstr "Aktualisieren von %1 auf Revision %2"
-
-#~ msgid "No entities"
-#~ msgstr "Keine Entitäten"
-
-#~ msgid "Entity type"
-#~ msgstr "Entitätstyp"
-
-#~ msgid "List entities"
-#~ msgstr "Entitäten auflisten"

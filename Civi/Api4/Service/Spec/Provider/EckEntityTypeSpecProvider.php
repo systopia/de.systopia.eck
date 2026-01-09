@@ -36,8 +36,8 @@ class EckEntityTypeSpecProvider implements Generic\SpecProviderInterface {
 
       $field = new FieldSpec('sub_types', 'EckEntityType', 'Array');
       $field
-        ->setTitle(ts('Sub Types'))
-        ->setLabel(ts('Sub Types'))
+        ->setTitle(ts('Subtypes'))
+        ->setLabel(ts('Subtypes'))
         ->setColumnName('name')
         ->setDescription(ts('All subtypes of this entity.'))
         ->setOptionsCallback([__CLASS__, 'getSubtypeOptions'])
