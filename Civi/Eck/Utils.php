@@ -21,7 +21,7 @@ class Utils {
       ->addSelect('type:name', 'settings', 'saved_search_id.api_entity')
       ->execute()->first();
 
-    if (!$display) {
+    if (!is_array($display)) {
       return NULL;
     }
 
