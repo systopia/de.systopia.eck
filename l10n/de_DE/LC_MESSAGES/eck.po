@@ -20,99 +20,58 @@ msgstr "Fehler beim Abrufen des Entitätstyp-Namens."
 msgid "Error retrieving ECK entity type from request."
 msgstr "Fehler beim Abrufen des ECK-Entitätstyps aus der Anfrage."
 
-#: CRM/Eck/DAO/EckEntityType.php ang/afsearchECKEntityTypes.aff.php
-#: managed/Navigation_afsearchECKEntityTypes.mgd.php
-#: managed/SavedSearch_ECK_Entity_Types.mgd.php
-msgid "ECK Entity Types"
-msgstr "ECK-Entitätstypen"
+#: CRM/Eck/DAO/Entity.php
+msgid "ECK Entity"
+msgstr "ECK-Entität"
 
-#: CRM/Eck/DAO/EckEntityType.php
-msgid "ECK Entity Type"
-msgstr "ECK-Entitätstyp"
-
-#: CRM/Eck/DAO/EckEntityType.php CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
+#: schema/EckEntityType.entityType.php
 msgid "ID"
 msgstr "ID"
 
-#: CRM/Eck/DAO/EckEntityType.php
-msgid "Unique EckEntityType ID"
-msgstr "Eindeutige EckEntityType-ID"
-
-#: CRM/Eck/DAO/EckEntityType.php
-msgid "Name"
-msgstr "Name"
-
-#: CRM/Eck/DAO/EckEntityType.php
-msgid "The entity type name, also used in the sql table name"
-msgstr ""
-"Der Name des Entitätstyps, wird auch im Namen der Datenbanktabelle verwendet"
-
-#: CRM/Eck/DAO/EckEntityType.php
-msgid "Label"
-msgstr "Bezeichnung"
-
-#: CRM/Eck/DAO/EckEntityType.php
-msgid "The entity type's human-readable name"
-msgstr "Der lesbare Name des Entitätstyps"
-
-#: CRM/Eck/DAO/EckEntityType.php CRM/Eck/Form/EckSubtype.php
-msgid "Icon"
-msgstr "Symbol"
-
-#: CRM/Eck/DAO/EckEntityType.php
-msgid "crm-i icon class"
-msgstr ""
-
-#: CRM/Eck/DAO/EckEntityType.php
-msgid "In Recent Items"
-msgstr "In zuletzt angesehenen Elementen"
-
-#: CRM/Eck/DAO/EckEntityType.php
-msgid "Does this entity type get added to the recent items list"
-msgstr ""
-"Entitäten dieses Typs zur Liste zuletzt angesehener Elemente hinzufügen"
-
-#: CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "The unique entity ID."
 msgstr "Die eindeutige ID der Entität."
 
-#: CRM/Eck/DAO/Entity.php managed/SavedSearch_listings.mgd.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
+#: managed/SavedSearch_listings.mgd.php
 msgid "Title"
 msgstr "Titel"
 
-#: CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "The entity title."
 msgstr "Der Titel der Entität."
 
-#: CRM/Eck/DAO/Entity.php templates/CRM/Eck/Form/EntityType.tpl
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
+#: managed/SavedSearch_ECK_Subtypes.mgd.php
 msgid "Subtype"
 msgstr "Untertyp"
 
-#: CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "The entity subtype."
 msgstr "Der Untertyp der Entität."
 
-#: CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Created By Contact ID"
 msgstr "Ersteller-Kontakt-ID"
 
-#: CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "FK to contact table."
 msgstr "Fremdschlüssel zur Kontakt-Tabelle."
 
-#: CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Created By"
 msgstr "Erstellt von"
 
-#: CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Modified By Contact ID"
 msgstr "Bearbeiter-Kontakt-ID"
 
-#: CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Modified By"
 msgstr "Bearbeitet von"
 
-#: CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Created Date"
 msgstr "Erstellungsdatum"
 
@@ -120,7 +79,7 @@ msgstr "Erstellungsdatum"
 msgid "When the record was created."
 msgstr "Wann der Eintrag erstellt wurde."
 
-#: CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Modified Date"
 msgstr "Bearbeitungsdatum"
 
@@ -128,7 +87,7 @@ msgstr "Bearbeitungsdatum"
 msgid "When the record was last modified."
 msgstr "Wann der Eintrag zuletzt bearbeitet wurde."
 
-#: CRM/Eck/Form/EckSubtype.php templates/CRM/Eck/Form/EntityType.tpl
+#: CRM/Eck/Form/EckSubtype.php managed/SavedSearch_ECK_Subtypes.mgd.php
 msgid "Add Subtype"
 msgstr "Untertyp hinzufügen"
 
@@ -148,8 +107,14 @@ msgstr "Speichern"
 msgid "Subtype name"
 msgstr "Name des Untertyps"
 
+#: CRM/Eck/Form/EckSubtype.php schema/EckEntityType.entityType.php
+msgid "Icon"
+msgstr "Symbol"
+
 #: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
-#: managed/SavedSearch_listings.mgd.php templates/CRM/Eck/Form/EntityType.tpl
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+#: managed/SavedSearch_ECK_Subtypes.mgd.php
+#: managed/SavedSearch_listings.mgd.php
 msgid "Delete"
 msgstr "Löschen"
 
@@ -188,8 +153,8 @@ msgstr "Es existiert bereits ein Entitätstyp mit diesem Namen."
 msgid "View"
 msgstr "Anzeigen"
 
-#: CRM/Eck/Page/Entity/TabHeader.php managed/SavedSearch_listings.mgd.php
-#: templates/CRM/Eck/Form/EntityType.tpl
+#: CRM/Eck/Page/Entity/TabHeader.php managed/SavedSearch_ECK_Subtypes.mgd.php
+#: managed/SavedSearch_listings.mgd.php
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -210,13 +175,21 @@ msgstr "Untertypen"
 msgid "All subtypes of this entity."
 msgstr "Alle Untertypen dieser Entität."
 
-#: Civi/Eck/API/Entity.php
+#: Civi/Eck/API/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Entity Construction Kit entity type %1"
 msgstr "Entity-Construction-Kit-Eintitätstyp %1"
 
 #: Civi/Eck/API/Entity.php
 msgid "Search listing for %1"
 msgstr "Listenanzeige für %1"
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "When the entity was created."
+msgstr "Wann die Entität erstellt wurde."
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "When the entity was created or modified or deleted."
+msgstr "Wann die Entität erstellt, bearbeitet, oder gelöscht wurde."
 
 #: Civi/Eck/Permissions.php
 msgid "Entity Construction Kit (ECK): Administer Entity Types"
@@ -302,9 +275,74 @@ msgstr ""
 msgid "Allows deleting custom entities of type %1."
 msgstr "Erlaubt das Löschen benutzerdefinierter Entitäten des Typs %1."
 
+#: ang/afsearchECKEntityTypes.aff.php
+#: managed/Navigation_afsearchECKEntityTypes.mgd.php
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: schema/EckEntityType.entityType.php
+msgid "ECK Entity Types"
+msgstr "ECK-Entitätstypen"
+
 #: managed/Navigation__eck_entities.mgd.php
 msgid "Custom Entities"
 msgstr "Benutzerdefinierte Entitäten"
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "ECK Custom Groups"
+msgstr "ECK - Benutzerdefinierte (Feld-)Gruppen"
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Add Set of Custom Fields"
+msgstr "Satz benutzerdefinierter Felder hinzufügen"
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Custom Group"
+msgstr "Benutzerdefinierte (Feld-)Gruppe"
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+#: templates/CRM/Eck/Form/EntityType.tpl
+msgid "Subtypes"
+msgstr "Untertypen"
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "All"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+#: managed/SavedSearch_ECK_Subtypes.mgd.php
+msgid "Enabled"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Style"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Fields"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Fields (%1)"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Settings"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Preview"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Enable"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Disable"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Add Custom Field"
+msgstr "Benutzerdefiniertes Feld hinzufügen"
 
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "ECK Entity Type List"
@@ -332,6 +370,11 @@ msgid "View Records"
 msgstr "Datensätze anzeigen"
 
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: templates/CRM/Eck/Form/EntityType.tpl
+msgid "Custom Fields"
+msgstr "Benutzerdefinierte Felder"
+
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "Edit Type"
 msgstr "Typ bearbeiten"
 
@@ -342,6 +385,14 @@ msgstr "Typ löschen"
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "Add ECK Entity Type"
 msgstr "ECK-Entitätstyp hinzufügen"
+
+#: managed/SavedSearch_ECK_Subtypes.mgd.php
+msgid "ECK Subtypes"
+msgstr "ECK-Untertypen"
+
+#: managed/SavedSearch_ECK_Subtypes.mgd.php
+msgid "Description"
+msgstr "Beschreibung"
 
 #: managed/SavedSearch_listings.mgd.php
 msgid "ECK Listing: %1"
@@ -375,7 +426,49 @@ msgstr "[modified_date] von [modified_id.display_name]"
 msgid "Add %1"
 msgstr "%1 hinzufügen"
 
-#: templates/CRM/Eck/Form/EckSubtype.tpl templates/CRM/Eck/Form/EntityType.tpl
+#: schema/EckEntityType.entityType.php
+msgid "ECK Entity Type"
+msgstr "ECK-Entitätstyp"
+
+#: schema/EckEntityType.entityType.php
+msgid "Custom CiviCRM entity types"
+msgstr "Benutzerdefinierte CiviCRM-Entitätstypen"
+
+#: schema/EckEntityType.entityType.php
+msgid "Unique EckEntityType ID"
+msgstr "Eindeutige EckEntityType-ID"
+
+#: schema/EckEntityType.entityType.php
+msgid "Name"
+msgstr "Name"
+
+#: schema/EckEntityType.entityType.php
+msgid "The entity type name, also used in the sql table name"
+msgstr ""
+"Der Name des Entitätstyps, wird auch im Namen der Datenbanktabelle verwendet"
+
+#: schema/EckEntityType.entityType.php
+msgid "Label"
+msgstr "Bezeichnung"
+
+#: schema/EckEntityType.entityType.php
+msgid "The entity type's human-readable name"
+msgstr "Der lesbare Name des Entitätstyps"
+
+#: schema/EckEntityType.entityType.php
+msgid "crm-i icon class"
+msgstr ""
+
+#: schema/EckEntityType.entityType.php
+msgid "In Recent Items"
+msgstr "In zuletzt angesehenen Elementen"
+
+#: schema/EckEntityType.entityType.php
+msgid "Does this entity type get added to the recent items list"
+msgstr ""
+"Entitäten dieses Typs zur Liste zuletzt angesehener Elemente hinzufügen"
+
+#: templates/CRM/Eck/Form/EckSubtype.tpl
 msgid "Custom Groups"
 msgstr "Benutzerdefinierte (Feld-)Gruppen"
 
@@ -409,18 +502,6 @@ msgid "This action cannot be undone."
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: templates/CRM/Eck/Form/EntityType.tpl
-msgid "Sub types"
-msgstr "Untertypen"
-
-#: templates/CRM/Eck/Form/EntityType.tpl
-msgid "Operations"
-msgstr "Operationen"
-
-#: templates/CRM/Eck/Form/EntityType.tpl
-msgid "No subtypes"
-msgstr "Keine Untertypen"
-
-#: templates/CRM/Eck/Form/EntityType.tpl
 msgid "You may add subtypes after saving this new entity type."
 msgstr ""
 "Untertypen können nach dem Anlegen des neuen Entitätstyps hinzugefügt werden."
@@ -430,29 +511,6 @@ msgid "Note: ECK entities require that you add at least one subtype."
 msgstr ""
 "Hinweis: ECK-Entitätstypen erfordern das Hinzufügen mindestens eines "
 "Untertyps."
-
-#: templates/CRM/Eck/Form/EntityType.tpl
-msgid ""
-"You may add custom fields to this entity type using\n"
-"                <a href=\"%1\">CiviCRM's custom groups</a>\n"
-"                ."
-msgstr ""
-"Benutzerdefinierte Felder können diesem Untertyp mit Hilfe von\n"
-"<a href=\"%1\">CiviCRMs benutzerdefinierter Feldgruppen</a> hinzugefügt "
-"werden."
-
-#: templates/CRM/Eck/Form/EntityType.tpl
-msgid ""
-"You may administer custom fields for subtypes of this entity type by editing "
-"the subtype."
-msgstr ""
-"Benutzerdefinierte Felder für Untertypen können beim Bearbeiten des "
-"Untertyps verwaltet werden."
-
-#: templates/CRM/Eck/Form/EntityType.tpl
-msgid "The following custom groups extend all subtypes of this entity type:"
-msgstr ""
-"Folgende Feldgruppen werden für alle Subtypen dieses Entitätstyps genutzt:"
 
 #: templates/CRM/Eck/Form/EntityType.tpl
 msgid "Do you want to delete the entity type<em>%1</em>?"
@@ -467,6 +525,14 @@ msgstr ""
 "zugeordneten benutzerdefinierten Felder gelöscht."
 
 #: templates/ang/afformEck.tpl
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: templates/ang/afformEck.tpl
+msgid "Copy"
+msgstr "Kopieren"
+
+#: templates/ang/afformEck.tpl
 msgid "Submit"
 msgstr "Übermitteln"
 
@@ -477,6 +543,32 @@ msgstr "Nach Titel filtern"
 #: templates/ang/afsearch_eck_listing.tpl
 msgid "Filter by Type"
 msgstr "Nach Typ filtern"
+
+#~ msgid "Operations"
+#~ msgstr "Operationen"
+
+#~ msgid "No subtypes"
+#~ msgstr "Keine Untertypen"
+
+#~ msgid ""
+#~ "You may add custom fields to this entity type using\n"
+#~ "                <a href=\"%1\">CiviCRM's custom groups</a>\n"
+#~ "                ."
+#~ msgstr ""
+#~ "Benutzerdefinierte Felder können diesem Untertyp mit Hilfe von\n"
+#~ "<a href=\"%1\">CiviCRMs benutzerdefinierter Feldgruppen</a> hinzugefügt "
+#~ "werden."
+
+#~ msgid ""
+#~ "You may administer custom fields for subtypes of this entity type by "
+#~ "editing the subtype."
+#~ msgstr ""
+#~ "Benutzerdefinierte Felder für Untertypen können beim Bearbeiten des "
+#~ "Untertyps verwaltet werden."
+
+#~ msgid "The following custom groups extend all subtypes of this entity type:"
+#~ msgstr ""
+#~ "Folgende Feldgruppen werden für alle Subtypen dieses Entitätstyps genutzt:"
 
 #~ msgid "No subtype given."
 #~ msgstr "Kein Untertyp angegeben."

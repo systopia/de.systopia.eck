@@ -1,404 +1,472 @@
-#: ./CRM/Eck/BAO/EckEntityType.php
+#: CRM/Eck/BAO/EckEntityType.php
 msgid "Error retrieving ECK entity type name."
 msgstr ""
 
-#: ./CRM/Eck/BAO/Entity.php
+#: CRM/Eck/BAO/Entity.php
 msgid "Error retrieving ECK entity type from request."
 msgstr ""
 
-#: ./CRM/Eck/DAO/EckEntityType.php ./ang/afsearchECKEntityTypes.aff.php ./managed/Navigation_afsearchECKEntityTypes.mgd.php ./managed/SavedSearch_ECK_Entity_Types.mgd.php
-msgid "ECK Entity Types"
+#: CRM/Eck/DAO/Entity.php
+msgid "ECK Entity"
 msgstr ""
 
-#: ./CRM/Eck/DAO/EckEntityType.php
-msgid "ECK Entity Type"
-msgstr ""
-
-#: ./CRM/Eck/DAO/EckEntityType.php ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php schema/EckEntityType.entityType.php
 msgid "ID"
 msgstr ""
 
-#: ./CRM/Eck/DAO/EckEntityType.php
-msgid "Unique EckEntityType ID"
-msgstr ""
-
-#: ./CRM/Eck/DAO/EckEntityType.php
-msgid "Name"
-msgstr ""
-
-#: ./CRM/Eck/DAO/EckEntityType.php
-msgid "The entity type name, also used in the sql table name"
-msgstr ""
-
-#: ./CRM/Eck/DAO/EckEntityType.php
-msgid "Label"
-msgstr ""
-
-#: ./CRM/Eck/DAO/EckEntityType.php
-msgid "The entity type's human-readable name"
-msgstr ""
-
-#: ./CRM/Eck/DAO/EckEntityType.php ./CRM/Eck/Form/EckSubtype.php
-msgid "Icon"
-msgstr ""
-
-#: ./CRM/Eck/DAO/EckEntityType.php
-msgid "crm-i icon class"
-msgstr ""
-
-#: ./CRM/Eck/DAO/EckEntityType.php
-msgid "In Recent Items"
-msgstr ""
-
-#: ./CRM/Eck/DAO/EckEntityType.php
-msgid "Does this entity type get added to the recent items list"
-msgstr ""
-
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "The unique entity ID."
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php ./managed/SavedSearch_listings.mgd.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php managed/SavedSearch_listings.mgd.php
 msgid "Title"
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "The entity title."
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php ./templates/CRM/Eck/Form/EntityType.tpl
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php managed/SavedSearch_ECK_Subtypes.mgd.php
 msgid "Subtype"
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "The entity subtype."
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Created By Contact ID"
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "FK to contact table."
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Created By"
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Modified By Contact ID"
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Modified By"
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Created Date"
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php
 msgid "When the record was created."
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Modified Date"
 msgstr ""
 
-#: ./CRM/Eck/DAO/Entity.php
+#: CRM/Eck/DAO/Entity.php
 msgid "When the record was last modified."
 msgstr ""
 
-#: ./CRM/Eck/Form/EckSubtype.php ./templates/CRM/Eck/Form/EntityType.tpl
+#: CRM/Eck/Form/EckSubtype.php managed/SavedSearch_ECK_Subtypes.mgd.php
 msgid "Add Subtype"
 msgstr ""
 
-#: ./CRM/Eck/Form/EckSubtype.php
+#: CRM/Eck/Form/EckSubtype.php
 msgid "Edit Subtype <em>%1</em>"
 msgstr ""
 
-#: ./CRM/Eck/Form/EckSubtype.php
+#: CRM/Eck/Form/EckSubtype.php
 msgid "Delete Subtype <em>%1</em>"
 msgstr ""
 
-#: ./CRM/Eck/Form/EckSubtype.php ./CRM/Eck/Form/EntityType.php
+#: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
 msgid "Save"
 msgstr ""
 
-#: ./CRM/Eck/Form/EckSubtype.php
+#: CRM/Eck/Form/EckSubtype.php
 msgid "Subtype name"
 msgstr ""
 
-#: ./CRM/Eck/Form/EckSubtype.php ./CRM/Eck/Form/EntityType.php ./managed/SavedSearch_listings.mgd.php ./templates/CRM/Eck/Form/EntityType.tpl
+#: CRM/Eck/Form/EckSubtype.php schema/EckEntityType.entityType.php
+msgid "Icon"
+msgstr ""
+
+#: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php managed/SavedSearch_ECK_Custom_Groups.mgd.php managed/SavedSearch_ECK_Subtypes.mgd.php managed/SavedSearch_listings.mgd.php
 msgid "Delete"
 msgstr ""
 
-#: ./CRM/Eck/Form/EckSubtype.php ./CRM/Eck/Form/EntityType.php
+#: CRM/Eck/Form/EckSubtype.php CRM/Eck/Form/EntityType.php
 msgid "Cancel"
 msgstr ""
 
-#: ./CRM/Eck/Form/EntityType.php
+#: CRM/Eck/Form/EntityType.php
 msgid "Add Entity Type"
 msgstr ""
 
-#: ./CRM/Eck/Form/EntityType.php
+#: CRM/Eck/Form/EntityType.php
 msgid "Edit Entity Type %1"
 msgstr ""
 
-#: ./CRM/Eck/Form/EntityType.php
+#: CRM/Eck/Form/EntityType.php
 msgid "Delete Entity Type %1"
 msgstr ""
 
-#: ./CRM/Eck/Form/EntityType.php
+#: CRM/Eck/Form/EntityType.php
 msgid "Invalid operation."
 msgstr ""
 
-#: ./CRM/Eck/Form/EntityType.php
+#: CRM/Eck/Form/EntityType.php
 msgid "The entity type name must be in PascalCase (at least first letter uppercase)."
 msgstr ""
 
-#: ./CRM/Eck/Form/EntityType.php
+#: CRM/Eck/Form/EntityType.php
 msgid "An entity type with this name already exists."
 msgstr ""
 
-#: ./CRM/Eck/Page/Entity/TabHeader.php ./managed/SavedSearch_listings.mgd.php
+#: CRM/Eck/Page/Entity/TabHeader.php managed/SavedSearch_listings.mgd.php
 msgid "View"
 msgstr ""
 
-#: ./CRM/Eck/Page/Entity/TabHeader.php ./managed/SavedSearch_listings.mgd.php ./templates/CRM/Eck/Form/EntityType.tpl
+#: CRM/Eck/Page/Entity/TabHeader.php managed/SavedSearch_ECK_Subtypes.mgd.php managed/SavedSearch_listings.mgd.php
 msgid "Edit"
 msgstr ""
 
-#: ./Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
+#: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
 msgid "API Name"
 msgstr ""
 
-#: ./Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
+#: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
 msgid "APIv4 name of this entity."
 msgstr ""
 
-#: ./Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php ./managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "Sub Types"
 msgstr ""
 
-#: ./Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
+#: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
 msgid "All subtypes of this entity."
 msgstr ""
 
-#: ./Civi/Eck/API/Entity.php
+#: Civi/Eck/API/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Entity Construction Kit entity type %1"
 msgstr ""
 
-#: ./Civi/Eck/API/Entity.php
+#: Civi/Eck/API/Entity.php
 msgid "Search listing for %1"
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "When the entity was created."
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "When the entity was created or modified or deleted."
+msgstr ""
+
+#: Civi/Eck/Permissions.php
 msgid "Entity Construction Kit (ECK): Administer Entity Types"
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Allows creating, editing and deleting custom entity types."
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Entity Construction Kit (ECK): Administer custom entities"
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Allows creating, viewing, editing and deleting custom entities of any type."
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Entity Construction Kit (ECK): View any custom entity"
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Allows viewing custom entities of any type."
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Entity Construction Kit (ECK): Create or edit any custom entity"
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Allows creating and editing custom entities of any type."
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Entity Construction Kit (ECK): Delete any custom entity"
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Allows deleting custom entities of any type."
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Entity Construction Kit (ECK): View custom entities of type %1"
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Allows viewing custom entities of type %1."
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Entity Construction Kit (ECK): Create or edit custom entities of type %1"
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Allows creating and editing custom entities of type %1."
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Entity Construction Kit (ECK): Delete custom entities of type %1"
 msgstr ""
 
-#: ./Civi/Eck/Permissions.php
+#: Civi/Eck/Permissions.php
 msgid "Allows deleting custom entities of type %1."
 msgstr ""
 
-#: ./managed/Navigation__eck_entities.mgd.php
+#: ang/afsearchECKEntityTypes.aff.php managed/Navigation_afsearchECKEntityTypes.mgd.php managed/SavedSearch_ECK_Entity_Types.mgd.php schema/EckEntityType.entityType.php
+msgid "ECK Entity Types"
+msgstr ""
+
+#: managed/Navigation__eck_entities.mgd.php
 msgid "Custom Entities"
 msgstr ""
 
-#: ./managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "ECK Custom Groups"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Add Set of Custom Fields"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Custom Group"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php templates/CRM/Eck/Form/EntityType.tpl
+msgid "Subtypes"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "All"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php managed/SavedSearch_ECK_Subtypes.mgd.php
+msgid "Enabled"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Style"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Fields"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Fields (%1)"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Settings"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Preview"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Enable"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Disable"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
+msgid "Add Custom Field"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "ECK Entity Type List"
 msgstr ""
 
-#: ./managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "The Entity Construction Kit extension allows you to create and manage custom CiviCRM entities. Note: Entities require at least one subtype."
 msgstr ""
 
-#: ./managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "Entity Type"
 msgstr ""
 
-#: ./managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "Internal Name"
 msgstr ""
 
-#: ./managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "View Records"
 msgstr ""
 
-#: ./managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php templates/CRM/Eck/Form/EntityType.tpl
+msgid "Custom Fields"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "Edit Type"
 msgstr ""
 
-#: ./managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "Delete Type"
 msgstr ""
 
-#: ./managed/SavedSearch_ECK_Entity_Types.mgd.php
+#: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "Add ECK Entity Type"
 msgstr ""
 
-#: ./managed/SavedSearch_listings.mgd.php
+#: managed/SavedSearch_ECK_Subtypes.mgd.php
+msgid "ECK Subtypes"
+msgstr ""
+
+#: managed/SavedSearch_ECK_Subtypes.mgd.php
+msgid "Description"
+msgstr ""
+
+#: managed/SavedSearch_listings.mgd.php
 msgid "ECK Listing: %1"
 msgstr ""
 
-#: ./managed/SavedSearch_listings.mgd.php
+#: managed/SavedSearch_listings.mgd.php
 msgid "ECK Listing Display: %1"
 msgstr ""
 
-#: ./managed/SavedSearch_listings.mgd.php
+#: managed/SavedSearch_listings.mgd.php
 msgid "Type"
 msgstr ""
 
-#: ./managed/SavedSearch_listings.mgd.php
+#: managed/SavedSearch_listings.mgd.php
 msgid "Created"
 msgstr ""
 
-#: ./managed/SavedSearch_listings.mgd.php
+#: managed/SavedSearch_listings.mgd.php
 msgid "[created_date] by [created_id.display_name]"
 msgstr ""
 
-#: ./managed/SavedSearch_listings.mgd.php
+#: managed/SavedSearch_listings.mgd.php
 msgid "Modified"
 msgstr ""
 
-#: ./managed/SavedSearch_listings.mgd.php
+#: managed/SavedSearch_listings.mgd.php
 msgid "[modified_date] by [modified_id.display_name]"
 msgstr ""
 
-#: ./managed/SavedSearch_listings.mgd.php
+#: managed/SavedSearch_listings.mgd.php
 msgid "Add %1"
 msgstr ""
 
-#: ./templates/CRM/Eck/Form/EckSubtype.tpl ./templates/CRM/Eck/Form/EntityType.tpl
+#: schema/EckEntityType.entityType.php
+msgid "ECK Entity Type"
+msgstr ""
+
+#: schema/EckEntityType.entityType.php
+msgid "Custom CiviCRM entity types"
+msgstr ""
+
+#: schema/EckEntityType.entityType.php
+msgid "Unique EckEntityType ID"
+msgstr ""
+
+#: schema/EckEntityType.entityType.php
+msgid "Name"
+msgstr ""
+
+#: schema/EckEntityType.entityType.php
+msgid "The entity type name, also used in the sql table name"
+msgstr ""
+
+#: schema/EckEntityType.entityType.php
+msgid "Label"
+msgstr ""
+
+#: schema/EckEntityType.entityType.php
+msgid "The entity type's human-readable name"
+msgstr ""
+
+#: schema/EckEntityType.entityType.php
+msgid "crm-i icon class"
+msgstr ""
+
+#: schema/EckEntityType.entityType.php
+msgid "In Recent Items"
+msgstr ""
+
+#: schema/EckEntityType.entityType.php
+msgid "Does this entity type get added to the recent items list"
+msgstr ""
+
+#: templates/CRM/Eck/Form/EckSubtype.tpl
 msgid "Custom Groups"
 msgstr ""
 
-#: ./templates/CRM/Eck/Form/EckSubtype.tpl
+#: templates/CRM/Eck/Form/EckSubtype.tpl
 msgid "You may add custom fields to this subtype using <a href=\"%1\">CiviCRM's custom groups</a>."
 msgstr ""
 
-#: ./templates/CRM/Eck/Form/EckSubtype.tpl
+#: templates/CRM/Eck/Form/EckSubtype.tpl
 msgid "The following custom groups extend this subtype:"
 msgstr ""
 
-#: ./templates/CRM/Eck/Form/EckSubtype.tpl
+#: templates/CRM/Eck/Form/EckSubtype.tpl
 msgid "Do you want to delete the subtype <em>%1</em>?"
 msgstr ""
 
-#: ./templates/CRM/Eck/Form/EckSubtype.tpl
+#: templates/CRM/Eck/Form/EckSubtype.tpl
 msgid "This involves deleting all custom fields attached to this subtype and all currently existing entities of this subtype."
 msgstr ""
 
-#: ./templates/CRM/Eck/Form/EckSubtype.tpl ./templates/CRM/Eck/Form/EntityType.tpl
+#: templates/CRM/Eck/Form/EckSubtype.tpl templates/CRM/Eck/Form/EntityType.tpl
 msgid "This action cannot be undone."
 msgstr ""
 
-#: ./templates/CRM/Eck/Form/EntityType.tpl
-msgid "Sub types"
-msgstr ""
-
-#: ./templates/CRM/Eck/Form/EntityType.tpl
-msgid "Operations"
-msgstr ""
-
-#: ./templates/CRM/Eck/Form/EntityType.tpl
-msgid "No subtypes"
-msgstr ""
-
-#: ./templates/CRM/Eck/Form/EntityType.tpl
+#: templates/CRM/Eck/Form/EntityType.tpl
 msgid "You may add subtypes after saving this new entity type."
 msgstr ""
 
-#: ./templates/CRM/Eck/Form/EntityType.tpl
+#: templates/CRM/Eck/Form/EntityType.tpl
 msgid "Note: ECK entities require that you add at least one subtype."
 msgstr ""
 
-#: ./templates/CRM/Eck/Form/EntityType.tpl
-msgid "You may add custom fields to this entity type using\n                <a href=\"%1\">CiviCRM's custom groups</a>\n                ."
-msgstr ""
-
-#: ./templates/CRM/Eck/Form/EntityType.tpl
-msgid "You may administer custom fields for subtypes of this entity type by editing the subtype."
-msgstr ""
-
-#: ./templates/CRM/Eck/Form/EntityType.tpl
-msgid "The following custom groups extend all subtypes of this entity type:"
-msgstr ""
-
-#: ./templates/CRM/Eck/Form/EntityType.tpl
+#: templates/CRM/Eck/Form/EntityType.tpl
 msgid "Do you want to delete the entity type<em>%1</em>?"
 msgstr ""
 
-#: ./templates/CRM/Eck/Form/EntityType.tpl
+#: templates/CRM/Eck/Form/EntityType.tpl
 msgid "This involves deleting all custom fields attached to this entity type and all currently existing entities of this type."
 msgstr ""
 
-#: ./templates/ang/afformEck.tpl
+#: templates/ang/afformEck.tpl
+msgid "Add"
+msgstr ""
+
+#: templates/ang/afformEck.tpl
+msgid "Copy"
+msgstr ""
+
+#: templates/ang/afformEck.tpl
 msgid "Submit"
 msgstr ""
 
-#: ./templates/ang/afsearch_eck_listing.tpl
+#: templates/ang/afsearch_eck_listing.tpl
 msgid "Filter by Title"
 msgstr ""
 
-#: ./templates/ang/afsearch_eck_listing.tpl
+#: templates/ang/afsearch_eck_listing.tpl
 msgid "Filter by Type"
 msgstr ""
 
