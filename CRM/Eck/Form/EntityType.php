@@ -15,6 +15,7 @@
 
 use CRM_Eck_ExtensionUtil as E;
 use Civi\Api4\EckEntityType;
+use Civi\Eck\Utils;
 
 /**
  * Form controller class
@@ -29,16 +30,6 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
    * @var array<string, int|string>
    */
   protected array $_entityType = [];
-
-  /**
-   * @var array<int|string, array<string, mixed>>
-   */
-  protected array $_customGroups = [];
-
-  /**
-   * @var array<int|string, mixed>
-   */
-  protected array $_subTypes = [];
 
   /**
    * {@inheritDoc}
@@ -71,17 +62,6 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       switch ($this->_action) {
         case CRM_Core_Action::UPDATE:
           $this->setTitle(E::ts('Edit Entity Type %1', [1 => $this->_entityType['label']]));
-
-          // Retrieve custom groups for this entity type.
-          $this->_subTypes = CRM_Eck_BAO_EckEntityType::getSubTypes($this->_entityTypeName);
-          $this->_customGroups = array_filter(
-            CRM_Eck_BAO_EckEntityType::getCustomGroups($this->_entityTypeName),
-            function($custom_group) {
-              return !isset($custom_group['extends_entity_column_value'])
-                || !is_array($custom_group['extends_entity_column_value'])
-                || [] === $custom_group['extends_entity_column_value'];
-            }
-          );
           break;
 
         case CRM_Core_Action::DELETE:
@@ -132,28 +112,20 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           );
         }
       }
-      if ($this->_action === CRM_Core_Action::UPDATE) {
-        $this->getElement('name')->freeze();
-      }
-
-      // Add links to custom groups.
-      $this->assign('customGroupAdminUrl', CRM_Utils_System::url('civicrm/admin/custom/group'));
-      foreach ($this->_customGroups as &$custom_group) {
-        $custom_group['browse_url'] = CRM_Utils_System::url(
-          'civicrm/admin/custom/group/field',
-          [
-            'action' => CRM_Core_Action::BROWSE,
-            'gid' => $custom_group['id'],
-          ]
-        );
-      }
-      $this->assign('customGroups', $this->_customGroups);
-      $this->assign('subTypes', $this->_subTypes);
+    }
+    if ($this->_action === CRM_Core_Action::UPDATE) {
+      $this->getElement('name')->freeze();
+      // Embed search displays for subtypes and custom fields
+      Civi::service('angularjs.loader')->addModules(['crmSearchDisplayTable']);
+      $subtypeFilter = ['grouping' => ['=' => $this->_entityTypeName]];
+      $this->assign('subtypeDisplay', Utils::searchDisplayMarkup('ECK_Subtypes', 'ECK_Subtypes', $subtypeFilter));
+      $groupFilter = ['extends' => 'Eck_' . $this->_entityTypeName];
+      $this->assign('groupDisplay', Utils::searchDisplayMarkup('ECK_Custom_Groups', 'ECK_Custom_Groups', $groupFilter));
     }
     elseif ($this->_action == CRM_Core_Action::DELETE) {
       $submit_button_caption = E::ts('Delete');
     }
-    else {
+    elseif ($this->_action !== CRM_Core_Action::ADD) {
       throw new CRM_Core_Exception(E::ts('Invalid operation.'));
     }
 

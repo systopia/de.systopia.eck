@@ -57,3 +57,21 @@ function _eck_get_table_name(string $entityTypeName): string {
   // SQL table names must be alphanumeric and no longer than 64 characters
   return CRM_Utils_String::munge('civicrm_eck_' . strtolower($entityTypeName), '_', 64);
 }
+
+/**
+ * Hack to set default value on custom group form.
+ *
+ * Workaround for older versions of CiviCRM; fixed in core by https://github.com/civicrm/civicrm-core/pull/34456
+ * TODO: Remove this after core version requirement is bumped to 6.12
+ *
+ * @param string $formName
+ * @param CRM_Core_Form $form
+ */
+function eck_civicrm_buildForm($formName, $form): void {
+  if ($formName === 'CRM_Custom_Form_Group' && $form->get('action') === CRM_Core_Action::ADD) {
+    $extendsVal = \CRM_Utils_Request::retrieve('extends', 'string');
+    if (isset($extendsVal)) {
+      $form->setDefaults(['extends' => $extendsVal]);
+    }
+  }
+}

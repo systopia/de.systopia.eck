@@ -50,7 +50,7 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
   public function getFields(): array {
     $fields = [
       'id' => [
-        'title' => ts('ID'),
+        'title' => E::ts('ID'),
         'sql_type' => 'int unsigned',
         'input_type' => 'Number',
         'required' => TRUE,
@@ -89,13 +89,13 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
         ],
       ],
       'created_id' => [
-        'title' => ts('Created By Contact ID'),
+        'title' => E::ts('Created By Contact ID'),
         'sql_type' => 'int unsigned',
         'input_type' => 'EntityRef',
-        'description' => ts('FK to contact table.'),
+        'description' => E::ts('FK to contact table.'),
         'default_callback' => ['CRM_Core_Session', 'getLoggedInContactID'],
         'input_attrs' => [
-          'label' => ts('Created By'),
+          'label' => E::ts('Created By'),
         ],
         'usage' => [
           'import',
@@ -108,14 +108,14 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
         ],
       ],
       'modified_id' => [
-        'title' => ts('Modified By Contact ID'),
+        'title' => E::ts('Modified By Contact ID'),
         'sql_type' => 'int unsigned',
         'input_type' => NULL,
         'readonly' => TRUE,
-        'description' => ts('FK to contact table.'),
+        'description' => E::ts('FK to contact table.'),
         'default_callback' => ['CRM_Core_Session', 'getLoggedInContactID'],
         'input_attrs' => [
-          'label' => ts('Modified By'),
+          'label' => E::ts('Modified By'),
         ],
         'usage' => [
           'import',
@@ -128,33 +128,33 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
         ],
       ],
       'created_date' => [
-        'title' => ts('Created Date'),
+        'title' => E::ts('Created Date'),
         'sql_type' => 'timestamp',
         'input_type' => 'Select Date',
         'readonly' => TRUE,
-        'description' => ts('When was the contact was created.'),
+        'description' => E::ts('When the entity was created.'),
         'default' => NULL,
         'usage' => [
           'export',
         ],
         'input_attrs' => [
           'format_type' => 'activityDateTime',
-          'label' => ts('Created Date'),
+          'label' => E::ts('Created Date'),
         ],
       ],
       'modified_date' => [
-        'title' => ts('Modified Date'),
+        'title' => E::ts('Modified Date'),
         'sql_type' => 'timestamp',
         'input_type' => 'Select Date',
         'readonly' => TRUE,
-        'description' => ts('When was the contact (or closely related entity) was created or modified or deleted.'),
+        'description' => E::ts('When the entity was created or modified or deleted.'),
         'default' => 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
         'usage' => [
           'export',
         ],
         'input_attrs' => [
           'format_type' => 'activityDateTime',
-          'label' => ts('Modified Date'),
+          'label' => E::ts('Modified Date'),
         ],
       ],
     ];

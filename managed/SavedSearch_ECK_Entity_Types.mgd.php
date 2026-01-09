@@ -102,7 +102,7 @@ return [
                 ],
                 [
                   'path' => 'civicrm/admin/custom/group#?extends=Eck_[name]',
-                  'icon' => 'fa-list-alt',
+                  'icon' => 'fa-rectangle-list',
                   'text' => E::ts('Custom Fields'),
                   'style' => 'default',
                 ],
