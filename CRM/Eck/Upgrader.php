@@ -158,7 +158,7 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
       'default' => FALSE,
     ], 'AFTER icon');
     // Set to TRUE for all existing records
-    CRM_Core_DAO::executeQuery("UPDATE `civicrm_eck_entity_type` SET `has_subtypes` = 1");
+    CRM_Core_DAO::executeQuery('UPDATE `civicrm_eck_entity_type` SET `has_subtypes` = 1');
 
     return TRUE;
   }
