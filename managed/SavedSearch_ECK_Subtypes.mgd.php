@@ -128,7 +128,7 @@ return [
               'entity' => '',
               'action' => '',
               'join' => '',
-              'target' => '',
+              'target' => 'crm-popup',
             ],
           ],
           'button' => NULL,
