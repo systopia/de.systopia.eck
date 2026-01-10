@@ -8,7 +8,7 @@ use CRM_Eck_ExtensionUtil as E;
 class EckEntityMetaProvider extends SqlEntityMetadata {
 
   /**
-   * @var array<string, string>|null
+   * @var array<string, string|bool>|null
    */
   private $eckDefn;
 
@@ -48,6 +48,7 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
    * @return array<string, array<string, mixed>>
    */
   public function getFields(): array {
+    $entity_type = $this->getEckDefn();
     $fields = [
       'id' => [
         'title' => E::ts('ID'),
@@ -77,7 +78,7 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
         'title' => E::ts('Subtype'),
         'sql_type' => 'text',
         'description' => E::ts('The entity subtype.'),
-        'required' => TRUE,
+        'required' => $entity_type['has_subtypes'],
         'input_type' => 'Text',
         'pseudoconstant' => [
           'callback' => [__CLASS__, 'getSubtypeOptions'],
@@ -174,6 +175,8 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
         [1 => [substr($this->entityName, 4), 'String']]
       );
       $this->eckDefn = $query->fetchAll()[0];
+      $this->eckDefn['in_recent'] = (bool) ($this->eckDefn['in_recent'] ?? TRUE);
+      $this->eckDefn['has_subtypes'] = (bool) ($this->eckDefn['has_subtypes'] ?? FALSE);
     }
     return $this->eckDefn;
   }

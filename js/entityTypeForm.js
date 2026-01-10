@@ -3,6 +3,13 @@
 (function($, _) {
   $(function() {
     const $form = $('form.CRM_Eck_Form_EntityType');
+
+    function toggleSubtypes() {
+      $('#eck-subtype-details').toggle($(this).is(':checked'));
+      $('#eck-subtype-warning').toggle(!$(this).is(':checked'));
+    }
+    $('#has_subtypes', $form).each(toggleSubtypes).change(toggleSubtypes);
+
     // Auto-generate name from label.
     // On update the field is hidden and must not be changed.
     const $name = $('#name[type!="hidden"]', $form);

@@ -142,4 +142,25 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Implements hook_civicrm_upgrade_N().
+   *
+   * Add has_subtypes column to civicrm_eck_entity_type
+   */
+  public function upgrade_0016(): bool {
+    $this->ctx->log->info('Add has_subtypes column to civicrm_eck_entity_type');
+    E::schema()->alterSchemaField('EckEntityType', 'has_subtypes', [
+      'title' => E::ts('Enable Subtypes'),
+      'sql_type' => 'boolean',
+      'input_type' => 'CheckBox',
+      'required' => TRUE,
+      'description' => E::ts('Does this entity support subtypes?'),
+      'default' => FALSE,
+    ], 'AFTER icon');
+    // Set to TRUE for all existing records
+    CRM_Core_DAO::executeQuery('UPDATE `civicrm_eck_entity_type` SET `has_subtypes` = 1');
+
+    return TRUE;
+  }
+
 }

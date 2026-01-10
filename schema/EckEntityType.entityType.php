@@ -56,6 +56,14 @@ return [
       'description' => E::ts('crm-i icon class'),
       'default' => NULL,
     ],
+    'has_subtypes' => [
+      'title' => E::ts('Enable Subtypes'),
+      'sql_type' => 'boolean',
+      'input_type' => 'CheckBox',
+      'required' => TRUE,
+      'description' => E::ts('Does this entity support subtypes?'),
+      'default' => FALSE,
+    ],
     'in_recent' => [
       'title' => E::ts('In Recent Items'),
       'sql_type' => 'boolean',

@@ -10,8 +10,6 @@ a name and a label, and as many properties as you like by attaching custom
 fields to them. You can also introduce another level of hierarchy by defining
 sub-types.
 
-Note: Each ECK entity requires that you define at least one subtype. 
-
 As instances of those entity types are "real" CiviCRM entities, other extensions
 can build upon that data model. E.g. the *SearchKit* extension can be used to
 create search forms, overview pages, etc., and the *FormBuilder* extension can

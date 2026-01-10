@@ -21,7 +21,7 @@
     <ver>5.82</ver>
   </compatibility>
   <requires/>
-  <upgrader>CRM_Eck_Upgrader</upgrader>
+  <upgrader>CiviMix\Schema\Eck\AutomaticUpgrader</upgrader>
   <classloader>
     <psr0 prefix="CRM_" path=""/>
     <psr4 prefix="Civi\" path="Civi"/>
