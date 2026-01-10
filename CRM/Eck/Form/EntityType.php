@@ -61,6 +61,12 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       }
       switch ($this->_action) {
         case CRM_Core_Action::UPDATE:
+          $subtypesExist = FALSE;
+          if ($this->_entityType['has_subtypes']) {
+            $subtypesExist = (bool) \CRM_Eck_BAO_EckEntityType::getSubTypes($this->_entityTypeName);
+          }
+          $this->assign('subtypesExist', $subtypesExist);
+
           $this->setTitle(E::ts('Edit Entity Type %1', [1 => $this->_entityType['label']]));
           break;
 
@@ -92,16 +98,18 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
     ) {
       $submit_button_caption = E::ts('Save');
 
-      foreach (['label', 'name', 'icon', 'in_recent'] as $fieldName) {
-        $field = CRM_Eck_DAO_EckEntityType::getSupportedFields()[$fieldName] ?? NULL;
+      $fields = \Civi::entity('EckEntityType')->getSupportedFields();
+
+      foreach (['label', 'name', 'icon'] as $fieldName) {
+        $field = $fields[$fieldName] ?? NULL;
         if ($field) {
           $this->addField(
-            $field['name'],
+            $fieldName,
             [
               'entity' => 'EckEntityType',
-              'name' => $field['name'],
+              'name' => $fieldName,
               'action' => 'create',
-              'class' => $field['name'] === 'icon' ? 'crm-icon-picker' : '',
+              'class' => $fieldName === 'icon' ? 'crm-icon-picker' : '',
               'context' => array_search(
                 $this->_action,
                 CRM_Core_Action::$_names,
@@ -112,9 +120,17 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
           );
         }
       }
+      // TODO: After bumping Civi compat to 6.9+ this can be done with metadata & the addField array above
+      $this->addToggle('in_recent', $fields['in_recent']['title']);
     }
     if ($this->_action === CRM_Core_Action::UPDATE) {
       $this->getElement('name')->freeze();
+
+      $this->addToggle('has_subtypes', $fields['has_subtypes']['title'], [
+        'on' => E::ts('Enabled'),
+        'off' => E::ts('Disabled'),
+      ]);
+
       // Embed search displays for subtypes and custom fields
       Civi::service('angularjs.loader')->addModules(['crmSearchDisplayTable']);
       $subtypeFilter = ['grouping' => ['=' => $this->_entityTypeName]];
@@ -149,22 +165,26 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
   }
 
   /**
+   * TODO: Remove this shim after bumping Civi compat to 6.9+
+   *
+   * @param string $name
+   * @param string $title
+   * @param array $attributes
+   * @param bool $required
+   * @return HTML_QuickForm_Element
+   */
+  public function addToggle(string $name, string $title, array $attributes = [], bool $required = FALSE) {
+    if (is_callable('CRM_Core_Form::addToggle')) {
+      return parent::addToggle($name, $title, $attributes, $required);
+    }
+    return $this->add('advcheckbox', $name, $title, NULL, $required);
+  }
+
+  /**
    * {@inheritDoc}
    */
   public function setDefaultValues() {
-    // Set current field values as element default values.
-    $values = $this->exportValues();
-    $defaults = [];
-    foreach ($this->getRenderableElementNames() as $elementName) {
-      if (isset($values[$elementName])) {
-        $this->getElement($elementName)->setValue($values[$elementName]);
-        $defaults[$elementName] = $values[$elementName];
-      }
-      elseif (isset($this->_entityType[$elementName])) {
-        $this->getElement($elementName)->setValue((string) $this->_entityType[$elementName]);
-        $defaults[$elementName] = $this->_entityType[$elementName];
-      }
-    }
+    $defaults = $this->_entityType;
     return $defaults;
   }
 
@@ -209,7 +229,6 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
    */
   public function postProcess() {
     $values = $this->exportValues(NULL, TRUE);
-    $values['in_recent'] = ($values['in_recent'] ?? FALSE) === '1';
     switch ($this->getAction()) {
       case CRM_Core_Action::ADD:
         \Civi\Api4\EckEntityType::create()
