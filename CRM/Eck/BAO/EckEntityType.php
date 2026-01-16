@@ -340,10 +340,6 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
   }
 
   /**
-   * @param string $eckTypeName
-   * @param bool $oldValue
-   * @param bool $newValue
-   * @return void
    * @throws CRM_Core_Exception
    */
   public static function onChangeHasSubtypes(string $eckTypeName, bool $oldValue, bool $newValue): void {

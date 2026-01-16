@@ -61,10 +61,9 @@ class CRM_Eck_Form_EntityType extends CRM_Core_Form {
       }
       switch ($this->_action) {
         case CRM_Core_Action::UPDATE:
-          $subtypesExist = FALSE;
-          if ($this->_entityType['has_subtypes']) {
-            $subtypesExist = (bool) \CRM_Eck_BAO_EckEntityType::getSubTypes($this->_entityTypeName);
-          }
+          $subtypesExist =
+            $this->_entityType['has_subtypes']
+            && (bool) \CRM_Eck_BAO_EckEntityType::getSubTypes($this->_entityTypeName);
           $this->assign('subtypesExist', $subtypesExist);
 
           $this->setTitle(E::ts('Edit Entity Type %1', [1 => $this->_entityType['label']]));
