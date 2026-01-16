@@ -2,6 +2,7 @@
 
 namespace api\v4\EckEntity;
 
+use Civi\Api4\EckEntity;
 use PHPUnit\Framework\TestCase;
 use Civi\Test\HeadlessInterface;
 use Civi\Test\TransactionalInterface;
@@ -257,13 +258,6 @@ class EckEntityTest extends TestCase implements HeadlessInterface, Transactional
     self::assertEquals('Custom', $fields['My_Entity_Fields.MyField1']['type']);
     self::assertArrayHasKey('One_Subtype_Fields.MyField2', $fields);
 
-    /** @phpstan-var array{
-     *     title: array{entity: string},
-     *     id: array{table_name: string},
-     *     subtype: array{options: array<string, mixed>},
-     *     "One_Subtype_Fields.MyField2": array{type: string},
-     *     "My_Entity_Fields.MyField1": array{type: string}
-     *   } $fields */
     $subTypeOneFields = civicrm_api4($entityName, 'getFields', [
       'checkPermissions' => FALSE,
       'values' => ['subtype' => $subTypeKeys['one']],
@@ -280,27 +274,127 @@ class EckEntityTest extends TestCase implements HeadlessInterface, Transactional
   }
 
   /**
+   * @covers \Civi\Api4\EckEntityType::update
+   */
+  public function testToggleHasSubtypes(): void {
+    // Create entity type with has_subtypes = false
+    $entityName = $this->createEntity();
+    $eckType = substr($entityName, 4);
+
+    // Ensure subtype field is not required
+    $this->checkSubtypeFieldIsRequired($entityName, FALSE);
+
+    EckEntityType::update(FALSE)
+      ->addWhere('api_name', '=', $entityName)
+      ->addValue('has_subtypes', TRUE)
+      ->execute();
+
+    // Ensure subtype field is now required
+    $this->checkSubtypeFieldIsRequired($entityName, TRUE);
+
+    // Create a couple subtypes
+    OptionValue::save(FALSE)
+      ->addDefault('option_group_id:name', 'eck_sub_types')
+      ->addDefault('grouping', $entityName)
+      ->addRecord(['name' => 'one', 'label' => 'One'])
+      ->addRecord(['name' => 'two', 'label' => 'Two'])
+      ->execute();
+
+    // Try saving a record without a subtype
+    try {
+      EckEntity::create($eckType, FALSE)
+        ->addValue('title', 'Test3')
+        ->execute();
+      self::fail('Expected exception');
+    }
+    catch (\CRM_Core_Exception $e) {
+      // Expect mandatory field error
+      self::assertEquals(['subtype'], $e->getErrorData()['fields']);
+    }
+
+    // Create a couple records with subtypes
+    EckEntity::create($eckType, FALSE)
+      ->addValue('title', 'Test1')
+      ->addValue('subtype', 'one')
+      ->execute();
+    EckEntity::create($eckType, FALSE)
+      ->addValue('title', 'Test2')
+      ->addValue('subtype', 'two')
+      ->execute();
+
+    $savedRecords = EckEntity::get($eckType, FALSE)
+      ->execute()
+      ->column('subtype', 'title');
+    self::assertEquals(['Test1' => 'one', 'Test2' => 'two'], $savedRecords);
+
+    // Disable has_subtypes
+    EckEntityType::update(FALSE)
+      ->addWhere('api_name', '=', $entityName)
+      ->addValue('has_subtypes', FALSE)
+      ->execute();
+
+    // Ensure subtype field is not required
+    $this->checkSubtypeFieldIsRequired($entityName, FALSE);
+
+    // Saving without a value for 'subtype' is now allowed
+    EckEntity::create($eckType, FALSE)
+      ->addValue('title', 'Test3')
+      ->execute();
+
+    // Ensure existing subtypes have been nulled
+    $savedRecords = EckEntity::get($eckType, FALSE)
+      ->execute()
+      ->column('subtype', 'title');
+    self::assertEquals(['Test1' => NULL, 'Test2' => NULL, 'Test3' => NULL], $savedRecords);
+  }
+
+  /**
    * @param array<string,string> $subTypes
    *
    * @return string
    * @throws \CRM_Core_Exception
    * @throws \Civi\API\Exception\UnauthorizedException
    */
-  private function createEntity(array $subTypes): string {
+  private function createEntity(array $subTypes = []): string {
     $name = uniqid();
     /** @phpstan-var array{name: string} $entityType */
     $entityType = EckEntityType::create(FALSE)
       ->addValue('label', $name)
+      ->addValue('has_subtypes', count($subTypes) > 0)
       ->execute()->first();
 
     // Create sub-types
-    OptionValue::save(FALSE)
-      ->addDefault('option_group_id:name', 'eck_sub_types')
-      ->addDefault('grouping', $entityType['name'])
-      ->setRecords(\CRM_Utils_Array::makeNonAssociative($subTypes, 'name', 'label'))
-      ->execute();
+    if (count($subTypes) > 0) {
+      OptionValue::save(FALSE)
+        ->addDefault('option_group_id:name', 'eck_sub_types')
+        ->addDefault('grouping', $entityType['name'])
+        ->setRecords(\CRM_Utils_Array::makeNonAssociative($subTypes, 'name', 'label'))
+        ->execute();
+    }
 
     return 'Eck_' . $entityType['name'];
+  }
+
+  private function checkSubtypeFieldIsRequired(string $entityName, bool $expected): void {
+    // Check entity field
+    /** @phpstan-var array{required: bool} $fieldDefn */
+    $fieldDefn = \Civi::entity($entityName)->getField('subtype');
+    self::assertSame($expected, $fieldDefn['required']);
+
+    // Check api getFields
+    /** @phpstan-var array{required: bool} $fieldDefn */
+    $apiField = civicrm_api4($entityName, 'getFields', [
+      'where' => [['name', '=', 'subtype']],
+    ])->single();
+    self::assertSame($expected, $apiField['required']);
+
+    // Check sql schema
+    $tableName = _eck_get_table_name(substr($entityName, 4));
+    /** @phpstan-var \CRM_Core_DAO $dao */
+    $dao = \CRM_Core_DAO::executeQuery("SHOW COLUMNS FROM `$tableName` WHERE Field = 'subtype'");
+    $schemaDefn = $dao->fetchAll();
+    $expectedValue = $expected ? 'NO' : 'YES';
+    self::assertSame($expectedValue, $schemaDefn[0]['Null']);
   }
 
 }

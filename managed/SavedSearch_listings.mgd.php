@@ -40,6 +40,97 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
       ],
     ],
   ];
+
+  // Display columns
+  $columns = [];
+  $columns[] = [
+    'type' => 'field',
+    'key' => 'title',
+    'dataType' => 'String',
+    'label' => E::ts('Title'),
+    'sortable' => TRUE,
+    'editable' => TRUE,
+  ];
+  // Conditionally add subtype column if applicable
+  if ($type['has_subtypes']) {
+    $columns[] = [
+      'type' => 'field',
+      'key' => 'subtype:label',
+      'dataType' => 'String',
+      'label' => E::ts('Type'),
+      'sortable' => TRUE,
+      'icons' => [
+        [
+          'field' => 'subtype:icon',
+          'side' => 'left',
+        ],
+        [
+          'icon' => $type['icon'],
+          'side' => 'left',
+          'if' => [
+            'subtype:icon',
+            'IS EMPTY',
+          ],
+        ],
+      ],
+    ];
+  }
+  $columns[] = [
+    'type' => 'field',
+    'key' => 'created_date',
+    'dataType' => 'Timestamp',
+    'label' => E::ts('Created'),
+    'sortable' => TRUE,
+    'rewrite' => E::ts('[created_date] by [created_id.display_name]'),
+  ];
+  $columns[] = [
+    'type' => 'field',
+    'key' => 'modified_date',
+    'dataType' => 'Timestamp',
+    'label' => E::ts('Modified'),
+    'sortable' => TRUE,
+    'rewrite' => E::ts('[modified_date] by [modified_id.display_name]'),
+  ];
+  $columns[] = [
+    'type' => 'buttons',
+    'alignment' => 'text-right',
+    'size' => 'btn-xs',
+    'links' => [
+      [
+        'entity' => $type['entity_name'],
+        'action' => 'view',
+        'join' => '',
+        'icon' => 'fa-external-link',
+        'text' => E::ts('View'),
+        'style' => 'default',
+        'path' => '',
+        'condition' => [],
+      ],
+      [
+        'entity' => $type['entity_name'],
+        'action' => 'update',
+        'join' => '',
+        'target' => 'crm-popup',
+        'icon' => 'fa-pencil',
+        'text' => E::ts('Edit'),
+        'style' => 'default',
+        'path' => '',
+        'condition' => [],
+      ],
+      [
+        'entity' => 'EckEntityType',
+        'task' => 'delete',
+        'join' => '',
+        'target' => 'crm-popup',
+        'icon' => 'fa-trash',
+        'text' => E::ts('Delete'),
+        'style' => 'danger',
+        'path' => '',
+        'condition' => [],
+      ],
+    ],
+  ];
+
   $searches[] = [
     'name' => 'SavedSearch_listing_display:' . $type['name'],
     'entity' => 'SearchDisplay',
@@ -65,92 +156,7 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
           ],
           'placeholder' => 5,
           'sort' => [],
-          'columns' => [
-            [
-              'type' => 'field',
-              'key' => 'title',
-              'dataType' => 'String',
-              'label' => E::ts('Title'),
-              'sortable' => TRUE,
-              'editable' => TRUE,
-            ],
-            [
-              'type' => 'field',
-              'key' => 'subtype:label',
-              'dataType' => 'String',
-              'label' => E::ts('Type'),
-              'sortable' => TRUE,
-              'icons' => [
-                [
-                  'field' => 'subtype:icon',
-                  'side' => 'left',
-                ],
-                [
-                  'icon' => $type['icon'],
-                  'side' => 'left',
-                  'if' => [
-                    'subtype:icon',
-                    'IS EMPTY',
-                  ],
-                ],
-              ],
-            ],
-            [
-              'type' => 'field',
-              'key' => 'created_date',
-              'dataType' => 'Timestamp',
-              'label' => E::ts('Created'),
-              'sortable' => TRUE,
-              'rewrite' => E::ts('[created_date] by [created_id.display_name]'),
-            ],
-            [
-              'type' => 'field',
-              'key' => 'modified_date',
-              'dataType' => 'Timestamp',
-              'label' => E::ts('Modified'),
-              'sortable' => TRUE,
-              'rewrite' => E::ts('[modified_date] by [modified_id.display_name]'),
-            ],
-            [
-              'type' => 'buttons',
-              'alignment' => 'text-right',
-              'size' => 'btn-xs',
-              'links' => [
-                [
-                  'entity' => $type['entity_name'],
-                  'action' => 'view',
-                  'join' => '',
-                  'icon' => 'fa-external-link',
-                  'text' => E::ts('View'),
-                  'style' => 'default',
-                  'path' => '',
-                  'condition' => [],
-                ],
-                [
-                  'entity' => $type['entity_name'],
-                  'action' => 'update',
-                  'join' => '',
-                  'target' => 'crm-popup',
-                  'icon' => 'fa-pencil',
-                  'text' => E::ts('Edit'),
-                  'style' => 'default',
-                  'path' => '',
-                  'condition' => [],
-                ],
-                [
-                  'entity' => 'EckEntityType',
-                  'task' => 'delete',
-                  'join' => '',
-                  'target' => 'crm-popup',
-                  'icon' => 'fa-trash',
-                  'text' => E::ts('Delete'),
-                  'style' => 'danger',
-                  'path' => '',
-                  'condition' => [],
-                ],
-              ],
-            ],
-          ],
+          'columns' => $columns,
           'toolbar' => [
             [
               'entity' => $type['entity_name'],
