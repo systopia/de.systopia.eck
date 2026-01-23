@@ -134,6 +134,15 @@ msgstr "Entitätstyp %1 bearbeiten"
 msgid "Delete Entity Type %1"
 msgstr "Entitätstyp %1 löschen"
 
+#: CRM/Eck/Form/EntityType.php managed/SavedSearch_ECK_Custom_Groups.mgd.php
+#: managed/SavedSearch_ECK_Subtypes.mgd.php
+msgid "Enabled"
+msgstr ""
+
+#: CRM/Eck/Form/EntityType.php
+msgid "Disabled"
+msgstr ""
+
 #: CRM/Eck/Form/EntityType.php
 msgid "Invalid operation."
 msgstr "Ungültige Operation."
@@ -157,6 +166,14 @@ msgstr "Anzeigen"
 #: managed/SavedSearch_listings.mgd.php
 msgid "Edit"
 msgstr "Bearbeiten"
+
+#: CRM/Eck/Upgrader.php schema/EckEntityType.entityType.php
+msgid "Enable Subtypes"
+msgstr "ECK-Untertypen aktivieren"
+
+#: CRM/Eck/Upgrader.php schema/EckEntityType.entityType.php
+msgid "Does this entity support subtypes?"
+msgstr "Unterstützt dieser Entitätstyp Untertypen?"
 
 #: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
 msgid "API Name"
@@ -305,11 +322,6 @@ msgid "All"
 msgstr ""
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
-#: managed/SavedSearch_ECK_Subtypes.mgd.php
-msgid "Enabled"
-msgstr ""
-
-#: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Style"
 msgstr ""
 
@@ -348,11 +360,10 @@ msgstr "ECK-Entitätstypen"
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid ""
 "The Entity Construction Kit extension allows you to create and manage custom "
-"CiviCRM entities. Note: Entities require at least one subtype."
+"CiviCRM entities."
 msgstr ""
 "Die Erweiterung \"Entity Construction Kit\" ermöglicht das Erstellen und "
-"Verwalten benutzerdefinierter CiviCRM-Entitäten. Hinweis: Entitätstypen "
-"erfordern mindestens einen Untertyp."
+"Verwalten benutzerdefinierter CiviCRM-Entitäten."
 
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
 msgid "Entity Type"
@@ -396,10 +407,6 @@ msgid "ECK Listing: %1"
 msgstr "ECK-Liste: %1"
 
 #: managed/SavedSearch_listings.mgd.php
-msgid "ECK Listing Display: %1"
-msgstr "ECK-Listen-Anzeige: %1"
-
-#: managed/SavedSearch_listings.mgd.php
 msgid "Type"
 msgstr "Typ"
 
@@ -418,6 +425,10 @@ msgstr "Bearbeitet"
 #: managed/SavedSearch_listings.mgd.php
 msgid "[modified_date] by [modified_id.display_name]"
 msgstr "[modified_date] von [modified_id.display_name]"
+
+#: managed/SavedSearch_listings.mgd.php
+msgid "ECK Listing Display: %1"
+msgstr "ECK-Listen-Anzeige: %1"
 
 #: managed/SavedSearch_listings.mgd.php
 msgid "Add %1"
@@ -499,15 +510,17 @@ msgid "This action cannot be undone."
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: templates/CRM/Eck/Form/EntityType.tpl
-msgid "You may add subtypes after saving this new entity type."
+msgid ""
+"You can add subtypes and custom fields after saving this new entity type."
 msgstr ""
-"Untertypen können nach dem Anlegen des neuen Entitätstyps hinzugefügt werden."
+"Untertypen und benutzerdefinierte Felder können nach dem Anlegen des neuen "
+"Entitätstyps hinzugefügt werden."
 
 #: templates/CRM/Eck/Form/EntityType.tpl
-msgid "Note: ECK entities require that you add at least one subtype."
+msgid "Subtype information will be deleted from all existing %1 records."
 msgstr ""
-"Hinweis: ECK-Entitätstypen erfordern das Hinzufügen mindestens eines "
-"Untertyps."
+"Informationen über Untertypen werden bei allen vorhandenen %1 Datensätzen "
+"entfernt."
 
 #: templates/CRM/Eck/Form/EntityType.tpl
 msgid "Do you want to delete the entity type<em>%1</em>?"
@@ -540,3 +553,8 @@ msgstr "Nach Titel filtern"
 #: templates/ang/afsearch_eck_listing.tpl
 msgid "Filter by Type"
 msgstr "Nach Typ filtern"
+
+#~ msgid "Note: ECK entities require that you add at least one subtype."
+#~ msgstr ""
+#~ "Hinweis: ECK-Entitätstypen erfordern das Hinzufügen mindestens eines "
+#~ "Untertyps."

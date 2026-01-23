@@ -114,6 +114,14 @@ msgstr ""
 msgid "Delete Entity Type %1"
 msgstr ""
 
+#: CRM/Eck/Form/EntityType.php managed/SavedSearch_ECK_Custom_Groups.mgd.php managed/SavedSearch_ECK_Subtypes.mgd.php
+msgid "Enabled"
+msgstr ""
+
+#: CRM/Eck/Form/EntityType.php
+msgid "Disabled"
+msgstr ""
+
 #: CRM/Eck/Form/EntityType.php
 msgid "Invalid operation."
 msgstr ""
@@ -132,6 +140,14 @@ msgstr ""
 
 #: CRM/Eck/Page/Entity/TabHeader.php managed/SavedSearch_ECK_Subtypes.mgd.php managed/SavedSearch_listings.mgd.php
 msgid "Edit"
+msgstr ""
+
+#: CRM/Eck/Upgrader.php schema/EckEntityType.entityType.php
+msgid "Enable Subtypes"
+msgstr ""
+
+#: CRM/Eck/Upgrader.php schema/EckEntityType.entityType.php
+msgid "Does this entity support subtypes?"
 msgstr ""
 
 #: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
@@ -254,10 +270,6 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: managed/SavedSearch_ECK_Custom_Groups.mgd.php managed/SavedSearch_ECK_Subtypes.mgd.php
-msgid "Enabled"
-msgstr ""
-
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Style"
 msgstr ""
@@ -295,7 +307,7 @@ msgid "ECK Entity Type List"
 msgstr ""
 
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
-msgid "The Entity Construction Kit extension allows you to create and manage custom CiviCRM entities. Note: Entities require at least one subtype."
+msgid "The Entity Construction Kit extension allows you to create and manage custom CiviCRM entities."
 msgstr ""
 
 #: managed/SavedSearch_ECK_Entity_Types.mgd.php
@@ -339,10 +351,6 @@ msgid "ECK Listing: %1"
 msgstr ""
 
 #: managed/SavedSearch_listings.mgd.php
-msgid "ECK Listing Display: %1"
-msgstr ""
-
-#: managed/SavedSearch_listings.mgd.php
 msgid "Type"
 msgstr ""
 
@@ -360,6 +368,10 @@ msgstr ""
 
 #: managed/SavedSearch_listings.mgd.php
 msgid "[modified_date] by [modified_id.display_name]"
+msgstr ""
+
+#: managed/SavedSearch_listings.mgd.php
+msgid "ECK Listing Display: %1"
 msgstr ""
 
 #: managed/SavedSearch_listings.mgd.php
@@ -431,11 +443,11 @@ msgid "This action cannot be undone."
 msgstr ""
 
 #: templates/CRM/Eck/Form/EntityType.tpl
-msgid "You may add subtypes after saving this new entity type."
+msgid "You can add subtypes and custom fields after saving this new entity type."
 msgstr ""
 
 #: templates/CRM/Eck/Form/EntityType.tpl
-msgid "Note: ECK entities require that you add at least one subtype."
+msgid "Subtype information will be deleted from all existing %1 records."
 msgstr ""
 
 #: templates/CRM/Eck/Form/EntityType.tpl
