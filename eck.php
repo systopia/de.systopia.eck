@@ -69,7 +69,7 @@ function _eck_get_table_name(string $entityTypeName): string {
  */
 function eck_civicrm_buildForm($formName, $form): void {
   if ($formName === 'CRM_Custom_Form_Group' && $form->get('action') === CRM_Core_Action::ADD) {
-    $extendsVal = \CRM_Utils_Request::retrieve('extends', 'string');
+    $extendsVal = \CRM_Utils_Request::retrieve('extends', 'String');
     if (isset($extendsVal)) {
       $form->setDefaults(['extends' => $extendsVal]);
     }
