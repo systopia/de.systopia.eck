@@ -19,7 +19,7 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
         'filter' => TRUE,
         'is_reserved' => TRUE,
         'is_active' => TRUE,
-        'grouping' => 'subtype',
+        'grouping' => $type['has_subtypes'] ? 'subtype' : NULL,
       ],
       'match' => [
         'name',

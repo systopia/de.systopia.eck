@@ -27,10 +27,14 @@ class ECKLinksProvider extends \Civi\Core\Service\AutoSubscriber {
       /** @phpstan-var array<int, array{path: string, text: string, icon: string}> $links */
       $links = (array) $e->getResponse();
       $addLinkIndex = self::getActionIndex($links, 'add');
-      // Expand the "add" link to multiple subtypes if it exists (otherwise the WHERE clause excluded "add" so we should
-      // too).
+      // Expand the "add" link to multiple subtypes if it exists
+      // (otherwise the WHERE clause excluded "add" so we should too).
       if ($request->getExpandMultiple() && isset($addLinkIndex)) {
         [, $entityTypeName] = explode('_', $request->getEntityName(), 2);
+        $entityType = \CRM_Eck_BAO_EckEntityType::getEntityType($entityTypeName);
+        if (!isset($entityType) || !$entityType['has_subtypes']) {
+          return;
+        }
         $addLinks = [];
         /** @phpstan-var array<string, array{path: string, text: string, icon: string}> $paths */
         $paths = CoreUtil::getInfoItem($request->getEntityName(), 'paths');
