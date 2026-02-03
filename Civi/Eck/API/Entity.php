@@ -23,6 +23,9 @@ use CRM_Eck_ExtensionUtil as E;
 use Civi\API\Events;
 use Civi\Core\Event\GenericHookEvent;
 
+/**
+ * @phpstan-import-type entityTypeT from \CRM_Eck_BAO_EckEntityType
+ */
 class Entity extends AutoSubscriber {
 
   /**
@@ -56,6 +59,7 @@ class Entity extends AutoSubscriber {
    */
   public function onApi4EntityTypes(GenericHookEvent $event): void {
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entity_type) {
+      $subtype = $entity_type['has_subtypes'] ? '/[subtype]' : '';
       $event->entities[$entity_type['entity_name']] = [
         'name' => $entity_type['entity_name'],
         'title' => $entity_type['label'],
@@ -68,13 +72,13 @@ class Entity extends AutoSubscriber {
         'class_args' => [$entity_type['name']],
         'label_field' => 'title',
         'search_fields' => ['title'],
-        'icon_field' => ['subtype:icon'],
+        'icon_field' => $entity_type['has_subtypes'] ? ['subtype:icon'] : [],
         'searchable' => 'secondary',
         'paths' => [
           'browse' => "civicrm/eck/entity/list/{$entity_type['name']}",
           'view' => "civicrm/eck/entity?reset=1&type={$entity_type['name']}&id=[id]",
-          'update' => "civicrm/eck/entity/edit/{$entity_type['name']}/[subtype]#?{$entity_type['entity_name']}=[id]",
-          'add' => "civicrm/eck/entity/edit/{$entity_type['name']}/[subtype]",
+          'update' => "civicrm/eck/entity/edit/{$entity_type['name']}$subtype#?{$entity_type['entity_name']}=[id]",
+          'add' => "civicrm/eck/entity/edit/{$entity_type['name']}$subtype",
         ],
         'class' => 'Civi\Api4\EckEntity',
         'icon' => $entity_type['icon'] ?? 'fa-cubes',
@@ -89,17 +93,13 @@ class Entity extends AutoSubscriber {
    */
   public static function afformEntityTypes(GenericHookEvent $e): void {
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
-      // Don't expose entity types without subtypes, as ECK entities are required to have a subtype and saving those
-      // forms without a subtype would fail silently.
-      if ([] !== \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType['name'])) {
-        $e->entities[$entityType['entity_name']] = [
-          'entity' => $entityType['entity_name'],
-          'label' => $entityType['label'],
-          'icon' => $entityType['icon'],
-          'type' => 'primary',
-          'defaults' => '{}',
-        ];
-      }
+      $e->entities[$entityType['entity_name']] = [
+        'entity' => $entityType['entity_name'],
+        'label' => $entityType['label'],
+        'icon' => $entityType['icon'],
+        'type' => 'primary',
+        'defaults' => '{}',
+      ];
     }
   }
 
@@ -128,88 +128,120 @@ class Entity extends AutoSubscriber {
     }
 
     foreach (\CRM_Eck_BAO_EckEntityType::getEntityTypes() as $entityType) {
-      $subTypes = \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType['name'], FALSE);
-
-      // Submission form to create/edit entities of each sub-type.
-      foreach ($subTypes as $subType) {
-        $name = 'afform' . $entityType['entity_name'] . '_' . $subType['value'];
-        $item = [
-          'name' => $name,
-          'type' => 'form',
-          'title' => $entityType['label'] . ' (' . $subType['label'] . ')',
-          'description' => '',
-          'base_module' => E::LONG_NAME,
-          'is_public' => FALSE,
-          'permission' => [
-            Permissions::ADMINISTER_ECK_ENTITIES,
-            Permissions::EDIT_ANY_ECK_ENTITY,
-            Permissions::getTypePermissionName(Permissions::ACTION_EDIT, $entityType['name']),
-          ],
-          'permission_operator' => 'OR',
-          'server_route' => "civicrm/eck/entity/edit/{$entityType['name']}/{$subType['value']}",
-          'redirect' => "civicrm/eck/entity/list/{$entityType['name']}#?subtype={$subType['value']}",
-        ];
-        if ($event->getLayout) {
-          $fields = EckEntity::getFields($entityType['name'], FALSE)
-            ->addValue('subtype', $subType['value'])
-            ->addSelect('name')
-            ->addWhere('readonly', 'IS EMPTY')
-            ->addWhere('input_type', 'IS NOT EMPTY')
-            // Don't allow subtype to be changed on the form, since this form is specific to subtype
-            ->addWhere('name', '!=', 'subtype')
-            // Exclude custom fields, as they are being handled by Afform's automatic custom blocks.
-            ->addWhere('type', '!=', 'Custom')
-            ->execute();
-          $customGroups = CustomGroup::get(FALSE)
-            ->addSelect('name', 'title', 'is_multiple', 'max_multiple')
-            ->addWhere('extends', '=', $entityType['entity_name'])
-            ->addClause(
-              'OR',
-              ['extends_entity_column_value', '=', $subType['value']],
-              ['extends_entity_column_value', 'IS EMPTY']
-            )
-            ->addOrderBy('weight')
-            ->execute()
-            ->getArrayCopy();
-          array_walk($customGroups, function (&$customGroup) {
-            /** @phpstan-var array{id: int, name: string, title: string} $customGroup */
-            $customGroup['afName'] = \CRM_Utils_String::convertStringToDash($customGroup['name']);
-          });
-          $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afformEck.tpl', [
-            'entityType' => $entityType,
-            'subType' => $subType,
-            'fields' => $fields,
-            'customGroups' => $customGroups,
-          ]);
+      $hasSubtypes = $entityType['has_subtypes'];
+      if ($hasSubtypes) {
+        $subTypes = \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType['name'], FALSE);
+        // Submission form to create/edit entities of each sub-type.
+        foreach ($subTypes as $subType) {
+          $afform = self::makeEditForm($entityType, $subType, $event->getLayout);
+          $afforms[$afform['name']] = $afform;
         }
-        $afforms[$name] = $item;
+      }
+      else {
+        // Single submission form (no subtypes)
+        $afform = self::makeEditForm($entityType, NULL, $event->getLayout);
+        $afforms[$afform['name']] = $afform;
       }
 
-      // Search listing for for each type.
-      $name = 'afsearch' . $entityType['entity_name'] . '_listing';
-      $item = [
-        'name' => $name,
-        'type' => 'search',
-        'title' => $entityType['label'],
-        'description' => E::ts('Search listing for %1', [1 => $entityType['label']]),
-        'base_module' => E::LONG_NAME,
-        'is_public' => FALSE,
-        'permission' => [
-          Permissions::ADMINISTER_ECK_ENTITIES,
-          Permissions::VIEW_ANY_ECK_ENTITY,
-          Permissions::getTypePermissionName(Permissions::ACTION_VIEW, $entityType['name']),
-        ],
-        'permission_operator' => 'OR',
-        'server_route' => "civicrm/eck/entity/list/{$entityType['name']}",
-        'requires' => ['crmSearchDisplayTable'],
-      ];
-      if ($event->getLayout) {
-        $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afsearch_eck_listing.tpl', [
-          'entityType' => $entityType,
-        ]);
-      }
-      $afforms[$name] = $item;
+      // Search listing for each type.
+      $afform = self::makeSearchForm($entityType, $event->getLayout);
+      $afforms[$afform['name']] = $afform;
     }
+  }
+
+  /**
+   * Generate afform to create/edit entities
+   *
+   * @phpstan-param entityTypeT $entityType
+   * @phpstan-param array<string, string|null>|null $subType
+   * @phpstan-return array<string, mixed>
+   * @throws \CRM_Core_Exception
+   */
+  private static function makeEditForm(array $entityType, ?array $subType, bool $getLayout): array {
+    $hasSubType = isset($subType);
+    $subtypeName = $subType['value'] ?? NULL;
+    $item = [
+      'name' => 'afform' . $entityType['entity_name'] . ($hasSubType ? "_$subtypeName" : ''),
+      'type' => 'form',
+      'title' => $entityType['label'] . ($hasSubType ? " ({$subType['label']})" : ''),
+      'description' => '',
+      'base_module' => E::LONG_NAME,
+      'is_public' => FALSE,
+      'permission' => [
+        Permissions::ADMINISTER_ECK_ENTITIES,
+        Permissions::EDIT_ANY_ECK_ENTITY,
+        Permissions::getTypePermissionName(Permissions::ACTION_EDIT, $entityType['name']),
+      ],
+      'permission_operator' => 'OR',
+      'server_route' => "civicrm/eck/entity/edit/{$entityType['name']}" . ($hasSubType ? "/$subtypeName" : ''),
+      'redirect' => "civicrm/eck/entity/list/{$entityType['name']}" . ($hasSubType ? "#?subtype=$subtypeName" : ''),
+    ];
+    if ($getLayout) {
+      $fields = EckEntity::getFields($entityType['name'], FALSE)
+        ->addValue('subtype', $subtypeName)
+        ->addSelect('name')
+        ->addWhere('readonly', 'IS EMPTY')
+        ->addWhere('input_type', 'IS NOT EMPTY')
+        // Don't allow subtype to be changed on the form, since this form is specific to subtype
+        ->addWhere('name', '!=', 'subtype')
+        // Exclude custom fields, as they are being handled by Afform's automatic custom blocks.
+        ->addWhere('type', '!=', 'Custom')
+        ->execute();
+      $customGroups = CustomGroup::get(FALSE)
+        ->addSelect('name', 'title', 'is_multiple', 'max_multiple')
+        ->addWhere('extends', '=', $entityType['entity_name'])
+        ->addClause(
+          'OR',
+          ['extends_entity_column_value', '=', $subtypeName],
+          ['extends_entity_column_value', 'IS EMPTY']
+        )
+        ->addOrderBy('weight')
+        ->execute()
+        ->getArrayCopy();
+      array_walk($customGroups, function (&$customGroup) {
+        /** @phpstan-var array{id: int, name: string, title: string} $customGroup */
+        $customGroup['afName'] = \CRM_Utils_String::convertStringToDash($customGroup['name']);
+      });
+      $item['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afformEck.tpl', [
+        'entityType' => $entityType,
+        'subType' => $subType ?? ['value' => NULL, 'label' => $entityType['label']],
+        'fields' => $fields,
+        'customGroups' => $customGroups,
+      ]);
+    }
+    return $item;
+  }
+
+  /**
+   * Generate search listing afform
+   *
+   * @phpstan-param entityTypeT $entityType
+   * @phpstan-return array<string, mixed>
+   * @throws \Exception
+   */
+  private static function makeSearchForm(array $entityType, bool $getLayout): array {
+    $afform = [
+      'name' => 'afsearch' . $entityType['entity_name'] . '_listing',
+      'type' => 'search',
+      'title' => $entityType['label'],
+      'description' => E::ts('Search listing for %1', [1 => $entityType['label']]),
+      'base_module' => E::LONG_NAME,
+      'is_public' => FALSE,
+      'permission' => [
+        Permissions::ADMINISTER_ECK_ENTITIES,
+        Permissions::VIEW_ANY_ECK_ENTITY,
+        Permissions::getTypePermissionName(Permissions::ACTION_VIEW, $entityType['name']),
+      ],
+      'permission_operator' => 'OR',
+      'server_route' => "civicrm/eck/entity/list/{$entityType['name']}",
+      'requires' => ['crmSearchDisplayTable'],
+    ];
+    if ($getLayout) {
+      $afform['layout'] = \CRM_Core_Smarty::singleton()->fetchWith('ang/afsearch_eck_listing.tpl', [
+        'entityType' => $entityType,
+      ]);
+    }
+    return $afform;
   }
 
 }
