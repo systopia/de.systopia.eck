@@ -152,10 +152,9 @@ class Entity extends AutoSubscriber {
   /**
    * Generate afform to create/edit entities
    *
-   * @param entityTypeT $entityType
-   * @param array<string, string|null>|null $subType
-   * @param bool $getLayout
-   * @return array<string, mixed>
+   * @phpstan-param entityTypeT $entityType
+   * @phpstan-param array<string, string|null>|null $subType
+   * @phpstan-return array<string, mixed>
    * @throws \CRM_Core_Exception
    */
   private static function makeEditForm(array $entityType, ?array $subType, bool $getLayout): array {
@@ -216,9 +215,8 @@ class Entity extends AutoSubscriber {
   /**
    * Generate search listing afform
    *
-   * @param entityTypeT $entityType
-   * @param bool $getLayout
-   * @return array<string, mixed>
+   * @phpstan-param entityTypeT $entityType
+   * @phpstan-return array<string, mixed>
    * @throws \Exception
    */
   private static function makeSearchForm(array $entityType, bool $getLayout): array {
