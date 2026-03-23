@@ -16,6 +16,7 @@
 namespace Civi\Api4;
 
 use Civi\Api4\Generic\BasicBatchAction;
+use Civi\Api4\Generic\DAOGetAction;
 use Civi\Api4\Generic\ExportAction;
 use Civi\Api4\Generic\Traits\ManagedEntity;
 use CRM_Eck_ExtensionUtil as E;
@@ -74,10 +75,10 @@ class EckEntity {
   /**
    * @param string $entity_type
    * @param bool $checkPermissions
-   * @return \Civi\Api4\EckDAOGetAction
+   * @return \Civi\Api4\Generic\DAOGetAction
    */
   public static function get(string $entity_type, $checkPermissions = TRUE) {
-    return (new EckDAOGetAction('Eck_' . $entity_type, __FUNCTION__))
+    return (new DAOGetAction('Eck_' . $entity_type, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
