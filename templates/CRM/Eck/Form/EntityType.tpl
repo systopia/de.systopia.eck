@@ -76,7 +76,7 @@
 
       <div class="crm-section no-label">
         <div class="status">
-          <p>{ts 1=$entityType.label}Do you want to delete the entity type<em>%1</em>?{/ts}
+          <p>{ts 1=$entityType.label}Do you want to delete the entity type <em>%1</em>?{/ts}
           </p>
           <p>{ts}This involves deleting all custom fields attached to this entity type and all currently existing entities of this type.{/ts}</p>
           <p class="crm-error">{ts}This action cannot be undone.{/ts}</p>
