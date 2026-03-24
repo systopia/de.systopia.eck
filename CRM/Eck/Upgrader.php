@@ -26,6 +26,21 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
   public function install(): void {
   }
 
+  private function getAllEntityTypes() {
+    $entityTypesQuery = CRM_Core_DAO::executeQuery('
+        SELECT
+            *,
+            CONCAT("Eck_", name) AS entity_name,
+            CONCAT("civicrm_eck_", LOWER(name)) AS table_name
+        FROM `civicrm_eck_entity_type`;
+    ');
+    if (!is_a($entityTypesQuery, CRM_Core_DAO::class)) {
+      Civi::log()->error('Error retrieving ECK entity types during database upgrade.');
+      return FALSE;
+    }
+    return $entityTypesQuery->fetchAll();
+  }
+
   /**
    * Implements hook_civicrm_upgrade_N().
    */
@@ -66,18 +81,7 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
    * Implements hook_civicrm_upgrade_N().
    */
   public function upgrade_0011(): bool {
-    $entityTypesQuery = CRM_Core_DAO::executeQuery('
-        SELECT
-            *,
-            CONCAT("Eck_", name) AS entity_name,
-            CONCAT("civicrm_eck_", LOWER(name)) AS table_name
-        FROM `civicrm_eck_entity_type`;
-    ');
-    if (!is_a($entityTypesQuery, CRM_Core_DAO::class)) {
-      Civi::log()->error('Error retrieving ECK entity types during database upgrade.');
-      return FALSE;
-    }
-    $entityTypes = $entityTypesQuery->fetchAll();
+    $entityTypes = $this->getAllEntityTypes();
 
     foreach ($entityTypes as $tableName => $entityType) {
       $tableName = $entityType['table_name'];
@@ -159,6 +163,18 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
     ], 'AFTER icon');
     // Set to TRUE for all existing records
     CRM_Core_DAO::executeQuery('UPDATE `civicrm_eck_entity_type` SET `has_subtypes` = 1');
+
+    return TRUE;
+  }
+
+  public function upgrade_0017(): bool {
+    $entityTypes = $this->getAllEntityTypes();
+    foreach ($entityTypes as $entityType) {
+      $tableName = $entityType['table_name'];
+      $this->ctx->log->info('Update subtype to allow NULL in ' . $entityType['entity_name']);
+      CRM_Core_DAO::executeQuery("ALTER TABLE `$tableName`
+        MODIFY COLUMN subtype text NULL COMMENT 'The entity subtype.'");
+    }
 
     return TRUE;
   }
