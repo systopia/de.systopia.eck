@@ -523,7 +523,7 @@ msgstr ""
 "entfernt."
 
 #: templates/CRM/Eck/Form/EntityType.tpl
-msgid "Do you want to delete the entity type<em>%1</em>?"
+msgid "Do you want to delete the entity type <em>%1</em>?"
 msgstr "Soll der Entitätstyp <em>%1</em> gelöscht werden?"
 
 #: templates/CRM/Eck/Form/EntityType.tpl
