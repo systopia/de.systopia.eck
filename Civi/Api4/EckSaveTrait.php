@@ -30,19 +30,16 @@ trait EckSaveTrait {
 
     foreach ($items as &$item) {
       $item['entity_type'] = $entityType;
-      if (empty($item['subtype'])) {
-        // This comes in as '' which saves in the DB as 'null'
-        // But since subtypes are optional we should save NULL
+      if (!isset($item['subtype']) || '' === $item['subtype']) {
         $item['subtype'] = NULL;
       }
-      // Make sure we set created_id/modified_id
-      if (empty($item['id'])) {
-        if (empty($item['created_id'])) {
+      if (!isset($item['id'])) {
+        if (!isset($item['created_id'])) {
           $item['created_id'] = \CRM_Core_Session::getLoggedInContactID();
         }
       }
       else {
-        if (empty($item['modified_id'])) {
+        if (!isset($item['modified_id'])) {
           $item['modified_id'] = \CRM_Core_Session::getLoggedInContactID();
         }
       }

@@ -86,13 +86,12 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
     // Retrieve and build custom data view.
     // TODO: Replace call to deprecated method CRM_Core_BAO_CustomGroup::getTree().
     // @phpstan-ignore-next-line
-    $subTypes = !empty($entity['subtype']) ? [$entity['subtype']] : [];
     $custom_group_tree = CRM_Core_BAO_CustomGroup::getTree(
       'Eck_' . $this->_entityTypeName,
       [],
       $this->_id,
       NULL,
-      $subTypes,
+      isset($entity['subtype']) ? [$entity['subtype']] : [],
       NULL,
       FALSE,
       NULL,
