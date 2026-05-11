@@ -30,6 +30,19 @@ trait EckSaveTrait {
 
     foreach ($items as &$item) {
       $item['entity_type'] = $entityType;
+      if (!isset($item['subtype']) || '' === $item['subtype']) {
+        $item['subtype'] = NULL;
+      }
+      if (!isset($item['id'])) {
+        if (!isset($item['created_id'])) {
+          $item['created_id'] = \CRM_Core_Session::getLoggedInContactID();
+        }
+      }
+      else {
+        if (!isset($item['modified_id'])) {
+          $item['modified_id'] = \CRM_Core_Session::getLoggedInContactID();
+        }
+      }
     }
 
     return \CRM_Eck_BAO_Entity::writeRecords($items);
