@@ -121,12 +121,13 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
     //   A workaround for this has been developed by always calling the
     //   constructor for ECK entities in CiviCRM Core 6.6.0.
     //   @link https://github.com/civicrm/civicrm-core/pull/33263
+    $className = self::$_className ?? '';
     if (
-      !isset(Civi::$statics[self::$_className]['fields'])
-      || [] === Civi::$statics[self::$_className]['fields']
+      !isset(Civi::$statics[$className]['fields'])
+      || [] === Civi::$statics[$className]['fields']
     ) {
       if (isset(self::$_entityType)) {
-        Civi::$statics[self::$_className]['fields'] = [
+        Civi::$statics[$className]['fields'] = [
           'id' => [
             'name' => 'id',
             'title' => E::ts('ID'),
@@ -240,16 +241,16 @@ class CRM_Eck_DAO_Entity extends CRM_Core_DAO {
           ],
         ];
         CRM_Core_DAO_AllCoreTables::invoke(
-          self::$_className,
+          $className,
           'fields_callback',
-          Civi::$statics[self::$_className]['fields']
+          Civi::$statics[$className]['fields']
         );
       }
       else {
-        Civi::$statics[self::$_className]['fields'] = [];
+        Civi::$statics[$className]['fields'] = [];
       }
     }
-    return Civi::$statics[self::$_className]['fields'];
+    return Civi::$statics[$className]['fields'];
   }
 
   /**
