@@ -75,3 +75,23 @@ function eck_civicrm_buildForm($formName, $form): void {
     }
   }
 }
+
+/**
+ * We can't use mixin scan-classes directly because we need to exclude the
+ *   CRM_CiviRulesPostTrigger_Eck class since that will fail with missing class if CiviRules
+ *   extension is not installed because it extends CRM_Civirules_Trigger_Post.
+ * We could probably work around that by using a submodule but that's only supported from
+ *   about 6.10/6.11.
+ *
+ * @param $classes
+ *
+ * @return void
+ *
+ * Implements hook_civicrm_scanClasses
+ *
+ * @see CRM_Utils_Hook::scanClasses()
+ */
+function eck_civicrm_scanClasses(&$classes) {
+  \Civi\Core\ClassScanner::scanFolders($classes, __DIR__, 'CRM', '_', ';(CiviRulesPostTrigger);');
+  \Civi\Core\ClassScanner::scanFolders($classes, __DIR__, 'Civi', '\\');
+}
