@@ -50,6 +50,9 @@ jobs:
         composer config --no-plugins allow-plugins.civicrm/composer-downloads-plugin true
         composer config --no-plugins allow-plugins.composer/installers true
         composer config --no-plugins allow-plugins.cweagans/composer-patches true
+        # CiviRules is an optional dependency (not a composer package), so it
+        # needs to be cloned separately for PHPStan to resolve its classes.
+        git clone --depth=1 https://lab.civicrm.org/extensions/civirules.git ../civirules
         # Run with --no-scripts so ComposerHelper doesn't prevent installation
         # of civicrm packages.
         composer update --no-scripts --no-progress --prefer-dist --${{ matrix.prefer }} --optimize-autoloader --ignore-platform-reqs

@@ -22,13 +22,16 @@ class CRM_CiviRulesPostTrigger_Eck extends CRM_Civirules_Trigger_Post {
     return 'CRM_Eck_DAO_Entity';
   }
 
-  public function alterTriggerData(CRM_Civirules_TriggerData_TriggerData &$triggerData) {
-    $entityData = $triggerData->getEntityData($triggerData->getEntity());
-    $triggerData->setContactId($entityData['modified_id'] ?? $entityData['created_id']);
+  public function alterTriggerData(CRM_Civirules_TriggerData_TriggerData &$triggerData): void {
+    $entity = $triggerData->getEntity();
+    if ($entity !== NULL) {
+      $entityData = $triggerData->getEntityData($entity);
+      $triggerData->setContactId($entityData['modified_id'] ?? $entityData['created_id']);
+    }
     parent::alterTriggerData($triggerData);
   }
 
-  public function getExtraDataInputUrl($ruleId) {
+  public function getExtraDataInputUrl($ruleId): string {
     return $this->getFormattedExtraDataInputUrl('civicrm/civirule/form/trigger/post', $ruleId);
   }
 

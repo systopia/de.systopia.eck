@@ -93,7 +93,7 @@ function eck_civicrm_buildForm($formName, $form): void {
  * We could probably work around that by using a submodule but that's only supported from
  *   about 6.10/6.11.
  *
- * @param $classes
+ * @param string[] $classes
  *
  * @return void
  *
@@ -101,7 +101,7 @@ function eck_civicrm_buildForm($formName, $form): void {
  *
  * @see CRM_Utils_Hook::scanClasses()
  */
-function eck_civicrm_scanClasses(&$classes) {
+function eck_civicrm_scanClasses(array &$classes) {
   \Civi\Core\ClassScanner::scanFolders($classes, __DIR__, 'CRM', '_', ';(CiviRulesPostTrigger);');
   \Civi\Core\ClassScanner::scanFolders($classes, __DIR__, 'Civi', '\\');
 }
