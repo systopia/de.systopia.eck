@@ -374,8 +374,12 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
    * @throws \Civi\API\Exception\UnauthorizedException
    */
   public static function createCivirulesTriggers(?string $entityName) : void {
-    $eckEntityTypes = $entityName ? [self::getEntityType($entityName)] : self::getEntityTypes();
+    $eckEntityTypes = $entityName !== NULL ? [self::getEntityType($entityName)] : self::getEntityTypes();
+    $records = [];
     foreach ($eckEntityTypes as $eckEntityType) {
+      if ($eckEntityType === NULL) {
+        continue;
+      }
       $name = $eckEntityType['name'];
       $label = $eckEntityType['label'];
 
@@ -396,7 +400,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
       $records[] = $record;
     }
 
-    if (!empty($records)) {
+    if ($records !== []) {
       \Civi\Api4\CiviRulesTrigger::save(FALSE)
         ->setRecords($records)
         ->setMatch(['name'])
@@ -415,11 +419,13 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
     $eckEntities = \Civi\Api4\EckEntityType::get(FALSE)
       ->addSelect('id', 'name')
       ->execute();
-    if (!$eckEntities->count()) {
+    if ($eckEntities->count() === 0) {
       return;
     }
 
+    $eckObjectNames = [];
     foreach ($eckEntities as $eckEntity) {
+      /** @phpstan-var array{id: int, name: string} $eckEntity */
       $eckObjectNames[] = 'Eck_' . $eckEntity['name'];
     }
 
@@ -428,6 +434,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
       ->addWhere('object_name', 'LIKE', 'Eck_%')
       ->execute();
     foreach ($deletedTriggers as $deletedTrigger) {
+      /** @phpstan-var array{id: int, object_name: string} $deletedTrigger */
       try {
         \Civi\Api4\CiviRulesTrigger::delete(FALSE)
           ->addWhere('id', '=', $deletedTrigger['id'])
