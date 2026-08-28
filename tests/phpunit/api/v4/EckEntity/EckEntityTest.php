@@ -274,6 +274,37 @@ class EckEntityTest extends TestCase implements HeadlessInterface, Transactional
   }
 
   /**
+   * @covers \Civi\Eck\API\Entity::getEckAfforms
+   */
+  public function testGeneratedAfform(): void {
+    $entityName = $this->createEntity();
+    CustomGroup::create(FALSE)
+      ->addValue('title', 'MyAfformFields')
+      ->addValue('extends', $entityName)
+      ->addChain('fields', CustomField::save()
+        ->addDefault('html_type', 'Text')
+        ->addDefault('custom_group_id', '$id')
+        ->addRecord(['label' => 'MyField1'])
+      )->execute();
+
+    $afform = civicrm_api4('Afform', 'get', [
+      'checkPermissions' => FALSE,
+      'layoutFormat' => 'html',
+      'select' => ['layout'],
+      'where' => [['name', '=', "afform$entityName"]],
+    ])->single();
+
+    self::assertStringContainsString('name="title"', $afform['layout']);
+    // Custom fields are added via a block
+    self::assertStringContainsString('<afblock-custom-my-afform-fields', $afform['layout']);
+    // Readonly fields should be excluded
+    self::assertStringNotContainsString('name="created_id"', $afform['layout']);
+    self::assertStringNotContainsString('name="modified_id"', $afform['layout']);
+    self::assertStringNotContainsString('name="created_date"', $afform['layout']);
+    self::assertStringNotContainsString('name="modified_date"', $afform['layout']);
+  }
+
+  /**
    * @covers \Civi\Api4\EckEntityType::update
    */
   public function testToggleHasSubtypes(): void {
