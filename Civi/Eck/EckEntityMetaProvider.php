@@ -93,6 +93,7 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
         'title' => E::ts('Created By Contact ID'),
         'sql_type' => 'int unsigned',
         'input_type' => 'EntityRef',
+        'readonly' => TRUE,
         'description' => E::ts('FK to contact table.'),
         'default_callback' => ['CRM_Core_Session', 'getLoggedInContactID'],
         'input_attrs' => [
