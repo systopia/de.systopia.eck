@@ -19,7 +19,7 @@ use Civi\Core\Event\PostEvent;
 use Civi\Api4\RecentItem;
 use Civi\Eck\Permissions;
 
-class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
+class CRM_Eck_BAO_Entity extends CRM_Core_DAO implements HookInterface {
 
   public static function getEntityType(string $entityName): ?string {
     return str_starts_with($entityName, 'Eck_') ? substr($entityName, strlen('Eck_')) : NULL;
@@ -32,7 +32,7 @@ class CRM_Eck_BAO_Entity extends CRM_Eck_DAO_Entity implements HookInterface {
    */
   public static function getEntityIcon(string $entityName, ?int $entityId = NULL): string {
     $entityTypes = \CRM_Eck_BAO_EckEntityType::getEntityTypes();
-    $default = $entityTypes[$entityName]['icon'] ?? self::$_icon;
+    $default = $entityTypes[$entityName]['icon'] ?? 'fa-cubes';
     if (!isset($entityId)) {
       return $default;
     }

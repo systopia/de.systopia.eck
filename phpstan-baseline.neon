@@ -31,16 +31,6 @@ parameters:
 			path: CRM/Eck/Page/Entity/TabHeader.php
 
 		-
-			message: "#^Method Civi\\\\Api4\\\\EckDAODeleteAction\\:\\:deleteObjects\\(\\) has parameter \\$items with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Civi/Api4/EckDAODeleteAction.php
-
-		-
-			message: "#^Method Civi\\\\Api4\\\\EckDAODeleteAction\\:\\:deleteObjects\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Civi/Api4/EckDAODeleteAction.php
-
-		-
 			message: "#^Cannot call method exchangeArray\\(\\) on mixed\\.$#"
 			count: 1
 			path: Civi/Api4/Service/Links/ECKLinksProvider.php

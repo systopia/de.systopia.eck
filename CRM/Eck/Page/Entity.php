@@ -48,8 +48,10 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
       throw new CRM_Core_Exception('No ECK entity type given.');
     }
     try {
-      $entity_type = EckEntityType::get(FALSE)->addWhere('name', '=', $entity_type_name)->execute()->single();
-      $entity_type['table_name'] = (new CRM_Eck_BAO_Entity($entity_type_name))->tableName();
+      $entity_type = EckEntityType::get(FALSE)
+        ->addSelect('*', 'table_name')
+        ->addWhere('name', '=', $entity_type_name)
+        ->execute()->single();
       $this->assign('entity_type', $entity_type);
       $this->_entityType = $entity_type;
     }

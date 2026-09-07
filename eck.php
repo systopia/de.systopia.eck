@@ -17,6 +17,16 @@ require_once 'eck.civix.php';
 use CRM_Eck_ExtensionUtil as E;
 
 /**
+ * Magically create DAO classes for every ECK entity on-demand
+ */
+spl_autoload_register(function ($class) {
+  if (str_starts_with($class, 'CRM_Eck_DAO_Entity') && $class !== 'CRM_Eck_DAO_Entity') {
+    // phpcs:ignore Drupal.Functions.DiscouragedFunctions.Discouraged
+    eval("class $class extends CRM_Core_DAO_Base {}");
+  }
+});
+
+/**
  * Implements hook_civicrm_config().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/
@@ -39,7 +49,7 @@ function eck_civicrm_entityTypes(array &$entityTypes): void {
     $entityName = 'Eck_' . $entity_type['name'];
     $entityTypes[$entityName] = [
       'name' => $entityName,
-      'class' => 'CRM_Eck_DAO_Entity',
+      'class' => 'CRM_Eck_DAO_Entity' . $entity_type['name'],
       'table' => _eck_get_table_name($entity_type['name']),
       'module' => E::LONG_NAME,
       'metaProvider' => \Civi\Eck\EckEntityMetaProvider::class,

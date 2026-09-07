@@ -30,7 +30,7 @@ class EckEntityTypeSpecProvider implements Generic\SpecProviderInterface {
         ->setLabel(ts('API Name'))
         ->setColumnName('name')
         ->setDescription(ts('APIv4 name of this entity.'))
-        ->setInputType('Type')
+        ->setInputType('Text')
         ->setSqlRenderer([__CLASS__, 'renderSqlForApiName']);
       $spec->addFieldSpec($field);
 
@@ -46,6 +46,15 @@ class EckEntityTypeSpecProvider implements Generic\SpecProviderInterface {
         ->setInputAttrs(['multiple' => TRUE])
         ->setSerialize(\CRM_Core_DAO::SERIALIZE_COMMA)
         ->setSqlRenderer([__CLASS__, 'renderSqlForEckSubtypes']);
+      $spec->addFieldSpec($field);
+
+      $field = new FieldSpec('table_name', 'EckEntityType', 'String');
+      $field
+        ->setTitle(ts('Table Name'))
+        ->setColumnName('name')
+        ->setDescription(ts('SQL table name of this entity.'))
+        ->setInputType('Text')
+        ->addOutputFormatter([__CLASS__, 'getTableName']);
       $spec->addFieldSpec($field);
     }
   }
@@ -84,6 +93,12 @@ class EckEntityTypeSpecProvider implements Generic\SpecProviderInterface {
       $option['id'] = $option['value'];
     }
     return $options;
+  }
+
+  public static function getTableName(?string &$value): void {
+    if (is_string($value)) {
+      $value = \_eck_get_table_name($value);
+    }
   }
 
   /**
