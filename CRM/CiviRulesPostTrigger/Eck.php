@@ -13,15 +13,6 @@ class CRM_CiviRulesPostTrigger_Eck extends CRM_Civirules_Trigger_Post {
     );
   }
 
-  /**
-   * Return the name of the DAO Class. If a dao class does not exist return an empty value
-   *
-   * @return string
-   */
-  protected function getDaoClassName() {
-    return 'CRM_Eck_DAO_Entity';
-  }
-
   public function alterTriggerData(CRM_Civirules_TriggerData_TriggerData &$triggerData): void {
     $entity = $triggerData->getEntity();
     if ($entity !== NULL) {
@@ -60,7 +51,7 @@ class CRM_CiviRulesPostTrigger_Eck extends CRM_Civirules_Trigger_Post {
    */
   public function triggerTrigger($op, $objectName, $objectId, $objectRef, $eventID) {
     // Check if this trigger is enabled for this op
-    if (!str_contains($this->triggerParams['trigger_op'], $op)) {
+    if (!str_contains($this->triggerParams['trigger_op'] ?? '', $op)) {
       return;
     }
 

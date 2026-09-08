@@ -339,7 +339,9 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
     $config->userSystem->invalidateRouteCache();
 
     if (CRM_Extension_System::singleton()->getMapper()->isActiveModule('civirules')) {
-      self::createCivirulesTriggers($event->params['name']);
+      // `name` is absent from the params when it was auto-derived from `label`.
+      $eckTypeName = $event->object->name ?? NULL;
+      self::createCivirulesTriggers(is_string($eckTypeName) ? $eckTypeName : NULL);
       self::cleanupCivirulesTriggers();
     }
   }
