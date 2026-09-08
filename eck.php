@@ -58,6 +58,22 @@ function eck_civicrm_entityTypes(array &$entityTypes): void {
 }
 
 /**
+ * Implements hook_civicrm_pre().
+ *
+ * @param string $op
+ * @param string $objectName
+ * @param int|null $id
+ * @param array<string, mixed> $params
+ */
+function eck_civicrm_pre($op, $objectName, $id, &$params): void {
+  // The `modified_id` default_callback only runs on create, so refresh it here.
+  // `modified_date` is maintained by MySQL.
+  if ('edit' === $op && str_starts_with($objectName, 'Eck_')) {
+    $params['modified_id'] ??= CRM_Core_Session::getLoggedInContactID();
+  }
+}
+
+/**
  * Convert ECK EntityType name to sql table name.
  *
  * @param string $entityTypeName
