@@ -9,6 +9,7 @@ use Civi\Test\TransactionalInterface;
 use Civi\Test;
 use Civi\Test\CiviEnvBuilder;
 use Civi\Api4\EckEntityType;
+use Civi\Api4\Contact;
 use Civi\Api4\CustomField;
 use Civi\Api4\CustomGroup;
 use Civi\Api4\OptionValue;
@@ -434,6 +435,48 @@ class EckEntityTest extends TestCase implements HeadlessInterface, Transactional
     EckEntity::delete('Base', FALSE)
       ->addWhere('id', '=', $record['id'])
       ->execute();
+  }
+
+  /**
+   * Updating a record must not reset the contact who created it.
+   *
+   * @covers \Civi\Eck\EckEntityMetaProvider::getProperty
+   * @covers ::eck_civicrm_pre
+   */
+  public function testUpdateKeepsCreatedId(): void {
+    $entityName = $this->createEntity();
+    $eckType = substr($entityName, 4);
+
+    // `created_id` is only defaulted on create, and core relies on this
+    // metadata to tell a create from an update.
+    self::assertEquals('id', \Civi::entity($entityName)->getMeta('primary_key'));
+
+    $contacts = Contact::save(FALSE)
+      ->addRecord(['first_name' => 'Creator', 'last_name' => 'Test'])
+      ->addRecord(['first_name' => 'Editor', 'last_name' => 'Test'])
+      ->execute()->column('id');
+
+    \CRM_Core_Session::singleton()->set('userID', $contacts[0]);
+    /** @phpstan-var array{id: int, created_id: int, modified_id: int} $record */
+    $record = EckEntity::create($eckType, FALSE)
+      ->addValue('title', 'Test record')
+      ->execute()->single();
+    self::assertEquals($contacts[0], $record['created_id']);
+    self::assertEquals($contacts[0], $record['modified_id']);
+
+    \CRM_Core_Session::singleton()->set('userID', $contacts[1]);
+    EckEntity::update($eckType, FALSE)
+      ->addWhere('id', '=', $record['id'])
+      ->addValue('title', 'Test record updated')
+      ->execute();
+
+    /** @phpstan-var array{created_id: int, modified_id: int} $updated */
+    $updated = EckEntity::get($eckType, FALSE)
+      ->addSelect('created_id', 'modified_id')
+      ->addWhere('id', '=', $record['id'])
+      ->execute()->single();
+    self::assertEquals($contacts[0], $updated['created_id']);
+    self::assertEquals($contacts[1], $updated['modified_id']);
   }
 
   /**

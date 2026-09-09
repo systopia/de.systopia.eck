@@ -24,6 +24,12 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
     if (isset($staticProps[$propertyName])) {
       return $staticProps[$propertyName];
     }
+    // Derived by the parent from the field list. Only these are delegated
+    // because the parent's fallback branch calls a `getInfo` callback that ECK
+    // entity types don't declare.
+    if (in_array($propertyName, ['primary_key', 'primary_keys'], TRUE)) {
+      return parent::getProperty($propertyName);
+    }
     $entity_type = $this->getEckDefn();
     if ($propertyName === 'paths') {
       return [
