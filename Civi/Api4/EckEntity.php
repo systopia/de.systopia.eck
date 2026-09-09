@@ -25,6 +25,7 @@ use Civi\Api4\Generic\DAOSaveAction;
 use Civi\Api4\Generic\DAOUpdateAction;
 use Civi\Api4\Generic\ExportAction;
 use Civi\Api4\Generic\Traits\ManagedEntity;
+use Civi\Eck\Utils;
 use CRM_Eck_ExtensionUtil as E;
 use Civi\Api4\Generic\BasicReplaceAction;
 use Civi\Api4\Generic\CheckAccessAction;
@@ -187,7 +188,7 @@ class EckEntity {
    *   }
    */
   public static function permissions(string $entityName): array {
-    $type = \CRM_Eck_BAO_Entity::getEntityType($entityName);
+    $type = Utils::getEntityTypeName($entityName);
     if (!isset($type)) {
       throw new \CRM_Core_Exception('No ECK entity type given for compiling permissions.');
     }

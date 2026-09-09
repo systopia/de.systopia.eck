@@ -102,4 +102,33 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
     return 'CRM/Eck/Page/Entity/Tab.tpl';
   }
 
+  /**
+   * Access callback for /civicrm/eck/entity and /civicrm/eck/entity/view.
+   *
+   * @param array<'checkMenuAccess'> $args
+   * @param string|null $op
+   *
+   * @return bool
+   */
+  public static function checkMenuAccess(array $args, ?string $op = 'and'): bool {
+    // In order to not check nested paths (which are Afforms), we pass an access
+    // argument of "checkMenuAccess" in the menu XML and check it here, as this
+    // callback feels responsible only for the exact routes, not nested ones.
+    if (in_array('checkMenuAccess', $args, TRUE)) {
+      $null = NULL;
+      $type = CRM_Utils_Request::retrieve('type', 'String', $null);
+      if (!is_string($type)) {
+        throw new CRM_Core_Exception(E::ts('Error retrieving ECK entity type from request.'));
+      }
+      $eckPermissions = [
+        Civi\Eck\Permissions::ADMINISTER_ECK_ENTITIES,
+        Civi\Eck\Permissions::VIEW_ANY_ECK_ENTITY,
+        Civi\Eck\Permissions::getTypePermissionName(Civi\Eck\Permissions::ACTION_VIEW, $type),
+      ];
+      return CRM_Core_Permission::checkMenu($eckPermissions, 'or');
+    }
+
+    return CRM_Core_Permission::checkMenu($args, $op ?? 'and');
+  }
+
 }
