@@ -16,77 +16,6 @@ msgstr ""
 msgid "Error retrieving ECK entity type name."
 msgstr "Fehler beim Abrufen des Entitätstyp-Namens."
 
-#: CRM/Eck/BAO/Entity.php
-msgid "Error retrieving ECK entity type from request."
-msgstr "Fehler beim Abrufen des ECK-Entitätstyps aus der Anfrage."
-
-#: CRM/Eck/DAO/Entity.php
-msgid "ECK Entity"
-msgstr "ECK-Entität"
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-#: schema/EckEntityType.entityType.php
-msgid "ID"
-msgstr "ID"
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "The unique entity ID."
-msgstr "Die eindeutige ID der Entität."
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-#: managed/SavedSearch_listings.mgd.php
-msgid "Title"
-msgstr "Titel"
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "The entity title."
-msgstr "Der Titel der Entität."
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-#: managed/SavedSearch_ECK_Subtypes.mgd.php
-msgid "Subtype"
-msgstr "Untertyp"
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "The entity subtype."
-msgstr "Der Untertyp der Entität."
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Created By Contact ID"
-msgstr "Ersteller-Kontakt-ID"
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "FK to contact table."
-msgstr "Fremdschlüssel zur Kontakt-Tabelle."
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Created By"
-msgstr "Erstellt von"
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Modified By Contact ID"
-msgstr "Bearbeiter-Kontakt-ID"
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Modified By"
-msgstr "Bearbeitet von"
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Created Date"
-msgstr "Erstellungsdatum"
-
-#: CRM/Eck/DAO/Entity.php
-msgid "When the record was created."
-msgstr "Wann der Eintrag erstellt wurde."
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Modified Date"
-msgstr "Bearbeitungsdatum"
-
-#: CRM/Eck/DAO/Entity.php
-msgid "When the record was last modified."
-msgstr "Wann der Eintrag zuletzt bearbeitet wurde."
-
 #: CRM/Eck/Form/EckSubtype.php managed/SavedSearch_ECK_Subtypes.mgd.php
 msgid "Add Subtype"
 msgstr "Untertyp hinzufügen"
@@ -137,11 +66,11 @@ msgstr "Entitätstyp %1 löschen"
 #: CRM/Eck/Form/EntityType.php managed/SavedSearch_ECK_Custom_Groups.mgd.php
 #: managed/SavedSearch_ECK_Subtypes.mgd.php
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiviert"
 
 #: CRM/Eck/Form/EntityType.php
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktiviert"
 
 #: CRM/Eck/Form/EntityType.php
 msgid "Invalid operation."
@@ -157,6 +86,10 @@ msgstr ""
 #: CRM/Eck/Form/EntityType.php
 msgid "An entity type with this name already exists."
 msgstr "Es existiert bereits ein Entitätstyp mit diesem Namen."
+
+#: CRM/Eck/Page/Entity.php
+msgid "Error retrieving ECK entity type from request."
+msgstr "Fehler beim Abrufen des ECK-Entitätstyps aus der Anfrage."
 
 #: CRM/Eck/Page/Entity/TabHeader.php managed/SavedSearch_listings.mgd.php
 msgid "View"
@@ -194,6 +127,16 @@ msgstr "Untertypen"
 msgid "All subtypes of this entity."
 msgstr "Alle Untertypen dieser Entität."
 
+#: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
+#, fuzzy
+#| msgid "Internal Name"
+msgid "Table Name"
+msgstr "Interner Name"
+
+#: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
+msgid "SQL table name of this entity."
+msgstr "SQL-Tabellenname dieser Entität."
+
 #: Civi/Eck/API/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Entity Construction Kit entity type %1"
 msgstr "Entity-Construction-Kit-Eintitätstyp %1"
@@ -202,9 +145,61 @@ msgstr "Entity-Construction-Kit-Eintitätstyp %1"
 msgid "Search listing for %1"
 msgstr "Listenanzeige für %1"
 
+#: Civi/Eck/EckEntityMetaProvider.php schema/EckEntityType.entityType.php
+msgid "ID"
+msgstr "ID"
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "The unique entity ID."
+msgstr "Die eindeutige ID der Entität."
+
+#: Civi/Eck/EckEntityMetaProvider.php managed/SavedSearch_listings.mgd.php
+msgid "Title"
+msgstr "Titel"
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "The entity title."
+msgstr "Der Titel der Entität."
+
+#: Civi/Eck/EckEntityMetaProvider.php managed/SavedSearch_ECK_Subtypes.mgd.php
+msgid "Subtype"
+msgstr "Untertyp"
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "The entity subtype."
+msgstr "Der Untertyp der Entität."
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Created By Contact ID"
+msgstr "Ersteller-Kontakt-ID"
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "FK to contact table."
+msgstr "Fremdschlüssel zur Kontakt-Tabelle."
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Created By"
+msgstr "Erstellt von"
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Modified By Contact ID"
+msgstr "Bearbeiter-Kontakt-ID"
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Modified By"
+msgstr "Bearbeitet von"
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Created Date"
+msgstr "Erstellungsdatum"
+
 #: Civi/Eck/EckEntityMetaProvider.php
 msgid "When the entity was created."
 msgstr "Wann die Entität erstellt wurde."
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Modified Date"
+msgstr "Bearbeitungsdatum"
 
 #: Civi/Eck/EckEntityMetaProvider.php
 msgid "When the entity was created or modified or deleted."
@@ -319,35 +314,35 @@ msgstr "Benutzerdefinierte (Feld-)Gruppe"
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Style"
-msgstr ""
+msgstr "Stil"
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Fields"
-msgstr ""
+msgstr "Felder"
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Fields (%1)"
-msgstr ""
+msgstr "Felder (%1)"
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Preview"
-msgstr ""
+msgstr "Vorschau"
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Enable"
-msgstr ""
+msgstr "Aktivieren"
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Disable"
-msgstr ""
+msgstr "Deaktivieren"
 
 #: managed/SavedSearch_ECK_Custom_Groups.mgd.php
 msgid "Add Custom Field"
@@ -553,6 +548,15 @@ msgstr "Nach Titel filtern"
 #: templates/ang/afsearch_eck_listing.tpl
 msgid "Filter by Type"
 msgstr "Nach Typ filtern"
+
+#~ msgid "ECK Entity"
+#~ msgstr "ECK-Entität"
+
+#~ msgid "When the record was created."
+#~ msgstr "Wann der Eintrag erstellt wurde."
+
+#~ msgid "When the record was last modified."
+#~ msgstr "Wann der Eintrag zuletzt bearbeitet wurde."
 
 #~ msgid "Note: ECK entities require that you add at least one subtype."
 #~ msgstr ""

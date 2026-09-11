@@ -2,74 +2,6 @@
 msgid "Error retrieving ECK entity type name."
 msgstr ""
 
-#: CRM/Eck/BAO/Entity.php
-msgid "Error retrieving ECK entity type from request."
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php
-msgid "ECK Entity"
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php schema/EckEntityType.entityType.php
-msgid "ID"
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "The unique entity ID."
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php managed/SavedSearch_listings.mgd.php
-msgid "Title"
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "The entity title."
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php managed/SavedSearch_ECK_Subtypes.mgd.php
-msgid "Subtype"
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "The entity subtype."
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Created By Contact ID"
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "FK to contact table."
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Created By"
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Modified By Contact ID"
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Modified By"
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Created Date"
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php
-msgid "When the record was created."
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php Civi/Eck/EckEntityMetaProvider.php
-msgid "Modified Date"
-msgstr ""
-
-#: CRM/Eck/DAO/Entity.php
-msgid "When the record was last modified."
-msgstr ""
-
 #: CRM/Eck/Form/EckSubtype.php managed/SavedSearch_ECK_Subtypes.mgd.php
 msgid "Add Subtype"
 msgstr ""
@@ -134,6 +66,10 @@ msgstr ""
 msgid "An entity type with this name already exists."
 msgstr ""
 
+#: CRM/Eck/Page/Entity.php
+msgid "Error retrieving ECK entity type from request."
+msgstr ""
+
 #: CRM/Eck/Page/Entity/TabHeader.php managed/SavedSearch_listings.mgd.php
 msgid "View"
 msgstr ""
@@ -166,6 +102,14 @@ msgstr ""
 msgid "All subtypes of this entity."
 msgstr ""
 
+#: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
+msgid "Table Name"
+msgstr ""
+
+#: Civi/Api4/Service/Spec/Provider/EckEntityTypeSpecProvider.php
+msgid "SQL table name of this entity."
+msgstr ""
+
 #: Civi/Eck/API/Entity.php Civi/Eck/EckEntityMetaProvider.php
 msgid "Entity Construction Kit entity type %1"
 msgstr ""
@@ -174,8 +118,60 @@ msgstr ""
 msgid "Search listing for %1"
 msgstr ""
 
+#: Civi/Eck/EckEntityMetaProvider.php schema/EckEntityType.entityType.php
+msgid "ID"
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "The unique entity ID."
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php managed/SavedSearch_listings.mgd.php
+msgid "Title"
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "The entity title."
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php managed/SavedSearch_ECK_Subtypes.mgd.php
+msgid "Subtype"
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "The entity subtype."
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Created By Contact ID"
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "FK to contact table."
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Created By"
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Modified By Contact ID"
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Modified By"
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Created Date"
+msgstr ""
+
 #: Civi/Eck/EckEntityMetaProvider.php
 msgid "When the entity was created."
+msgstr ""
+
+#: Civi/Eck/EckEntityMetaProvider.php
+msgid "Modified Date"
 msgstr ""
 
 #: Civi/Eck/EckEntityMetaProvider.php
