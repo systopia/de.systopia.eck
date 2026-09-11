@@ -194,7 +194,7 @@ class EckEntityMetaProvider extends SqlEntityMetadata {
    * @return array<mixed>
    */
   public static function getSubtypeOptions(string $fieldName, array $params): array {
-    $entityType = \CRM_Eck_BAO_Entity::getEntityType($params['entity']);
+    $entityType = Utils::getEntityTypeName($params['entity']);
     $options = isset($entityType) ? \CRM_Eck_BAO_EckEntityType::getSubTypes($entityType, FALSE) : [];
     foreach ($options as &$option) {
       $option['id'] = $option['value'];

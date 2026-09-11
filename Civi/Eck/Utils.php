@@ -3,6 +3,7 @@
 namespace Civi\Eck;
 
 use Civi\Api4\SearchDisplay;
+use CRM_Eck_ExtensionUtil as E;
 
 class Utils {
 
@@ -34,6 +35,35 @@ class Utils {
       htmlspecialchars(\CRM_Utils_JS::encode($filters), ENT_COMPAT),
       $display['type:name']
     );
+  }
+
+  /**
+   * Convert API entityName to ECK type name.
+   *
+   * @param string $entityName
+   * @return string|null
+   */
+  public static function getEntityTypeName(string $entityName): ?string {
+    return str_starts_with($entityName, 'Eck_') ? substr($entityName, strlen('Eck_')) : NULL;
+  }
+
+  /**
+   * @param string $entityName
+   * @param int|null $entityId
+   * @return string
+   */
+  public static function getEntityIcon(string $entityName, ?int $entityId = NULL): string {
+    $entityTypes = \CRM_Eck_BAO_EckEntityType::getEntityTypes();
+    $default = $entityTypes[$entityName]['icon'] ?? 'fa-cubes';
+    if (!isset($entityId)) {
+      return $default;
+    }
+    $record = \Civi\Api4\EckEntity::get($entityTypes[$entityName]['name'], FALSE)
+      ->addSelect('subtype:icon')
+      ->addWhere('id', '=', $entityId)
+      ->execute()
+      ->first();
+    return $record['subtype:icon'] ?? $default;
   }
 
 }

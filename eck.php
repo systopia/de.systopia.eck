@@ -74,6 +74,30 @@ function eck_civicrm_pre($op, $objectName, $id, &$params): void {
 }
 
 /**
+ * Implements hook_civicrm_post().
+ *
+ * @param string $op
+ * @param string $objectName
+ * @param int|null $id
+ * @param CRM_Core_DAO|null $objectRef
+ * @param array<string, mixed>|null $params
+ */
+function eck_civicrm_post($op, $objectName, $id, $objectRef = NULL, $params = NULL): void {
+  $entityTypeName = Civi\Eck\Utils::getEntityTypeName($objectName);
+  // Add the recently created Entity to the list of recently viewed items.
+  if (
+    isset($entityTypeName)
+    && in_array($op, ['create', 'edit'], TRUE)
+    && (CRM_Eck_BAO_EckEntityType::getEntityType($entityTypeName)['in_recent'] ?? FALSE)
+  ) {
+    Civi\Api4\RecentItem::create(FALSE)
+      ->addValue('entity_type', $objectName)
+      ->addValue('entity_id', $id)
+      ->execute();
+  }
+}
+
+/**
  * Convert ECK EntityType name to sql table name.
  *
  * @param string $entityTypeName
