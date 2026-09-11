@@ -163,4 +163,16 @@ class CRM_Eck_Upgrader extends CRM_Extension_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Add CiviRules triggers
+   */
+  public function upgrade_0017(): bool {
+    $this->ctx->log->info('Add CiviRules support');
+    if (CRM_Extension_System::singleton()->getMapper()->isActiveModule('civirules')) {
+      CRM_Eck_BAO_EckEntityType::createCivirulesTriggers(NULL);
+    }
+
+    return TRUE;
+  }
+
 }
