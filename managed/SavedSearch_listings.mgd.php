@@ -166,6 +166,17 @@ foreach (CRM_Eck_BAO_EckEntityType::getEntityTypes() as $type) {
               'target' => 'crm-popup',
               'style' => 'primary',
             ],
+            [
+              'path' => "/civicrm/import/{$type['entity_name']}",
+              'icon' => 'fa-square-plus',
+              'text' => E::ts('Import %1', [1 => $type['label']]),
+              'style' => 'default',
+              "conditions" => [
+                 [
+                   "check user permission", "=", [\Civi\Eck\Permissions::getTypePermissionName()],
+                 ],
+              ],
+            ],
           ],
         ],
         'acl_bypass' => FALSE,
