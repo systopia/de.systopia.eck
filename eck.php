@@ -66,10 +66,22 @@ function eck_civicrm_entityTypes(array &$entityTypes): void {
  * @param array<string, mixed> $params
  */
 function eck_civicrm_pre($op, $objectName, $id, &$params): void {
-  // The `modified_id` default_callback only runs on create, so refresh it here.
-  // `modified_date` is maintained by MySQL.
-  if ('edit' === $op && str_starts_with($objectName, 'Eck_')) {
-    $params['modified_id'] ??= CRM_Core_Session::getLoggedInContactID();
+  if (str_starts_with($objectName, 'Eck_')) {
+    if ((bool) ($params['check_permissions'] ?? FALSE)) {
+      // Permissioned api calls should not override any audit fields
+      $params['modified_id'] = CRM_Core_Session::getLoggedInContactID();
+      $params['modified_date'] = date('YmdHis');
+      if ('create' === $op) {
+        $params['created_id'] = CRM_Core_Session::getLoggedInContactID();
+        $params['created_date'] = date('YmdHis');
+      }
+      elseif ('edit' === $op && isset($id)) {
+        unset($params['created_id'], $params['created_date']);
+      }
+    }
+    elseif ('edit' === $op) {
+      $params['modified_id'] ??= CRM_Core_Session::getLoggedInContactID();
+    }
   }
 }
 
