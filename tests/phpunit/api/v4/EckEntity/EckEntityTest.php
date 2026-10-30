@@ -480,6 +480,111 @@ class EckEntityTest extends TestCase implements HeadlessInterface, Transactional
   }
 
   /**
+   * Ensure created_id, modified_id, created_date, and modified_date cannot be
+   * manually overridden from what they're supposed to do by a user calling the api.
+   *
+   * @covers \Civi\Api4\EckEntity
+   * @covers \Civi\Eck\EckEntityMetaProvider::getFields
+   * @covers ::eck_civicrm_pre
+   */
+  public function testAuditFieldsCannotBeOverridden(): void {
+    $entityName = $this->createEntity();
+    $eckType = substr($entityName, 4);
+
+    $contacts = Contact::save(FALSE)
+      ->addRecord(['first_name' => 'Creator', 'last_name' => 'Test'])
+      ->addRecord(['first_name' => 'Editor', 'last_name' => 'Test'])
+      ->execute()->column('id');
+
+    \CRM_Core_Session::singleton()->set('userID', $contacts[0]);
+
+    // User calls API to create a record, attempting to manually override audit fields
+    $record = EckEntity::create($eckType)
+      ->addValue('title', 'Original Title')
+      ->addValue('created_id', $contacts[1])
+      ->addValue('modified_id', $contacts[1])
+      ->addValue('created_date', '2000-01-01 00:00:00')
+      ->addValue('modified_date', '2000-01-01 00:00:00')
+      ->execute()->single();
+
+    $created = EckEntity::get($eckType, FALSE)
+      ->addSelect('created_id', 'modified_id', 'created_date', 'modified_date')
+      ->addWhere('id', '=', $record['id'])
+      ->execute()->single();
+
+    // created_id and modified_id should be set to the logged-in user, not the overridden value
+    self::assertEquals($contacts[0], $created['created_id']);
+    self::assertEquals($contacts[0], $created['modified_id']);
+    // Dates should reflect current time, not manual overrides
+    self::assertStringStartsWith(date('Y-m-d'), $created['created_date']);
+    self::assertStringStartsWith(date('Y-m-d'), $created['modified_date']);
+
+    // Another user logs in to edit the record
+    \CRM_Core_Session::singleton()->set('userID', $contacts[1]);
+
+    // User calls API to update the record, attempting to manually override audit fields
+    EckEntity::update($eckType)
+      ->addWhere('id', '=', $record['id'])
+      ->addValue('title', 'Updated Title')
+      ->addValue('created_id', $contacts[1])
+      ->addValue('modified_id', $contacts[0])
+      ->addValue('created_date', '1999-01-01 00:00:00')
+      ->addValue('modified_date', '1999-01-01 00:00:00')
+      ->execute();
+
+    $updated = EckEntity::get($eckType, FALSE)
+      ->addSelect('created_id', 'modified_id', 'created_date', 'modified_date')
+      ->addWhere('id', '=', $record['id'])
+      ->execute()->single();
+
+    // created_id and created_date should remain unchanged from creation
+    self::assertEquals($contacts[0], $updated['created_id']);
+    self::assertEquals($created['created_date'], $updated['created_date']);
+    // modified_id should be updated to the current user who edited it
+    self::assertEquals($contacts[1], $updated['modified_id']);
+    // modified_date should reflect current time, not manual override
+    self::assertStringStartsWith(date('Y-m-d'), $updated['modified_date']);
+
+    // When checkPermissions = FALSE, manual overrides are permitted (e.g. for imports or migrations)
+    $manualRecord = EckEntity::create($eckType, FALSE)
+      ->addValue('title', 'Manual Override Record')
+      ->addValue('created_id', $contacts[1])
+      ->addValue('modified_id', $contacts[1])
+      ->addValue('created_date', '2000-01-01 00:00:00')
+      ->addValue('modified_date', '2000-01-01 00:00:00')
+      ->execute()->single();
+
+    $manualCreated = EckEntity::get($eckType, FALSE)
+      ->addSelect('created_id', 'modified_id', 'created_date', 'modified_date')
+      ->addWhere('id', '=', $manualRecord['id'])
+      ->execute()->single();
+
+    self::assertEquals($contacts[1], $manualCreated['created_id']);
+    self::assertEquals($contacts[1], $manualCreated['modified_id']);
+    self::assertStringStartsWith('2000-01-01', $manualCreated['created_date']);
+    self::assertStringStartsWith('2000-01-01', $manualCreated['modified_date']);
+
+    EckEntity::update($eckType, FALSE)
+      ->addWhere('id', '=', $manualRecord['id'])
+      ->addValue('title', 'Manual Override Updated')
+      ->addValue('created_id', $contacts[0])
+      ->addValue('modified_id', $contacts[0])
+      ->addValue('created_date', '1999-01-01 00:00:00')
+      ->addValue('modified_date', '1999-01-01 00:00:00')
+      ->execute();
+
+    $manualUpdated = EckEntity::get($eckType, FALSE)
+      ->addSelect('created_id', 'modified_id', 'created_date', 'modified_date')
+      ->addWhere('id', '=', $manualRecord['id'])
+      ->execute()->single();
+
+    self::assertEquals($contacts[0], $manualUpdated['created_id']);
+    self::assertEquals($contacts[0], $manualUpdated['modified_id']);
+    self::assertStringStartsWith('1999-01-01', $manualUpdated['created_date']);
+    self::assertStringStartsWith('1999-01-01', $manualUpdated['modified_date']);
+  }
+
+  /**
    * @param array<string,string> $subTypes
    *
    * @return string
