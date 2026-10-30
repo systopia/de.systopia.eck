@@ -331,7 +331,16 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
       ->execute();
 
     // Flush menu and navigation cache so the new Afform listing page appears.
-    CRM_Core_Menu::store();
+    // TODO: Call this unconditionally after dropping support for CiviCRM < 6.19 and remove phpstan-ignore comment
+    if (is_callable(['Civi', 'router'])) {
+      // @phpstan-ignore-next-line
+      Civi::router()->clear();
+    }
+    // TODO: `else` branch can be removed when dropping support for CiviCRM < 6.19
+    else {
+      // @phpstan-ignore-next-line
+      CRM_Core_Menu::store();
+    }
     CRM_Core_BAO_Navigation::resetNavigation();
 
     // Flush UF route cache for registering routes in the user framework (CMS).
