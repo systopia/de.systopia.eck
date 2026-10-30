@@ -58,7 +58,7 @@ return [
             [
               'type' => 'field',
               'key' => 'label',
-              'label' => E::ts('Subtype'),
+              'label' => 'Subtype',
               'sortable' => TRUE,
               'icons' => [
                 [
@@ -70,13 +70,13 @@ return [
             [
               'type' => 'field',
               'key' => 'description',
-              'label' => E::ts('Description'),
+              'label' => 'Description',
               'sortable' => TRUE,
             ],
             [
               'type' => 'field',
               'key' => 'is_active',
-              'label' => E::ts('Enabled'),
+              'label' => 'Enabled',
               'sortable' => TRUE,
             ],
             [
