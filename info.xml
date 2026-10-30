@@ -18,7 +18,7 @@
   <version>1.3.0-dev</version>
   <develStage>dev</develStage>
   <compatibility>
-    <ver>5.82</ver>
+    <ver>6.10</ver>
   </compatibility>
   <requires/>
   <upgrader>CiviMix\Schema\Eck\AutomaticUpgrader</upgrader>
@@ -28,7 +28,7 @@
   </classloader>
   <civix>
     <namespace>CRM/Eck</namespace>
-    <format>25.10.2</format>
+    <format>26.10.3</format>
   </civix>
   <mixins>
     <mixin>menu-xml@1.0.0</mixin>

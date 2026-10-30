@@ -27,9 +27,7 @@ return [
           'having' => [],
         ],
       ],
-      'match' => [
-        'name',
-      ],
+      'match' => ['name'],
     ],
   ],
   [
@@ -49,10 +47,7 @@ return [
           'description' => E::ts('The Entity Construction Kit extension allows you to create and manage custom CiviCRM entities.'),
           // phpcs:enable
           'sort' => [
-            [
-              'label',
-              'ASC',
-            ],
+            ['label', 'ASC'],
           ],
           'limit' => 50,
           'pager' => [],
@@ -62,7 +57,7 @@ return [
               'type' => 'field',
               'key' => 'label',
               'dataType' => 'Text',
-              'label' => E::ts('Entity Type'),
+              'label' => 'Entity Type',
               'sortable' => TRUE,
               'icons' => [
                 [
@@ -76,14 +71,14 @@ return [
               'type' => 'field',
               'key' => 'name',
               'dataType' => 'String',
-              'label' => E::ts('Internal Name'),
+              'label' => 'Internal Name',
               'sortable' => TRUE,
             ],
             [
               'type' => 'field',
               'key' => 'sub_types:label',
               'dataType' => 'Array',
-              'label' => E::ts('Subtypes'),
+              'label' => 'Subtypes',
               'sortable' => TRUE,
             ],
             [
@@ -134,10 +129,7 @@ return [
             ],
           ],
           'actions' => FALSE,
-          'classes' => [
-            'table',
-            'table-striped',
-          ],
+          'classes' => ['table', 'table-striped'],
           'toolbar' => [
             [
               'text' => E::ts('Add ECK Entity Type'),
