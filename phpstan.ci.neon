@@ -5,18 +5,15 @@ parameters:
 	scanFiles:
 		- vendor/civicrm/civicrm-core/ext/afform/core/afform.php
 	scanDirectories:
-		- vendor/civicrm/civicrm-core/Civi/
-		- vendor/civicrm/civicrm-core/CRM/
-		- vendor/civicrm/civicrm-core/api/
 		- vendor/civicrm/civicrm-core/ext/search_kit/Civi/Api4/
 		- vendor/civicrm/civicrm-packages/DB
 		- vendor/civicrm/civicrm-packages/HTML
 	bootstrapFiles:
 		- vendor/autoload.php
-	# Because we test with different versions in CI we have unmatched errors
+	# Because we test with different versions in CI we may have unmatched errors.
 	reportUnmatchedIgnoredErrors: false
 	ignoreErrors:
 		# Errors we get when using "prefer-lowest"
+
+		# Required with symfony/event-dispatcher <4.4.27
 		- '#::getSubscribedEvents\(\) return type has no value type specified in iterable type array.$#'
-		- '#Method Civi\\Api4\\EckDAODeleteAction\:\:deleteObjects\(\) has parameter \$items with no type specified.#'
-		- '#Call to function array_filter\(\) requires parameter \#2 to be passed to avoid loose comparison semantics.#'

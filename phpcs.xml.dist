@@ -6,9 +6,10 @@
     <file>Civi</file>
     <file>CRM</file>
     <file>tests</file>
+    <file>eck.php</file>
 
-    <exclude-pattern>/CRM/[^/]+/DAO/.*\.php$</exclude-pattern>
-    <exclude-pattern>/CRM/[^/]+/Upgrader/Base\.php$</exclude-pattern>
+    <exclude-pattern>/CRM/Eck/DAO/.*\.php$</exclude-pattern>
+    <exclude-pattern>tests/phpunit/bootstrap.local.php</exclude-pattern>
 
     <arg name="extensions" value="php"/>
     <arg name="cache" value=".phpcs.cache"/>
@@ -23,7 +24,6 @@
         <exclude name="Drupal.Commenting.VariableComment.IncorrectVarType"/>
         <exclude name="Drupal.Commenting.FunctionComment.ParamTypeSpaces"/>
         <exclude name="Drupal.Commenting.FunctionComment.ReturnTypeSpaces"/>
-        <exclude name="Drupal.Commenting.VariableComment.MissingVar"/>
 
         <!-- Don't enforce phpdoc type hint because it (might) only duplicate a PHP type hint -->
         <exclude name="Drupal.Commenting.VariableComment.MissingVar"/>
@@ -50,7 +50,7 @@
     <rule ref="Generic.NamingConventions.AbstractClassNamePrefix"/>
     <rule ref="Generic.NamingConventions.InterfaceNameSuffix"/>
     <rule ref="Generic.NamingConventions.TraitNameSuffix"/>
-    <!--rule ref="Generic.PHP.RequireStrictTypes"/-->
+    <rule ref="Generic.PHP.RequireStrictTypes"/>
     <rule ref="PSR1.Files.SideEffects"/>
     <rule ref="PSR12.Classes.ClassInstantiation"/>
     <rule ref="PSR12.Properties.ConstantVisibility"/>

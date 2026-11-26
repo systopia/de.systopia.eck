@@ -23,14 +23,6 @@
         "civicrm/civicrm-core": ">=5.82",
         "civicrm/civicrm-packages": ">=5.82"
     },
-    "conflict": {
-        "symfony/polyfill-php82": "<1.28",
-        "symfony/polyfill-php84": "<1.30"
-    },
-    "_comment": [
-        "symfony/polyfill-php82 >=1.28 is required for the ini_parse_quantity() polyfill that CiviCRM core calls during bootstrap; civicrm-core only requires ^1.0, so prefer-lowest would otherwise pick v1.26.0 (without the polyfill) and break PHPUnit on PHP 8.1",
-        "symfony/polyfill-php84 >=1.30 is required for the array_find() and array_find_key() polyfills that CiviCRM core calls, for the same reason"
-    ],
     "autoload": {
         "classmap": ["ComposerHelper.php"]
     },
@@ -70,9 +62,15 @@
             "@phpunit"
         ]
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.3.x-dev"
-        }
-    }
+    "conflict": {
+        "pear/mail_mime": "<1.10.2",
+        "pear/pear-core-minimal": "<1.10.16",
+        "symfony/polyfill-php82": "<1.28",
+        "symfony/polyfill-php84": "<1.30"
+    },
+    "_comment": [
+      "PEAR_ErrorStack::singleton() overridden in CRM_Core_Error is static since pear/pear-core v1.10.16",
+      "symfony/polyfill-php82 >=1.28 is required for the ini_parse_quantity() polyfill that CiviCRM core calls during bootstrap; civicrm-core only requires ^1.0, so prefer-lowest would otherwise pick v1.27.0 (without the polyfill) and break PHPUnit on PHP 8.1",
+      "symfony/polyfill-php84 >=1.30 is required for the array_find() and array_find_key() polyfills that CiviCRM core calls, for the same reason"
+    ]
 }

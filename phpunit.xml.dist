@@ -1,5 +1,23 @@
 <?xml version="1.0"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" colors="true" failOnRisky="true" failOnWarning="true" forceCoversAnnotation="true" bootstrap="tests/phpunit/bootstrap.php">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         colors="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         forceCoversAnnotation="true"
+         bootstrap="tests/phpunit/bootstrap.php">
+
+  <php>
+    <ini name="error_reporting" value="-1"/>
+    <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0&amp;baselineFile=./tests/ignored-deprecations.json"/>
+  </php>
+
+  <testsuites>
+    <testsuite name="de.systopia.eck Test Suite">
+      <directory>./tests/phpunit</directory>
+    </testsuite>
+  </testsuites>
+
   <coverage>
     <include>
       <directory suffix=".php">api</directory>
@@ -7,23 +25,14 @@
       <directory suffix=".php">Civi</directory>
     </include>
     <exclude>
-      <directory>CRM/*/DAO</directory>
-      <directory suffix="Base.php">CRM/*/Upgrader</directory>
+      <directory>CRM/Eck/DAO</directory>
     </exclude>
   </coverage>
-  <php>
-    <ini name="error_reporting" value="-1" />
-    <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0&amp;baselineFile=./tests/ignored-deprecations.json"/>
-  </php>
 
-  <testsuites>
-    <testsuite name="Extension Test Suite">
-      <directory>./tests/phpunit</directory>
-    </testsuite>
-  </testsuites>
   <listeners>
     <listener class="Civi\Test\CiviTestListener">
       <arguments/>
     </listener>
   </listeners>
+
 </phpunit>
