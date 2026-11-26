@@ -340,7 +340,7 @@ class CRM_Eck_BAO_EckEntityType extends CRM_Eck_DAO_EckEntityType implements Hoo
     }
     // TODO: `else` branch can be removed when dropping support for CiviCRM < 6.19
     else {
-      // @phpstan-ignore-next-line
+      // @phpstan-ignore staticMethod.deprecated
       CRM_Core_Menu::store();
     }
     CRM_Core_BAO_Navigation::resetNavigation();

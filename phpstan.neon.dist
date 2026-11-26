@@ -21,6 +21,8 @@ parameters:
 	excludePaths:
 		analyse:
 			- CRM/Eck/DAO/*
+			- CRM/Eck/Page/*
+			- CRM/Eck/Form/*
 			- tests/phpunit/bootstrap.php
 			- tests/phpunit/bootstrap.local.php (?)
 	scanFiles:

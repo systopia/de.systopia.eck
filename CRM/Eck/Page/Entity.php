@@ -37,7 +37,7 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
   /**
    * The entity subtype of the entity we are processing.
    *
-   * @var int
+   * @var ?int
    */
   public $_subtype;
 

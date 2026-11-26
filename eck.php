@@ -64,8 +64,10 @@ function eck_civicrm_entityTypes(array &$entityTypes): void {
 
 /**
  * Implements hook_civicrm_pre().
+ *
+ * @phpstan-param array<string, mixed> $params
  */
-function eck_civicrm_pre($op, $objectName, $id, &$params): void {
+function eck_civicrm_pre(string $op, string $objectName, ?int $id, array &$params): void {
   if (str_starts_with($objectName, 'Eck_')) {
     if ((bool) ($params['check_permissions'] ?? FALSE)) {
       // Permissioned api calls should not override any audit fields
@@ -87,8 +89,16 @@ function eck_civicrm_pre($op, $objectName, $id, &$params): void {
 
 /**
  * Implements hook_civicrm_post().
+ *
+ * @phpstan-param array<string, mixed> $params
  */
-function eck_civicrm_post($op, $objectName, $id, $objectRef = NULL, $params = NULL): void {
+function eck_civicrm_post(
+  string $op,
+  string $objectName,
+  ?int $id,
+  ?object $objectRef = NULL,
+  ?array $params = NULL
+): void {
   $entityTypeName = Civi\Eck\Utils::getEntityTypeName($objectName);
   // Add the recently created Entity to the list of recently viewed items.
   if (
@@ -122,7 +132,7 @@ function _eck_get_table_name(string $entityTypeName): string {
  * Workaround for older versions of CiviCRM; fixed in core by https://github.com/civicrm/civicrm-core/pull/34456
  * TODO: Remove this after core version requirement is bumped to 6.12
  */
-function eck_civicrm_buildForm($formName, $form): void {
+function eck_civicrm_buildForm(string $formName, \CRM_Core_Form $form): void {
   if ($formName === 'CRM_Custom_Form_Group' && $form->get('action') === CRM_Core_Action::ADD) {
     $extendsVal = \CRM_Utils_Request::retrieve('extends', 'String');
     if (isset($extendsVal)) {
@@ -134,9 +144,11 @@ function eck_civicrm_buildForm($formName, $form): void {
 /**
  * Implements hook_civicrm_scanClasses().
  *
+ * @phpstan-param array<string> $classes
+ *
  * @see CRM_Utils_Hook::scanClasses()
  */
-function eck_civicrm_scanClasses(array &$classes) {
+function eck_civicrm_scanClasses(array &$classes): void {
   // We can't use mixin scan-classes directly because we need to exclude the
   // CRM_CiviRulesPostTrigger_Eck class since that will fail with missing class
   // if CiviRules extension is not installed because it extends
