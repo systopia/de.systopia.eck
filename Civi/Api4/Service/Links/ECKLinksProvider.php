@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Civi\Api4\Service\Links;
 
 use Civi\API\Event\RespondEvent;

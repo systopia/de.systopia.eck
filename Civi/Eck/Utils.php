@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Civi\Eck;
 
 use Civi\Api4\SearchDisplay;

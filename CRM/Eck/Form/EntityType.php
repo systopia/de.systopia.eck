@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Eck_ExtensionUtil as E;
 use Civi\Api4\EckEntityType;
 use Civi\Eck\Utils;

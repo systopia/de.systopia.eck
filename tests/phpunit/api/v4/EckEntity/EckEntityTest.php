@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace api\v4\EckEntity;
 
 use Civi\Api4\EckEntity;
