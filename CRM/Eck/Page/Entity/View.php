@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use Civi\Api4\EckEntityType;
 use Civi\Api4\OptionValue;
 use CRM_Eck_ExtensionUtil as E;
@@ -106,6 +108,7 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
      * the field.
      * @todo: Migrate to SearchKit.
      */
+    // @phpstan-ignore argument.type
     $this->convertOptionIdsToValues($custom_group_tree);
 
     CRM_Core_BAO_CustomGroup::buildCustomDataView(
@@ -125,7 +128,7 @@ class CRM_Eck_Page_Entity_View extends CRM_Core_Page {
     $this->assign('entity', $entity);
 
     // Add to recent items
-    if ($this->_entityType['in_recent']) {
+    if ((bool) $this->_entityType['in_recent']) {
       \Civi\Api4\RecentItem::create()
         ->addValue('entity_type', 'Eck_' . $this->_entityTypeName)
         ->addValue('entity_id', $this->_id)

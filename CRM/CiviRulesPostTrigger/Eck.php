@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 class CRM_CiviRulesPostTrigger_Eck extends CRM_Civirules_Trigger_Post {
 
   /**

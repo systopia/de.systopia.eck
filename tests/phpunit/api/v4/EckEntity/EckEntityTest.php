@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace api\v4\EckEntity;
 
 use Civi\Api4\EckEntity;
@@ -36,7 +38,7 @@ class EckEntityTest extends TestCase implements HeadlessInterface, Transactional
   /**
    * @covers \Civi\Api4\EckEntityType::create
    */
-  public function testCreateEntityType():void {
+  public function testCreateEntityType(): void {
     $entityType = EckEntityType::create(FALSE)
       ->addValue('label', 'Test One Type')
       ->addValue('icon', 'fa-random')

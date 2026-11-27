@@ -13,8 +13,12 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-require_once 'eck.civix.php';
+declare(strict_types = 1);
+
 use CRM_Eck_ExtensionUtil as E;
+
+// phpcs:disable PSR1.Files.SideEffects.FoundWithSymbols
+require_once 'eck.civix.php';
 
 /**
  * Magically create DAO classes for every ECK entity on-demand
@@ -25,6 +29,7 @@ spl_autoload_register(function ($class) {
     eval("class $class extends CRM_Core_DAO_Base {}");
   }
 });
+// phpcs:enable
 
 /**
  * Implements hook_civicrm_config().
@@ -60,12 +65,10 @@ function eck_civicrm_entityTypes(array &$entityTypes): void {
 /**
  * Implements hook_civicrm_pre().
  *
- * @param string $op
- * @param string $objectName
- * @param int|null $id
- * @param array<string, mixed> $params
+ * @phpstan-param array<string, mixed> $params
  */
-function eck_civicrm_pre($op, $objectName, $id, &$params): void {
+function eck_civicrm_pre(string $op, string $objectName, int|string|null $id, array &$params): void {
+  $id = ($id !== '' && $id !== NULL) ? (int) $id : NULL;
   if (str_starts_with($objectName, 'Eck_')) {
     if ((bool) ($params['check_permissions'] ?? FALSE)) {
       // Permissioned api calls should not override any audit fields
@@ -88,13 +91,16 @@ function eck_civicrm_pre($op, $objectName, $id, &$params): void {
 /**
  * Implements hook_civicrm_post().
  *
- * @param string $op
- * @param string $objectName
- * @param int|null $id
- * @param CRM_Core_DAO|null $objectRef
- * @param array<string, mixed>|null $params
+ * @phpstan-param array<string, mixed> $params
  */
-function eck_civicrm_post($op, $objectName, $id, $objectRef = NULL, $params = NULL): void {
+function eck_civicrm_post(
+  string $op,
+  string $objectName,
+  int|string|null $id,
+  ?object $objectRef = NULL,
+  ?array $params = NULL
+): void {
+  $id = ($id !== '' && $id !== NULL) ? (int) $id : NULL;
   $entityTypeName = Civi\Eck\Utils::getEntityTypeName($objectName);
   // Add the recently created Entity to the list of recently viewed items.
   if (
@@ -121,15 +127,14 @@ function _eck_get_table_name(string $entityTypeName): string {
 }
 
 /**
+ * Implements hook_civicrm_buildForm().
+ *
  * Hack to set default value on custom group form.
  *
  * Workaround for older versions of CiviCRM; fixed in core by https://github.com/civicrm/civicrm-core/pull/34456
  * TODO: Remove this after core version requirement is bumped to 6.12
- *
- * @param string $formName
- * @param CRM_Core_Form $form
  */
-function eck_civicrm_buildForm($formName, $form): void {
+function eck_civicrm_buildForm(string $formName, \CRM_Core_Form $form): void {
   if ($formName === 'CRM_Custom_Form_Group' && $form->get('action') === CRM_Core_Action::ADD) {
     $extendsVal = \CRM_Utils_Request::retrieve('extends', 'String');
     if (isset($extendsVal)) {
@@ -139,21 +144,19 @@ function eck_civicrm_buildForm($formName, $form): void {
 }
 
 /**
- * We can't use mixin scan-classes directly because we need to exclude the
- *   CRM_CiviRulesPostTrigger_Eck class since that will fail with missing class if CiviRules
- *   extension is not installed because it extends CRM_Civirules_Trigger_Post.
- * We could probably work around that by using a submodule but that's only supported from
- *   about 6.10/6.11.
+ * Implements hook_civicrm_scanClasses().
  *
- * @param string[] $classes
- *
- * @return void
- *
- * Implements hook_civicrm_scanClasses
+ * @phpstan-param array<string> $classes
  *
  * @see CRM_Utils_Hook::scanClasses()
  */
-function eck_civicrm_scanClasses(array &$classes) {
+function eck_civicrm_scanClasses(array &$classes): void {
+  // We can't use mixin scan-classes directly because we need to exclude the
+  // CRM_CiviRulesPostTrigger_Eck class since that will fail with missing class
+  // if CiviRules extension is not installed because it extends
+  // CRM_Civirules_Trigger_Post.
+  // We could probably work around that by using a submodule but that's only
+  // supported from about 6.10/6.11.
   \Civi\Core\ClassScanner::scanFolders($classes, __DIR__, 'CRM', '_', ';(CiviRulesPostTrigger);');
   \Civi\Core\ClassScanner::scanFolders($classes, __DIR__, 'Civi', '\\');
 }

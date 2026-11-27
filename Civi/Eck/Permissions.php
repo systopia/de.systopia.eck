@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Eck;
 
 use CRM_Eck_ExtensionUtil as E;

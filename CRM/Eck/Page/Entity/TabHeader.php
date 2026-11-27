@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Eck_ExtensionUtil as E;
 
 /**
@@ -78,6 +80,7 @@ class CRM_Eck_Page_Entity_TabHeader {
 
     $entityID = $page->getVar('_id');
     /** @phpstan-var array{name: string} $entityType */
+    // @phpstan-ignore varTag.type
     $entityType = $page->getVar('_entityType');
     $subtype = $page->getVar('_subtype');
 
@@ -128,6 +131,7 @@ class CRM_Eck_Page_Entity_TabHeader {
     }
 
     // Load requested tab.
+    /** @var string $current */
     $current = CRM_Utils_Request::retrieve(
       'selectedChild',
       'Alphanumeric'

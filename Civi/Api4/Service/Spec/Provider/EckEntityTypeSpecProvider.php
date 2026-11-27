@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Civi\Api4\Service\Spec\Provider;
 
 use Civi\Api4\Query\Api4SelectQuery;

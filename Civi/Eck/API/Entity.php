@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Eck\API;
 
 use Civi\Api4\CustomGroup;

@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Eck_ExtensionUtil as E;
 use Civi\Api4\EckEntityType;
 
@@ -35,7 +37,7 @@ class CRM_Eck_Page_Entity extends CRM_Core_Page {
   /**
    * The entity subtype of the entity we are processing.
    *
-   * @var int
+   * @var ?int
    */
   public $_subtype;
 
