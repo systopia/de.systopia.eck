@@ -67,7 +67,8 @@ function eck_civicrm_entityTypes(array &$entityTypes): void {
  *
  * @phpstan-param array<string, mixed> $params
  */
-function eck_civicrm_pre(string $op, string $objectName, ?int $id, array &$params): void {
+function eck_civicrm_pre(string $op, string $objectName, int|string|null $id, array &$params): void {
+  $id = ($id !== '' && $id !== NULL) ? (int) $id : NULL;
   if (str_starts_with($objectName, 'Eck_')) {
     if ((bool) ($params['check_permissions'] ?? FALSE)) {
       // Permissioned api calls should not override any audit fields
@@ -95,10 +96,11 @@ function eck_civicrm_pre(string $op, string $objectName, ?int $id, array &$param
 function eck_civicrm_post(
   string $op,
   string $objectName,
-  ?int $id,
+  int|string|null $id,
   ?object $objectRef = NULL,
   ?array $params = NULL
 ): void {
+  $id = ($id !== '' && $id !== NULL) ? (int) $id : NULL;
   $entityTypeName = Civi\Eck\Utils::getEntityTypeName($objectName);
   // Add the recently created Entity to the list of recently viewed items.
   if (
